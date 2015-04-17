@@ -27,7 +27,14 @@ namespace Stereotypy_Kinect_Project
 
 			InitializeComponent();
 
+		    this.DataContext = this;
+
             kinectManager.Start();
 		}
+
+	    public ImageSource ImageSource
+	    {
+	        get { return kinectManager.ColorBit; }
+	    }
 	}
 }
