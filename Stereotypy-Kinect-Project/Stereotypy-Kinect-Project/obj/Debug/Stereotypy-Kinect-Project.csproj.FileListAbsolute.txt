@@ -13,3 +13,6 @@ C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Ster
 C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.csproj.GenerateResource.Cache
 C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.exe
 C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.pdb
+C:\Users\Guest\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Stereotypy-Kinect-Project.exe.config
+C:\Users\Guest\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.exe
+C:\Users\Guest\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.pdb
