@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Viewbox x:Name="kinectViewbox" HorizontalAlignment="Left" Height="319" VerticalAlignment="Top" Width="517">
+        <Viewbox x:Name="kinectViewBox" Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
     </Grid>
