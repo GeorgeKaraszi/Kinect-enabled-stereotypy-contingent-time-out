@@ -1,0 +1,15 @@
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Stereotypy-Kinect-Project.exe.config
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Stereotypy-Kinect-Project.exe
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Stereotypy-Kinect-Project.pdb
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Microsoft.Kinect.dll
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\bin\Debug\Microsoft.Kinect.xml
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.csprojResolveAssemblyReference.cache
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\MainWindow.baml
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\MainWindow.g.cs
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\App.g.cs
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project_MarkupCompile.cache
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.g.resources
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy_Kinect_Project.Properties.Resources.resources
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.csproj.GenerateResource.Cache
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.exe
+C:\Users\sysadmin\Documents\GitHub\Kinect-Project\Stereotypy-Kinect-Project\Stereotypy-Kinect-Project\obj\Debug\Stereotypy-Kinect-Project.pdb

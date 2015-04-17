@@ -20,9 +20,14 @@ namespace Stereotypy_Kinect_Project
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+	    private KinectManager kinectManager = null;
 		public MainWindow()
 		{
+		    kinectManager = new KinectManager();
+
 			InitializeComponent();
+
+            kinectManager.Start();
 		}
 	}
 }
