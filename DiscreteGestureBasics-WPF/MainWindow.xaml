@@ -1,0 +1,22 @@
+﻿<Window x:Class="Microsoft.Samples.Kinect.DiscreteGestureBasics.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Microsoft.Samples.Kinect.DiscreteGestureBasics"
+        Title=""
+        Height="650" Width="750"
+        Closing="MainWindow_Closing">
+    <Window.Resources>
+     
+
+    </Window.Resources>
+
+    <Grid Margin="10 0 10 0">
+
+
+        <Grid x:Name="contentGrid" Grid.Row="1" Grid.ColumnSpan="3" >
+          
+        </Grid>
+
+    
+    </Grid>
+</Window>
