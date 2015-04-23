@@ -29,7 +29,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
     {
         /// <summary> Active Kinect sensor </summary>
         private KinectSensor kinectSensor = null;
-        
+
         /// <summary> Array for the bodies (Kinect will track up to 6 people simultaneously) </summary>
         private Body[] bodies = null;
 
@@ -41,7 +41,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
         /// <summary> KinectBodyView object which handles drawing the Kinect bodies to a View box in the UI </summary>
         private KinectBodyView kinectBodyView = null;
-        
+
         /// <summary> List of gesture detectors, there will be one detector created for each potential body (max of 6) </summary>
         private List<GestureDetector> gestureDetectorList = null;
 
@@ -50,10 +50,9 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// </summary>
         public MainWindow()
         {
-
-	        // only one sensor is currently supported
+            // only one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
-            
+
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
 
@@ -81,39 +80,16 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
             // set our data context objects for display in UI
             this.DataContext = this;
-          //  this.kinectBodyViewbox.DataContext = this.kinectBodyView;
+            this.kinectBodyViewbox.DataContext = this.kinectBodyView;
 
             // create a gesture detector for each body (6 bodies => 6 detectors) and create content controls to display results in the UI
-            int col0Row = 0;
-            int col1Row = 0;
             int maxBodies = this.kinectSensor.BodyFrameSource.BodyCount;
             for (int i = 0; i < maxBodies; ++i)
             {
                 GestureResultView result = new GestureResultView(i, false, false, 0.0f);
                 GestureDetector detector = new GestureDetector(this.kinectSensor, result);
-                this.gestureDetectorList.Add(detector);                
-                
-                // split gesture results across the first two columns of the content grid
-                ContentControl contentControl = new ContentControl();
-               // contentControl.Content = this.gestureDetectorList[i].GestureResultView; annoying message at top
-                
-                if (i % 2 == 0)
-                {
-                    // Gesture results for bodies: 0, 2, 4
-                    Grid.SetColumn(contentControl, 0);
-                    Grid.SetRow(contentControl, col0Row);
-                    ++col0Row;
-                }
-                else
-                {
-                    // Gesture results for bodies: 1, 3, 5
-                    Grid.SetColumn(contentControl, 1);
-                    Grid.SetRow(contentControl, col1Row);
-                    ++col1Row;
-                }
-
-                this.contentGrid.Children.Add(contentControl);
-            } 
+                this.gestureDetectorList.Add(detector);
+            }
         }
 
         /// <summary>
