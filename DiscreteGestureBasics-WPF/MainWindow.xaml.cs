@@ -50,7 +50,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// </summary>
         public MainWindow()
         {
-            // only one sensor is currently supported
+
+	        // only one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
             
             // set IsAvailableChanged event notifier
@@ -112,7 +113,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 }
 
                 this.contentGrid.Children.Add(contentControl);
-            }
+            } 
         }
 
         /// <summary>
