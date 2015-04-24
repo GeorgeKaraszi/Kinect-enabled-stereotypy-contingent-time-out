@@ -49,6 +49,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// <summary> True, if the body is currently being tracked </summary>
         private bool isTracked = false;
 
+        private bool quiet_window_running = false;
+
         /// <summary> Timer </summary>
         private Timer timer;
         private Boolean isHandAboveHead, previous;
@@ -82,10 +84,12 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 countdown -= 1;
             else
             {
+                quiet_window_running = true;
                 countdown = COUNT_CONST;
                 QuietHandsWindow win = new QuietHandsWindow();
                 win.ShowDialog();
                 timer.Stop();
+                quiet_window_running = false;
             }
 
 
@@ -238,16 +242,24 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 this.Detected = isGestureDetected;
                 this.BodyColor = this.trackedColors[this.BodyIndex];
 
-                if (this.Detected)
+                if (quiet_window_running == false)
                 {
-                    this.Confidence = detectionConfidence;
-                    //this.ImageSource = this.seatedImage;
+                    if (this.Detected)
+                    {
+                        this.Confidence = detectionConfidence;
+                        //this.ImageSource = this.seatedImage;
 
-                    timer.Start();
+                        timer.Start();
+                    }
+                    else
+                    {
+                        //this.ImageSource = this.notSeatedImage;
+                        timer.Stop();
+                        countdown = COUNT_CONST;
+                    }
                 }
                 else
                 {
-                    //this.ImageSource = this.notSeatedImage;
                     timer.Stop();
                     countdown = COUNT_CONST;
                 }
