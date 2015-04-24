@@ -9,6 +9,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
     using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Windows.Forms;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
@@ -19,13 +20,13 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
     public sealed class GestureResultView : INotifyPropertyChanged
     {
         /// <summary> Image to show when the 'detected' property is true for a tracked body </summary>
-        private readonly ImageSource seatedImage = new BitmapImage(new Uri(@"Images\Seated.png", UriKind.Relative));
+        //private readonly ImageSource seatedImage = new BitmapImage(new Uri(@"Images\Seated.png", UriKind.Relative));
 
         /// <summary> Image to show when the 'detected' property is false for a tracked body </summary>
-        private readonly ImageSource notSeatedImage = new BitmapImage(new Uri(@"Images\NotSeated.png", UriKind.Relative));
+        //private readonly ImageSource notSeatedImage = new BitmapImage(new Uri(@"Images\NotSeated.png", UriKind.Relative));
 
         /// <summary> Image to show when the body associated with the GestureResultView object is not being tracked </summary>
-        private readonly ImageSource notTrackedImage = new BitmapImage(new Uri(@"Images\NotTracked.png", UriKind.Relative));
+        //private readonly ImageSource notTrackedImage = new BitmapImage(new Uri(@"Images\NotTracked.png", UriKind.Relative));
 
         /// <summary> Array of brush colors to use for a tracked body; array position corresponds to the body colors used in the KinectBodyView class </summary>
         private readonly Brush[] trackedColors = new Brush[] { Brushes.Red, Brushes.Orange, Brushes.Green, Brushes.Blue, Brushes.Indigo, Brushes.Violet };
@@ -48,6 +49,12 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// <summary> True, if the body is currently being tracked </summary>
         private bool isTracked = false;
 
+        /// <summary> Timer </summary>
+        private Timer timer;
+        private Boolean isHandAboveHead, previous;
+        const int COUNT_CONST = 10;
+        int countdown;
+
         /// <summary>
         /// Initializes a new instance of the GestureResultView class and sets initial property values
         /// </summary>
@@ -61,7 +68,27 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             this.IsTracked = isTracked;
             this.Detected = detected;
             this.Confidence = confidence;
-            this.ImageSource = this.notTrackedImage;
+            //this.ImageSource = this.notTrackedImage;
+
+            timer = new Timer();
+            countdown = COUNT_CONST;
+
+            timer.Tick += timer_Tick;
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (countdown > 0)
+                countdown -= 1;
+            else
+            {
+                countdown = COUNT_CONST;
+                QuietHandsWindow win = new QuietHandsWindow();
+                win.ShowDialog();
+                timer.Stop();
+            }
+
+
         }
 
         /// <summary>
@@ -202,7 +229,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
             if (!this.IsTracked)
             {
-                this.ImageSource = this.notTrackedImage;
+                //this.ImageSource = this.notTrackedImage;
                 this.Detected = false;
                 this.BodyColor = Brushes.Gray;
             }
@@ -214,11 +241,15 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 if (this.Detected)
                 {
                     this.Confidence = detectionConfidence;
-                    this.ImageSource = this.seatedImage;
+                    //this.ImageSource = this.seatedImage;
+
+                    timer.Start();
                 }
                 else
                 {
-                    this.ImageSource = this.notSeatedImage;
+                    //this.ImageSource = this.notSeatedImage;
+                    timer.Stop();
+                    countdown = COUNT_CONST;
                 }
             }
         }

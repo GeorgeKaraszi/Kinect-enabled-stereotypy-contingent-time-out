@@ -19,8 +19,6 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
 		public QuietHandsWindow()
 		{
-            Timer s = new Timer();
-            s.Tick
 			Setupwindow();
 			InitializeComponent();
 		}
