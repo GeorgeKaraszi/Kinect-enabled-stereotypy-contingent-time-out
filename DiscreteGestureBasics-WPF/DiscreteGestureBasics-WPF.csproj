@@ -136,6 +136,9 @@
     <EmbeddedResource Include="QuietHandsWindow.resx">
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Database\HandsHigh.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

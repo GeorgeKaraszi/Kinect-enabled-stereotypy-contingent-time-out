@@ -57,3 +57,4 @@ C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj
 C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj\x86\Debug\Microsoft.Samples.Kinect.DiscreteGestureBasics.Properties.Resources.resources
 C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj\x86\Debug\Microsoft.Samples.Kinect.DiscreteGestureBasics.QuietHandsWindow.resources
 C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.csproj.GenerateResource.Cache
+C:\Users\Guest\Desktop\Kinect-Project\DiscreteGestureBasics-WPF\bin\x86\Debug\Database\HandsHigh.gbd
