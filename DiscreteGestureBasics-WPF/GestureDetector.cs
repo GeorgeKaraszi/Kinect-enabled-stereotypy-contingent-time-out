@@ -21,7 +21,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         private readonly string gestureDatabase = @"Database\HandsHigh.gbd";
 
         /// <summary> Name of the discrete gesture in the database that we want to track </summary>
-        private readonly string seatedGestureName = "HandOverHead";
+        private readonly string highHandsGestureName = "HandOverHead";
 
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
@@ -67,7 +67,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 // but for this program, we only want to track one discrete gesture from the database, so we'll load it by name
                 foreach (Gesture gesture in database.AvailableGestures)
                 {
-                    if (gesture.Name.Equals(this.seatedGestureName))
+                    if (gesture.Name.Equals(this.highHandsGestureName))
                     {
                         this.vgbFrameSource.AddGesture(gesture);
                     }
@@ -171,7 +171,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                         // we only have one gesture in this source object, but you can get multiple gestures
                         foreach (Gesture gesture in this.vgbFrameSource.Gestures)
                         {
-                            if (gesture.Name.Equals(this.seatedGestureName) && gesture.GestureType == GestureType.Discrete)
+                            if (gesture.Name.Equals(this.highHandsGestureName) && gesture.GestureType == GestureType.Discrete)
                             {
                                 DiscreteGestureResult result = null;
                                 discreteResults.TryGetValue(gesture, out result);

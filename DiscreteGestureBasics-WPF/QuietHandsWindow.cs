@@ -14,8 +14,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 {
 	public partial class QuietHandsWindow : Form
 	{
-		private int _timeLeft = 60;	//6 secounds
-		private int _quitTime = 20;	//2 secounds
+		private int _timeLeft = 60;	//6 seconds
+		private int _quitTime = 20;	//2 seconds
 
 		public QuietHandsWindow()
 		{
@@ -63,7 +63,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 		/// </summary>
 		private void SetupTimer()
 		{
-			timer_lbl.Text = (_timeLeft / 10) + " secounds";
+			timer_lbl.Text = (_timeLeft / 10) + " seconds";
 			progressBar1.Maximum = _timeLeft;
 			progressBar1.Value = _timeLeft;
 			progressBar1.Minimum = 0;
@@ -119,7 +119,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 			{
 				_timeLeft -= 1;
 				progressBar1.Value = _timeLeft;
-				timer_lbl.Text = (_timeLeft / 10) + " secounds";
+				timer_lbl.Text = (_timeLeft / 10) + " seconds";
 			}
 			else
 			{
