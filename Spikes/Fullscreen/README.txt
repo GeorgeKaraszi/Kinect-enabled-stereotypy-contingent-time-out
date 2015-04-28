@@ -1,0 +1,1 @@
+This is for a simple way to go in fullscreen mode
