@@ -1,1 +1,0 @@
-Shows a method in which a timer may be activated or deactivated without diruputing the main program flow.
