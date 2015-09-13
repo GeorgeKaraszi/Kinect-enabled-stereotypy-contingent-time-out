@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
+namespace WesternMichgian.SeniorDesign.KinectProject
 {
     using System;
     using System.Collections.Generic;

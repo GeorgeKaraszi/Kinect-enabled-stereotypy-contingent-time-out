@@ -70,9 +70,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiscreteGestureBasics-WPF\DiscreteGestureBasics-WPF.csproj">
+    <ProjectReference Include="..\Source\KinectProject.csproj">
       <Project>{a4e3a730-c4ee-420e-b599-e7fbf9078c8c}</Project>
-      <Name>DiscreteGestureBasics-WPF</Name>
+      <Name>KinectProject</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

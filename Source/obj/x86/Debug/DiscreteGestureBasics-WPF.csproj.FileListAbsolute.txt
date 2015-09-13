@@ -59,3 +59,6 @@ C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj
 C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\Guest\Desktop\Kinect-Project\DiscreteGestureBasics-WPF\bin\x86\Debug\Database\HandsHigh.gbd
 C:\Users\mvanzoest\Documents\GitHub\Kinect-Project\DiscreteGestureBasics-WPF\bin\x86\Debug\Database\HandsHigh.gbd
+C:\Users\George\Desktop\Kinect-Project\Source\bin\x86\Debug\DiscreteGestureBasics-WPF.exe.config
+C:\Users\George\Desktop\Kinect-Project\Source\obj\x86\Debug\DiscreteGestureBasics-WPF.exe
+C:\Users\George\Desktop\Kinect-Project\Source\obj\x86\Debug\DiscreteGestureBasics-WPF.pdb
