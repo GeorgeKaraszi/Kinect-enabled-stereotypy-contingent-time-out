@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabSamples = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.splitContainer7 = new System.Windows.Forms.SplitContainer();
@@ -95,6 +95,7 @@
             this.btnLearnHMM = new System.Windows.Forms.Button();
             this.btnLearnHCRF = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
+            this.lbLoadedGesture = new System.Windows.Forms.Label();
             this.lbRecError = new System.Windows.Forms.Label();
             this.btnRecord = new System.Windows.Forms.Button();
             this.chartPattern = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -111,6 +112,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.lbDoesPatternEql = new System.Windows.Forms.Label();
+            this.cbGesture = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabSamples.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
@@ -664,7 +667,7 @@
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-            this.button4.Location = new System.Drawing.Point(945, 645);
+            this.button4.Location = new System.Drawing.Point(795, 657);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(174, 40);
             this.button4.TabIndex = 36;
@@ -677,9 +680,8 @@
             // gridSamples
             // 
             this.gridSamples.AllowUserToAddRows = false;
-            this.gridSamples.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridSamples.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gridSamples.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridSamples.BackgroundColor = System.Drawing.Color.White;
             this.gridSamples.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -687,9 +689,9 @@
             this.colImage,
             this.colClassification});
             this.gridSamples.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.gridSamples.Location = new System.Drawing.Point(814, 12);
+            this.gridSamples.Location = new System.Drawing.Point(684, 12);
             this.gridSamples.Name = "gridSamples";
-            this.gridSamples.Size = new System.Drawing.Size(305, 627);
+            this.gridSamples.Size = new System.Drawing.Size(290, 639);
             this.gridSamples.TabIndex = 34;
             // 
             // colImage
@@ -713,7 +715,7 @@
             // 
             this.btnLearnHMM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLearnHMM.Enabled = false;
-            this.btnLearnHMM.Location = new System.Drawing.Point(12, 645);
+            this.btnLearnHMM.Location = new System.Drawing.Point(12, 657);
             this.btnLearnHMM.Name = "btnLearnHMM";
             this.btnLearnHMM.Size = new System.Drawing.Size(144, 40);
             this.btnLearnHMM.TabIndex = 35;
@@ -727,9 +729,9 @@
             // 
             this.btnLearnHCRF.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLearnHCRF.Enabled = false;
-            this.btnLearnHCRF.Location = new System.Drawing.Point(162, 645);
+            this.btnLearnHCRF.Location = new System.Drawing.Point(161, 657);
             this.btnLearnHCRF.Name = "btnLearnHCRF";
-            this.btnLearnHCRF.Size = new System.Drawing.Size(152, 40);
+            this.btnLearnHCRF.Size = new System.Drawing.Size(150, 40);
             this.btnLearnHCRF.TabIndex = 35;
             this.btnLearnHCRF.Text = "Create a Hidden Conditional Random Field";
             this.btnLearnHCRF.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -739,10 +741,8 @@
             // 
             // panel
             // 
-            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel.BackColor = System.Drawing.Color.White;
+            this.panel.Controls.Add(this.lbLoadedGesture);
             this.panel.Controls.Add(this.lbRecError);
             this.panel.Controls.Add(this.btnRecord);
             this.panel.Controls.Add(this.chartPattern);
@@ -753,19 +753,29 @@
             this.panel.Controls.Add(this.panelClassification);
             this.panel.Location = new System.Drawing.Point(12, 12);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(804, 627);
+            this.panel.Size = new System.Drawing.Size(659, 639);
             this.panel.TabIndex = 43;
+            // 
+            // lbLoadedGesture
+            // 
+            this.lbLoadedGesture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLoadedGesture.AutoSize = true;
+            this.lbLoadedGesture.Font = new System.Drawing.Font("Segoe WP Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbLoadedGesture.ForeColor = System.Drawing.Color.Green;
+            this.lbLoadedGesture.Location = new System.Drawing.Point(165, 330);
+            this.lbLoadedGesture.Name = "lbLoadedGesture";
+            this.lbLoadedGesture.Size = new System.Drawing.Size(135, 17);
+            this.lbLoadedGesture.TabIndex = 51;
+            this.lbLoadedGesture.Text = "Gesture {Foo} loaded";
             // 
             // lbRecError
             // 
-            this.lbRecError.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbRecError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lbRecError.AutoSize = true;
             this.lbRecError.BackColor = System.Drawing.Color.White;
             this.lbRecError.Font = new System.Drawing.Font("Segoe WP", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbRecError.ForeColor = System.Drawing.Color.Red;
-            this.lbRecError.Location = new System.Drawing.Point(313, 97);
+            this.lbRecError.Location = new System.Drawing.Point(313, 109);
             this.lbRecError.Name = "lbRecError";
             this.lbRecError.Size = new System.Drawing.Size(147, 15);
             this.lbRecError.TabIndex = 50;
@@ -774,11 +784,9 @@
             // 
             // btnRecord
             // 
-            this.btnRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRecord.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btnRecord.Location = new System.Drawing.Point(168, 91);
+            this.btnRecord.Location = new System.Drawing.Point(168, 103);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(139, 23);
             this.btnRecord.TabIndex = 49;
@@ -788,73 +796,67 @@
             // 
             // chartPattern
             // 
-            this.chartPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chartPattern.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            chartArea5.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisY2.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
-            chartArea5.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            chartArea5.Name = "ChartArea1";
-            this.chartPattern.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chartPattern.Legends.Add(legend5);
-            this.chartPattern.Location = new System.Drawing.Point(8, 132);
+            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY2.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
+            chartArea1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            chartArea1.Name = "ChartArea1";
+            this.chartPattern.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartPattern.Legends.Add(legend1);
+            this.chartPattern.Location = new System.Drawing.Point(8, 144);
             this.chartPattern.Name = "chartPattern";
             this.chartPattern.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series5.Color = System.Drawing.Color.Yellow;
-            series5.IsVisibleInLegend = false;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chartPattern.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Color = System.Drawing.Color.Yellow;
+            series1.IsVisibleInLegend = false;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartPattern.Series.Add(series1);
             this.chartPattern.Size = new System.Drawing.Size(637, 164);
             this.chartPattern.TabIndex = 48;
             this.chartPattern.Text = "chart1";
             // 
             // chartKinectRaw
             // 
-            this.chartKinectRaw.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartKinectRaw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chartKinectRaw.BackColor = System.Drawing.Color.Black;
-            chartArea6.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisY2.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
-            chartArea6.BackColor = System.Drawing.Color.Black;
-            chartArea6.Name = "ChartArea1";
-            this.chartKinectRaw.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.chartKinectRaw.Legends.Add(legend6);
-            this.chartKinectRaw.Location = new System.Drawing.Point(8, 353);
+            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY2.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
+            chartArea2.BackColor = System.Drawing.Color.Black;
+            chartArea2.Name = "ChartArea1";
+            this.chartKinectRaw.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartKinectRaw.Legends.Add(legend2);
+            this.chartKinectRaw.Location = new System.Drawing.Point(8, 365);
             this.chartKinectRaw.Name = "chartKinectRaw";
             this.chartKinectRaw.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series6.Color = System.Drawing.Color.Yellow;
-            series6.IsVisibleInLegend = false;
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            this.chartKinectRaw.Series.Add(series6);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Color = System.Drawing.Color.Yellow;
+            series2.IsVisibleInLegend = false;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartKinectRaw.Series.Add(series2);
             this.chartKinectRaw.Size = new System.Drawing.Size(637, 164);
             this.chartKinectRaw.TabIndex = 47;
             this.chartKinectRaw.Text = "chart1";
             // 
             // lblKinectRawStream
             // 
-            this.lblKinectRawStream.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblKinectRawStream.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblKinectRawStream.AutoSize = true;
             this.lblKinectRawStream.BackColor = System.Drawing.Color.White;
             this.lblKinectRawStream.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblKinectRawStream.Location = new System.Drawing.Point(8, 318);
+            this.lblKinectRawStream.Location = new System.Drawing.Point(8, 330);
             this.lblKinectRawStream.Name = "lblKinectRawStream";
             this.lblKinectRawStream.Size = new System.Drawing.Size(122, 17);
             this.lblKinectRawStream.TabIndex = 46;
@@ -862,13 +864,11 @@
             // 
             // lblWavePattern
             // 
-            this.lblWavePattern.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWavePattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWavePattern.AutoSize = true;
             this.lblWavePattern.BackColor = System.Drawing.Color.White;
             this.lblWavePattern.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWavePattern.Location = new System.Drawing.Point(8, 97);
+            this.lblWavePattern.Location = new System.Drawing.Point(8, 109);
             this.lblWavePattern.Name = "lblWavePattern";
             this.lblWavePattern.Size = new System.Drawing.Size(150, 17);
             this.lblWavePattern.TabIndex = 45;
@@ -876,9 +876,7 @@
             // 
             // panelUserLabeling
             // 
-            this.panelUserLabeling.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelUserLabeling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panelUserLabeling.BackColor = System.Drawing.Color.White;
             this.panelUserLabeling.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelUserLabeling.Controls.Add(this.btnClear);
@@ -886,7 +884,7 @@
             this.panelUserLabeling.Controls.Add(this.label7);
             this.panelUserLabeling.Controls.Add(this.cbClass);
             this.panelUserLabeling.Controls.Add(this.lbWhat);
-            this.panelUserLabeling.Location = new System.Drawing.Point(8, 548);
+            this.panelUserLabeling.Location = new System.Drawing.Point(8, 560);
             this.panelUserLabeling.Name = "panelUserLabeling";
             this.panelUserLabeling.Size = new System.Drawing.Size(461, 74);
             this.panelUserLabeling.TabIndex = 43;
@@ -990,18 +988,47 @@
             this.lbDoesPatternEql.Text = "Does the pattern match {Foo} ?";
             this.lbDoesPatternEql.UseCompatibleTextRendering = true;
             // 
+            // cbGesture
+            // 
+            this.cbGesture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbGesture.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbGesture.Items.AddRange(new object[] {
+            "NO GESTURES DETECTED"});
+            this.cbGesture.Location = new System.Drawing.Point(641, 668);
+            this.cbGesture.Name = "cbGesture";
+            this.cbGesture.Size = new System.Drawing.Size(133, 21);
+            this.cbGesture.TabIndex = 44;
+            this.cbGesture.SelectedIndexChanged += new System.EventHandler(this.cbGesture_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.SystemColors.Control;
+            this.label1.Font = new System.Drawing.Font("Segoe WP Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(528, 669);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(97, 17);
+            this.label1.TabIndex = 45;
+            this.label1.Text = "Target Gesture";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1138, 692);
+            this.ClientSize = new System.Drawing.Size(988, 704);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cbGesture);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.gridSamples);
             this.Controls.Add(this.btnLearnHMM);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.btnLearnHCRF);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "Continuous density Hidden Markov Models for Sequence Recognition";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -1050,6 +1077,7 @@
             this.panelUserLabeling.PerformLayout();
             this.panelClassification.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1130,6 +1158,9 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label lbDoesPatternEql;
+        private System.Windows.Forms.Label lbLoadedGesture;
+        private System.Windows.Forms.ComboBox cbGesture;
+        private System.Windows.Forms.Label label1;
     }
 }
 

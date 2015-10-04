@@ -52,6 +52,27 @@ namespace Gestures.HMMs
                 _gestureDetectorList.Add(detector);
             }
         }
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Get a list of all gestures that have been loaded.
+        /// </summary>
+        /// <returns>List of gesture string names</returns>
+        public List<string> GetGestureNames()
+        {
+            return _gestureDetectorList[0].GestureNames;
+        }
+
+        /// <summary>
+        /// Set the gesture that wants to be loaded
+        /// </summary>
+        /// <param name="gesture">Name containing the gesture to be loaded</param>
+        public void SetGesture(string gesture)
+        {
+            foreach (var gest in _gestureDetectorList)
+            {
+                gest.SelectedGesture = gesture;
+            }
+        }
 
         //--------------------------------------------------------------------------------
         /// <summary>

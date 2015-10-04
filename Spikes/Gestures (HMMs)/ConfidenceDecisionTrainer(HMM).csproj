@@ -160,6 +160,7 @@
     <None Include="AccordResources\Accord.dll.config" />
     <None Include="app.config" />
     <None Include="Database\HandFlap2.gbd" />
+    <None Include="Database\HandFlap6.gbd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

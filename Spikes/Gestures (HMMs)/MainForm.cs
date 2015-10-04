@@ -47,6 +47,7 @@ namespace Gestures.HMMs
         /// The Markov Model class handler
         /// </summary>
         private Hmm _hmm;
+
         /// <summary>
         /// Kinect function and gesture handler.
         /// </summary>
@@ -62,14 +63,19 @@ namespace Gestures.HMMs
         {
             InitializeComponent();
 
-            _kinectHandle                   = new KinectHandle();  //Start kinect Gestures
-            _hmm                            = new Hmm();           //Start HMM ML Algo
+            _kinectHandle                   = new KinectHandle(); //Start kinect Gestures
+            _hmm                            = new Hmm(); //Start HMM ML Algo
             gridSamples.AutoGenerateColumns = false;
             gridSamples.DataSource          = _hmm.CLASSIFYDB.Samples;
             cbClass.SelectedItem            = cbClass.Items[0].ToString();
 
-            openDataDialog.InitialDirectory =
-                Path.Combine(Application.StartupPath, "Resources");
+            cbGesture.Items.Clear();
+            //Load the kinect gestures name's into the drop down menu
+            cbGesture.Items.AddRange(_kinectHandle.GetGestureNames().ToArray());
+            //Select the first one in the list to display in the drop down
+            cbGesture.SelectedItem = cbGesture.Items[0].ToString();
+            //Tell kinect to focus on just that one gesture
+            _kinectHandle.SetGesture(cbGesture.Items[0].ToString());
         }
 
         //--------------------------------------------------------------------------------
@@ -78,32 +84,30 @@ namespace Gestures.HMMs
         /// </summary>
         private void Reset()
         {
-            if(chartPattern.Series[0].Points.Count > 0)
+            if (chartPattern.Series[0].Points.Count > 0)
                 chartPattern.Series[0].Points.Clear();
 
             if (chartKinectRaw.Series[0].Points.Count > 0)
                 chartKinectRaw.Series[0].Points.Clear();
 
-            panelUserLabeling.Visible   = false;
+            panelUserLabeling.Visible = false;
             panelClassification.Visible = false;
-            lbRecError.Visible          = false;
-            btnLearnHMM.Enabled         = false;
-            btnLearnHCRF.Enabled        = false;
+            lbRecError.Visible = false;
+            btnLearnHMM.Enabled = false;
+            btnLearnHCRF.Enabled = false;
         }
 
         //--------------------------------------------------------------------------------
         private void btnLearnHMM_Click(object sender, EventArgs e)
         {
-           //HMM.HMM
+            //HMM.HMM
             _hmm.LearnHmm();
             btnLearnHCRF.Enabled = true;
 
         }
+
         //--------------------------------------------------------------------------------
-        private void btnLearnHCRF_Click(object sender, EventArgs e)
-        {
-            _hmm.LearnHcrf();
-        }
+        private void btnLearnHCRF_Click(object sender, EventArgs e) { _hmm.LearnHcrf(); }
 
         //--------------------------------------------------------------------------------
         // Load and save database methods
@@ -111,14 +115,16 @@ namespace Gestures.HMMs
         {
             openDataDialog.ShowDialog();
         }
+
         //--------------------------------------------------------------------------------
         private void saveDataStripMenuItem_Click(object sender, EventArgs e)
         {
             saveDataDialog.ShowDialog();
         }
+
         //--------------------------------------------------------------------------------
-        private void openDataDialog_FileOk(object sender, 
-            CancelEventArgs e)
+        private void openDataDialog_FileOk(object sender,
+                                           CancelEventArgs e)
         {
             //Open file dialog and load database
             using (var stream = openDataDialog.OpenFile())
@@ -137,6 +143,7 @@ namespace Gestures.HMMs
 
 
         }
+
         //--------------------------------------------------------------------------------
         private void saveDataDialog_FileOk(object sender, CancelEventArgs e)
         {
@@ -144,6 +151,7 @@ namespace Gestures.HMMs
             using (var stream = saveDataDialog.OpenFile())
                 _hmm.CLASSIFYDB.Save(stream);
         }
+
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Show the load and save options
@@ -164,7 +172,7 @@ namespace Gestures.HMMs
         /// <param name="e"></param>
         private void btnNo_Click(object sender, EventArgs e)
         {
-           //NO THIS IS NOT THE GESTURE... Switch the selected label
+            //NO THIS IS NOT THE GESTURE... Switch the selected label
             foreach (object item in cbClass.Items)
             {
                 if (item.ToString() == cbClass.SelectedItem.ToString())
@@ -178,7 +186,7 @@ namespace Gestures.HMMs
             }
 
             //Submit recorded pattern as the opposite of what was found.
-            btnInsert_Click(sender,e);
+            btnInsert_Click(sender, e);
         }
 
         //--------------------------------------------------------------------------------
@@ -187,23 +195,24 @@ namespace Gestures.HMMs
         {
             panelUserLabeling.Visible = false;
         }
+
         //--------------------------------------------------------------------------------
         private void btnInsert_Click(object sender, EventArgs e)
         {
             var dataPoints = chartPattern.Series[0].Points;
-            var label      = cbClass.SelectedItem.ToString();
+            var label = cbClass.SelectedItem.ToString();
 
             if (_hmm.AddPattern(dataPoints, label) == false)
             {
                 MessageBox.Show("Error adding pattern to database");
             }
-            else if(_hmm.CanLearn()) //Can we learn now?
+            else if (_hmm.CanLearn()) //Can we learn now?
             {
                 btnLearnHMM.Enabled = true;
             }
 
             panelClassification.Visible = false;
-            panelUserLabeling.Visible   = false;
+            panelUserLabeling.Visible = false;
             panelUserLabeling.Refresh();
             panelClassification.Refresh();
         }
@@ -211,18 +220,6 @@ namespace Gestures.HMMs
         //--------------------------------------------------------------------------------
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Perform special processing to enable aero
-            if (SafeNativeMethods.IsAeroEnabled)
-            {
-                ThemeMargins margins = new ThemeMargins();
-                margins.TopHeight    = panel.Top;
-                margins.LeftWidth    = panel.Left;
-                margins.RightWidth   = ClientRectangle.Right - gridSamples.Right;
-                margins.BottomHeight = ClientRectangle.Bottom - panel.Bottom;
-
-                // Extend the Frame into client area
-                SafeNativeMethods.ExtendAeroGlassIntoClientArea(this, margins);
-            }
         }
 
         //--------------------------------------------------------------------------------
@@ -231,13 +228,6 @@ namespace Gestures.HMMs
         /// </summary>
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            base.OnPaintBackground(e);
-
-            if (SafeNativeMethods.IsAeroEnabled)
-            {
-                // paint background black to enable include glass regions
-                e.Graphics.Clear(Color.FromArgb(0, this.BackColor));
-            }
         }
 
         //--------------------------------------------------------------------------------
@@ -262,15 +252,15 @@ namespace Gestures.HMMs
                     chartPattern.Refresh();
                 }
 
-                Recording          = true;
-                btnRecord.Text     = "Stop Recording...";
+                Recording = true;
+                btnRecord.Text = "Stop Recording...";
                 btnRecord.BackColor = Color.Red;
                 btnRecord.ForeColor = Color.White;
             }
             else
             {
-                Recording          = false;
-                btnRecord.Text     = "Start Recording...";
+                Recording = false;
+                btnRecord.Text = "Start Recording...";
                 btnRecord.BackColor = Color.FromKnownColor(KnownColor.ControlLight);
                 btnRecord.ForeColor = Color.Black;
 
@@ -292,8 +282,8 @@ namespace Gestures.HMMs
             }
             if (label != String.Empty)
             {
-                lbDoesPatternEql.Text       = $"Does the pattern match {label}?";
-                cbClass.SelectedItem        = label;
+                lbDoesPatternEql.Text = $"Does the pattern match {label}?";
+                cbClass.SelectedItem = label;
                 panelClassification.Visible = true;
 
             }
@@ -302,6 +292,12 @@ namespace Gestures.HMMs
                 panelUserLabeling.Visible = true;
             }
 
+        }
+
+        private void cbGesture_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _kinectHandle.SetGesture(cbGesture.SelectedItem.ToString());
+            lbLoadedGesture.Text = $"Gesture {cbGesture.SelectedItem} loaded";
         }
     }
 }

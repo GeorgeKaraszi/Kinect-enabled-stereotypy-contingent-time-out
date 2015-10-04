@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Kinect;
 using Microsoft.Kinect.VisualGestureBuilder;
 
@@ -18,7 +19,7 @@ namespace Gestures.HMMs
     public sealed class GestureDetector : IDisposable
     {
         /// <summary> Path to the gesture database that was trained with VGB </summary>
-        private readonly string gestureDatabase = @"Database\HandFlap2.gbd";
+        private readonly string gestureDatabase = @"Database\HandFlap6.gbd";
 
         /// <summary>
         ///     Gesture frame reader which will handle gesture events coming from the sensor
@@ -33,6 +34,15 @@ namespace Gestures.HMMs
         private ChartInteraction _chartInteraction;
 
         public static int MaxPlotPoints { get; } = 90;
+
+        private List<String> _gestureNameList;
+         
+        public List<String> GestureNames
+        {
+            get { return _gestureNameList; } 
+        }
+
+        private string selectedGesture;
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -84,6 +94,19 @@ namespace Gestures.HMMs
             get { return gestureDatabase; }
         }
 
+        public string SelectedGesture
+        {
+            get
+            {
+                return selectedGesture;
+            }
+
+            set
+            {
+                selectedGesture = value;
+            }
+        }
+
         //--------------------------------------------------------------------------------
         /// <summary>
         ///     Initializes a new instance of the GestureDetector class along with the gesture
@@ -113,6 +136,8 @@ namespace Gestures.HMMs
             //Initialize the GUI controls for handing kinect stream values.
             _chartInteraction = new ChartInteraction(MaxPlotPoints);
 
+            _gestureNameList = new List<string>();
+
             GestureResultView = gestureResultView;
 
             // create the vgb source. The associated body tracking ID will be set when a 
@@ -138,6 +163,8 @@ namespace Gestures.HMMs
                 {
                     if (gesture.GestureType == GestureType.Continuous)
                     {
+                        _gestureNameList.Add(gesture.Name);
+
                         _vgbFrameSource.AddGesture(gesture);
                     }
                 }
@@ -207,6 +234,9 @@ namespace Gestures.HMMs
                     // Process each gesture from the received frame.
                     foreach (Gesture gesture in _vgbFrameSource.Gestures)
                     {
+                        if (gesture.Name != SelectedGesture)
+                            continue;
+
                         result = null;
                         continuousGestureResults.TryGetValue(gesture, out result);
 
