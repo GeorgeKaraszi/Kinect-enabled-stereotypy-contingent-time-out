@@ -157,7 +157,9 @@
     <None Include="Accord.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="AccordResources\Accord.dll.config" />
     <None Include="app.config" />
+    <None Include="Database\HandFlap2.gbd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -187,6 +189,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="AccordResources\Accord.dll" />
+    <Content Include="AccordResources\Accord.Math.dll" />
+    <Content Include="AccordResources\Accord.Math.xml" />
+    <Content Include="AccordResources\Accord.Statistics.dll" />
+    <Content Include="AccordResources\Accord.Statistics.xml" />
+    <Content Include="AccordResources\Accord.xml" />
+    <Content Include="AccordResources\ZedGraph.dll" />
+    <Content Include="AccordResources\ZedGraph.xml" />
     <Content Include="framework.ico" />
     <Content Include="Resources\sample-mouse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -194,11 +204,14 @@
     <Content Include="Resources\sample-numbers.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="vgbtechs\AdaBoostTech.dll" />
+    <Content Include="vgbtechs\RFRProgressTech.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)vgbtechs" "$(TargetDir)\vgbtechs" /S /R /Y /I
+xcopy "$(SolutionDir)Database" "$(TargetDir)\Database" /S /R /Y /I
+xcopy "$(SolutionDir)AccordResources" "$(TargetDir)" /S /R /Y /I</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
