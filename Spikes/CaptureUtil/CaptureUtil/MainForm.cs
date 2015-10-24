@@ -114,6 +114,7 @@ namespace CaptureUtil
 
                 //Clear chart before recording starts
                 chartRecording.Series[0].Points.Clear();
+                chartRecording.Series[1].Points.Clear();
 
                 //Change the button display
                 btnRecord.BackColor = Color.Red;
@@ -241,12 +242,12 @@ namespace CaptureUtil
         /// <param name="e"></param>
         private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
+            var series0Points = chartRecording.Series[0].Points;
             var series1Points = chartRecording.Series[1].Points;
-            var series2Points = chartRecording.Series[2].Points;
 
             //Gather all points from the recored chart
-            var datapoints = series1Points.Select(point => point.YValues[0]).ToList();
-            var pv = series2Points.Select(point => 
+            var datapoints = series0Points.Select(point => point.YValues[0]).ToList();
+            var pv = series1Points.Select(point => 
                 new Tuple<int, double>((int) point.XValue, point.YValues[0])).ToList();
 
             using (var stream = saveFileDialog.OpenFile())
