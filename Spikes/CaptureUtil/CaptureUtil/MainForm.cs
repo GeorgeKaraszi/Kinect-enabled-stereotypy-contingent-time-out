@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using CaptureUtil.Algorithms;
@@ -14,7 +15,7 @@ namespace CaptureUtil
         /// <summary>
         /// Kinect function and gesture handler.
         /// </summary>
-        private KinectHandle _kinectHandle;
+        private readonly KinectHandle _kinectHandle;
 
         /// <summary>
         /// Global timer for handling recording time.
@@ -24,13 +25,17 @@ namespace CaptureUtil
         /// <summary>
         /// Signal flag to tell the confidence capture to gather more values.
         /// </summary>
-        public static bool Recording = false;
+        public static bool Recording;
 
         /// <summary>
         /// Flag to which algorithm is used to analyze the captured wave.
         /// </summary>
-        private int _AlgorithmSelected;
+        private int _algorithmSelected;
 
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Main GUI and Kinect initializer.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -38,8 +43,9 @@ namespace CaptureUtil
             _kinectHandle = new KinectHandle();
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
-        /// 
+        /// Main loading section when the application starts
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -50,29 +56,47 @@ namespace CaptureUtil
 
             cbGestureTarget.Items.Clear();
             //Load the kinect gestures name's into the drop down menu
-            cbGestureTarget.Items.AddRange(_kinectHandle.GetGestureNames().ToArray());
-            //Select the first one in the list to display in the drop down
-            cbGestureTarget.SelectedItem = cbGestureTarget.Items[0].ToString();
-            //Tell Kinect to focus on just that one gesture
-            _kinectHandle.SetGesture(cbGestureTarget.SelectedItem.ToString());
-
+            if (_kinectHandle != null)
+            {
+                // ReSharper disable once CoVariantArrayConversion
+                cbGestureTarget.Items.AddRange(_kinectHandle.GetGestureNames().ToArray());
+                //Select the first one in the list to display in the drop down
+                cbGestureTarget.SelectedItem = cbGestureTarget.Items[0].ToString();
+                //Tell Kinect to focus on just that one gesture
+                _kinectHandle.SetGesture(cbGestureTarget.SelectedItem.ToString());
+            }
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
-        /// 
+        /// Simple About menu item that displays simplified information about the program.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Resources.about_info_body, Resources.about_info_title);
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Every time the record timer changes on the GUI, store the results in 
+        /// milliseconds to the recording timer.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void udRecTime_ValueChanged(object sender, EventArgs e)
         {
             if (udRecTime.Value != 0)
-                this._recordingTimer = Convert.ToInt32(udRecTime.Value*1000);
+                _recordingTimer = Convert.ToInt32(udRecTime.Value*1000);
             else
-                this._recordingTimer = -1;
+                _recordingTimer = -1;
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
-        /// 
+        /// Start the recording process of the application when the GUI record button is 
+        /// clicked
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -93,8 +117,8 @@ namespace CaptureUtil
 
                 //Change the button display
                 btnRecord.BackColor = Color.Red;
-                btnRecord.Text = "Stop Recording...";
-                lbCapDis.Text = "Captured Data";
+                btnRecord.Text = Resources.stop_recording;
+                lbCapDis.Text = Resources.capture_data;
             }
             else
             {
@@ -108,7 +132,7 @@ namespace CaptureUtil
 
                 //Change the button to display data
                 btnRecord.BackColor = DefaultBackColor;
-                btnRecord.Text = "Start Recording...";
+                btnRecord.Text = Resources.start_recording;
 
                 //Open save dialog to save the recorded points
                 saveFileDialog.ShowDialog();
@@ -117,8 +141,10 @@ namespace CaptureUtil
             }
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
-        /// 
+        /// Every time a new gesture is selected from the available gesture list displayed 
+        /// on the GUI. Change the selected gesture in the kinect.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -128,6 +154,7 @@ namespace CaptureUtil
             _kinectHandle.SetGesture(cbGestureTarget.SelectedItem.ToString());
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Top menu that opens the open file dialog
         /// </summary>
@@ -138,6 +165,7 @@ namespace CaptureUtil
             openFileDialog.ShowDialog();
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Top menu that opens the save file dialog
         /// </summary>
@@ -148,6 +176,7 @@ namespace CaptureUtil
             saveFileDialog.ShowDialog();
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// The core timer that is responsible for timing data capturing
         /// </summary>
@@ -165,6 +194,7 @@ namespace CaptureUtil
             }
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Load a chart that was saved from an earlier time.
         /// </summary>
@@ -179,7 +209,7 @@ namespace CaptureUtil
             using (var stream = openFileDialog.OpenFile())
             {
                 //Load the Peak's and valley, and base data points to the wave
-                _AlgorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
+                _algorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
                 pv = (List<Tuple<int, double>>) new BinaryFormatter().Deserialize(stream);
                 datapoints = (List<double>) new BinaryFormatter().Deserialize(stream);
             }
@@ -199,10 +229,11 @@ namespace CaptureUtil
                 chartRecording.Series[1].Points.AddXY(point.Item1, point.Item2);
             }
 
-            lbCapDis.Text = "Loaded And Displayed Data";
+            lbCapDis.Text = Resources.load_and_display_data;
             panelAlgorithm.Visible = true;
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Save the results from the recording chart display
         /// </summary>
@@ -210,25 +241,24 @@ namespace CaptureUtil
         /// <param name="e"></param>
         private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-            var pv = new List<Tuple<int, double>>();
-            var datapoints = new List<double>();
+            var series1Points = chartRecording.Series[1].Points;
+            var series2Points = chartRecording.Series[2].Points;
 
-            var series = chartRecording.Series[0].Points;
-
-            foreach (var point in chartRecording.Series[0].Points)
-            {
-                datapoints.Add(point.YValues[0]);
-            }
+            //Gather all points from the recored chart
+            var datapoints = series1Points.Select(point => point.YValues[0]).ToList();
+            var pv = series2Points.Select(point => 
+                new Tuple<int, double>((int) point.XValue, point.YValues[0])).ToList();
 
             using (var stream = saveFileDialog.OpenFile())
             {
                 var bf = new BinaryFormatter();
-                bf.Serialize(stream,_AlgorithmSelected);
+                bf.Serialize(stream,_algorithmSelected);
                 bf.Serialize(stream, pv);
                 bf.Serialize(stream, datapoints);
             }
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Check for a change in the algorithm and run the Analyst when the run button 
         /// is clicked on.
@@ -240,28 +270,26 @@ namespace CaptureUtil
             //Check to see if one of the algorithms where checked.
             if (rbPV.Checked)
             {
-                _AlgorithmSelected = 1;
+                _algorithmSelected = 1;
             }
             else if (rbHillBuild.Checked)
             {
-                _AlgorithmSelected = 2;
+                _algorithmSelected = 2;
             }
             else
             {
-                _AlgorithmSelected = 0;
+                _algorithmSelected = 0;
             }
 
-            //Gather the wave datapoints
-            var wave = new List<double>();
-            foreach (var point in chartRecording.Series[0].Points)
-            {
-                wave.Add(point.YValues[0]);
-            }
+            //Gather the wave data points
+            var wave = chartRecording.Series[0].Points
+                                .Select(point => point.YValues[0]).ToList();
 
             //Run the analyst
             RunAnalyst(wave);
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Runs the given wave through a selected algorithm to produce a analysis.
         /// </summary>
@@ -270,7 +298,7 @@ namespace CaptureUtil
         {
             chartRecording.Series[1].Points.Clear();
 
-            switch (_AlgorithmSelected)
+            switch (_algorithmSelected)
             {
                 case 1:
                     var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
@@ -287,13 +315,6 @@ namespace CaptureUtil
                 default:
                     break;
             }
-
-            //chartRecording.Series[1].LabelFormat = "{0:0,}K";
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(Resources.about_info_body,Resources.about_info_title);
         }
     }
 }

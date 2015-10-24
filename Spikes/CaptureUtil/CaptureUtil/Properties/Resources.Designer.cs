@@ -79,5 +79,41 @@ namespace CaptureUtil.Properties {
                 return ResourceManager.GetString("about_info_title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Captured Data.
+        /// </summary>
+        internal static string capture_data {
+            get {
+                return ResourceManager.GetString("capture_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded And Displayed Data.
+        /// </summary>
+        internal static string load_and_display_data {
+            get {
+                return ResourceManager.GetString("load_and_display_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Recording....
+        /// </summary>
+        internal static string start_recording {
+            get {
+                return ResourceManager.GetString("start_recording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Recording....
+        /// </summary>
+        internal static string stop_recording {
+            get {
+                return ResourceManager.GetString("stop_recording", resourceCulture);
+            }
+        }
     }
 }

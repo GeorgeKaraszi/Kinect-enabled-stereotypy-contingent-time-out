@@ -125,4 +125,16 @@ Developed By: George Karaszi and Matt VanZoest</value>
   <data name="about_info_title" xml:space="preserve">
     <value>Capture Utility Information</value>
   </data>
+  <data name="stop_recording" xml:space="preserve">
+    <value>Stop Recording...</value>
+  </data>
+  <data name="capture_data" xml:space="preserve">
+    <value>Captured Data</value>
+  </data>
+  <data name="start_recording" xml:space="preserve">
+    <value>Start Recording...</value>
+  </data>
+  <data name="load_and_display_data" xml:space="preserve">
+    <value>Loaded And Displayed Data</value>
+  </data>
 </root>
