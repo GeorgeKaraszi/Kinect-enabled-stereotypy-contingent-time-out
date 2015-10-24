@@ -45,7 +45,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelAlgorithm = new System.Windows.Forms.Panel();
             this.rbHillBuild = new System.Windows.Forms.RadioButton();
             this.rbPV = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
@@ -63,7 +63,7 @@
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panelAlgorithm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartRecording)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartKinectRaw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRecTime)).BeginInit();
@@ -169,7 +169,7 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Controls.Add(this.panel3);
+            this.panel2.Controls.Add(this.panelAlgorithm);
             this.panel2.Controls.Add(this.lbCapDis);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.chartRecording);
@@ -179,17 +179,18 @@
             this.panel2.Size = new System.Drawing.Size(748, 401);
             this.panel2.TabIndex = 4;
             // 
-            // panel3
+            // panelAlgorithm
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.Controls.Add(this.btnAlgorRun);
-            this.panel3.Controls.Add(this.rbHillBuild);
-            this.panel3.Controls.Add(this.rbPV);
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(231, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(517, 28);
-            this.panel3.TabIndex = 7;
+            this.panelAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelAlgorithm.Controls.Add(this.btnAlgorRun);
+            this.panelAlgorithm.Controls.Add(this.rbHillBuild);
+            this.panelAlgorithm.Controls.Add(this.rbPV);
+            this.panelAlgorithm.Controls.Add(this.label5);
+            this.panelAlgorithm.Location = new System.Drawing.Point(231, 0);
+            this.panelAlgorithm.Name = "panelAlgorithm";
+            this.panelAlgorithm.Size = new System.Drawing.Size(517, 28);
+            this.panelAlgorithm.TabIndex = 7;
+            this.panelAlgorithm.Visible = false;
             // 
             // rbHillBuild
             // 
@@ -383,8 +384,8 @@
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.panelAlgorithm.ResumeLayout(false);
+            this.panelAlgorithm.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartRecording)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartKinectRaw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRecTime)).EndInit();
@@ -416,7 +417,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Timer timerRecord;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelAlgorithm;
         private System.Windows.Forms.RadioButton rbHillBuild;
         private System.Windows.Forms.RadioButton rbPV;
         private System.Windows.Forms.Label label5;

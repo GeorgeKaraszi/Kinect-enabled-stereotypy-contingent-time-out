@@ -79,6 +79,9 @@ namespace CaptureUtil
         {
             if (timerRecord.Enabled == false)
             {
+                //Disable Algorithm option.
+                panelAlgorithm.Visible = false;
+
                 //Enable recording and start the timer
                 Recording = true;
                 timerRecord.Enabled = true;
@@ -94,6 +97,9 @@ namespace CaptureUtil
             }
             else
             {
+                //Enable the algorithm for captured data
+                panelAlgorithm.Visible = true;
+
                 //Disable all recording and timing
                 Recording = false;
                 timerRecord.Enabled = false;
@@ -193,6 +199,7 @@ namespace CaptureUtil
             }
 
             lbCapDis.Text = "Loaded And Displayed Data";
+            panelAlgorithm.Visible = true;
         }
 
         /// <summary>
