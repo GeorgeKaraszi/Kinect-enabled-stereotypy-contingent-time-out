@@ -46,6 +46,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelAlgorithm = new System.Windows.Forms.Panel();
+            this.btnAlgorRun = new System.Windows.Forms.Button();
             this.rbHillBuild = new System.Windows.Forms.RadioButton();
             this.rbPV = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.timerRecord = new System.Windows.Forms.Timer(this.components);
             this.label2 = new System.Windows.Forms.Label();
-            this.btnAlgorRun = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -139,14 +139,14 @@
             // toolStripOpen
             // 
             this.toolStripOpen.Name = "toolStripOpen";
-            this.toolStripOpen.Size = new System.Drawing.Size(152, 22);
+            this.toolStripOpen.Size = new System.Drawing.Size(103, 22);
             this.toolStripOpen.Text = "Open";
             this.toolStripOpen.Click += new System.EventHandler(this.toolStripOpen_Click);
             // 
             // toolStripSave
             // 
             this.toolStripSave.Name = "toolStripSave";
-            this.toolStripSave.Size = new System.Drawing.Size(152, 22);
+            this.toolStripSave.Size = new System.Drawing.Size(103, 22);
             this.toolStripSave.Text = "Save";
             this.toolStripSave.Click += new System.EventHandler(this.toolStripSave_Click);
             // 
@@ -163,6 +163,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // panel2
             // 
@@ -191,6 +192,16 @@
             this.panelAlgorithm.Size = new System.Drawing.Size(517, 28);
             this.panelAlgorithm.TabIndex = 7;
             this.panelAlgorithm.Visible = false;
+            // 
+            // btnAlgorRun
+            // 
+            this.btnAlgorRun.Location = new System.Drawing.Point(341, 2);
+            this.btnAlgorRun.Name = "btnAlgorRun";
+            this.btnAlgorRun.Size = new System.Drawing.Size(96, 24);
+            this.btnAlgorRun.TabIndex = 8;
+            this.btnAlgorRun.Text = "Run";
+            this.btnAlgorRun.UseVisualStyleBackColor = true;
+            this.btnAlgorRun.Click += new System.EventHandler(this.btnAlgorRun_Click);
             // 
             // rbHillBuild
             // 
@@ -353,16 +364,6 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Sec\'s";
             // 
-            // btnAlgorRun
-            // 
-            this.btnAlgorRun.Location = new System.Drawing.Point(341, 2);
-            this.btnAlgorRun.Name = "btnAlgorRun";
-            this.btnAlgorRun.Size = new System.Drawing.Size(96, 24);
-            this.btnAlgorRun.TabIndex = 8;
-            this.btnAlgorRun.Text = "Run";
-            this.btnAlgorRun.UseVisualStyleBackColor = true;
-            this.btnAlgorRun.Click += new System.EventHandler(this.btnAlgorRun_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,7 +377,7 @@
             this.Controls.Add(this.btnRecord);
             this.Controls.Add(this.menuStrip1);
             this.Name = "MainForm";
-            this.Text = "Capture Util";
+            this.Text = "Capture & Test Utility";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using CaptureUtil.Algorithms;
+using CaptureUtil.Properties;
 
 namespace CaptureUtil
 {
@@ -288,6 +289,11 @@ namespace CaptureUtil
             }
 
             //chartRecording.Series[1].LabelFormat = "{0:0,}K";
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Resources.about_info_body,Resources.about_info_title);
         }
     }
 }
