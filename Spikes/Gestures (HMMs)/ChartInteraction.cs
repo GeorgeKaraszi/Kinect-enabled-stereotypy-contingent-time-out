@@ -50,10 +50,10 @@ namespace Gestures.HMMs
 
                 //Kinect value is between 0 & 1. Float can have 9 decimal places. Thus 
                 //multiply by 100k to strip the decimal to create whole numbers.
-                convertedY = Convert.ToInt32(fvalue * 1E6);
+                convertedY = Convert.ToInt32(fvalue * 1E3);
 
                 //Since kinect is 0-1 values. The conversion can only be between 0-10,000
-                if (convertedY > 1e7 || convertedY < 0)
+                if (convertedY > 1e4 || convertedY < 0)
                     return;
 
                 //Make sure we done plot beyond our limit

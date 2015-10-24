@@ -40,6 +40,9 @@ using System.Xml.Serialization;
 using System.Drawing;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
+using Accord.Statistics.Distributions.Multivariate;
+using Accord.Statistics.Models.Fields;
+using Accord.Statistics.Models.Markov;
 
 namespace Gestures.HMMs
 {
@@ -48,6 +51,10 @@ namespace Gestures.HMMs
         public BindingList<string> Classes { get; private set; }
         public BindingList<Sequence> Samples { get; private set; }
 
+        public int Count
+        {
+            get { return Samples.Count; }
+        }
 
         public Database()
         {
@@ -60,13 +67,14 @@ namespace Gestures.HMMs
         /// Save the database from memory
         /// </summary>
         /// <param name="path">File path to database</param>
-        public void Save(Stream steam)
+        public void Save(Stream steam, 
+            HiddenConditionalRandomField<double[]> hcrf)
         {
             using (Stream tempStream = new MemoryStream())
             {
                 var serializer = new XmlSerializer(typeof (BindingList<Sequence>));
+                hcrf.Save(tempStream);
                 serializer.Serialize(tempStream, Samples);
-
                 CompressSave(steam, tempStream);
             }
         }
@@ -76,12 +84,14 @@ namespace Gestures.HMMs
         /// Load database into memory
         /// </summary>
         /// <param name="path">File path with database</param>
-        public void Load(Stream stream)
+        public object Load(Stream stream)
         {
+
             using (Stream streamTmp = UncompressFile(stream))
             {
 
                 var serializer = new XmlSerializer(typeof (BindingList<Sequence>));
+                object hcrf = null;//HiddenConditionalRandomField<double[]>.Load(streamTmp);
                 var samples = (BindingList<Sequence>) serializer.Deserialize(streamTmp);
 
                 Classes.Clear();
@@ -94,6 +104,8 @@ namespace Gestures.HMMs
                     sample.Classes = Classes;
                     Samples.Add(sample);
                 }
+
+                return hcrf;
             }
         }
 

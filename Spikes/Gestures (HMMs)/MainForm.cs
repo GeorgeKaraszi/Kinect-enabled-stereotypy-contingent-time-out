@@ -54,6 +54,9 @@ namespace Gestures.HMMs
         private KinectHandle _kinectHandle;
 
         public static bool Recording { get; set; } = false;
+        private int _timeleft;
+        private int[] _timeintervals = {2000, 2100};
+        private Random _randomTime;
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -61,13 +64,15 @@ namespace Gestures.HMMs
         /// </summary>
         public MainForm()
         {
+            _randomTime = new Random();
+            this._timeleft = 2000;
             InitializeComponent();
 
             _kinectHandle                   = new KinectHandle(); //Start kinect Gestures
             _hmm                            = new Hmm(); //Start HMM ML Algo
-            gridSamples.AutoGenerateColumns = false;
-            gridSamples.DataSource          = _hmm.CLASSIFYDB.Samples;
             cbClass.SelectedItem            = cbClass.Items[0].ToString();
+            cbWaveType.SelectedItem         = cbWaveType.Items[0].ToString();
+            UpdateResultText();
 
             cbGesture.Items.Clear();
             //Load the kinect gestures name's into the drop down menu
@@ -102,12 +107,17 @@ namespace Gestures.HMMs
         {
             //HMM.HMM
             _hmm.LearnHmm();
+            lbHmmMatch.Text = $"HMM Matched {_hmm.HmmMatches}";
             btnLearnHCRF.Enabled = true;
 
         }
 
         //--------------------------------------------------------------------------------
-        private void btnLearnHCRF_Click(object sender, EventArgs e) { _hmm.LearnHcrf(); }
+        private void btnLearnHCRF_Click(object sender, EventArgs e)
+        {
+            _hmm.LearnHcrf();
+            lbHcrfMatch.Text = $"HCRF Matched {_hmm.HcrfMatches}";
+        }
 
         //--------------------------------------------------------------------------------
         // Load and save database methods
@@ -131,15 +141,11 @@ namespace Gestures.HMMs
             {
                 this.Reset();
                 _hmm.Clear();
-                _hmm.CLASSIFYDB.Load(stream);
+                _hmm.LoadHcrf(_hmm.CLASSIFYDB.Load(stream));
             }
 
-            if (_hmm.CanLearn())
-            {
-                _hmm.LearnHmm();
-                _hmm.LearnHcrf();
-                btnLearnHCRF.Enabled = true;
-            }
+            UpdateResultText();
+            //btnCompAuto_Click(sender, e);
 
 
         }
@@ -149,7 +155,7 @@ namespace Gestures.HMMs
         {
             //Save database
             using (var stream = saveDataDialog.OpenFile())
-                _hmm.CLASSIFYDB.Save(stream);
+                _hmm.CLASSIFYDB.Save(stream, _hmm.GetHcrf());
         }
 
         //--------------------------------------------------------------------------------
@@ -239,7 +245,7 @@ namespace Gestures.HMMs
         /// <param name="e"></param>
         private void btnRecord_Click(object sender, EventArgs e)
         {
-            if (Recording == false)
+            if (recordTimer.Enabled == false)
             {
                 //Clear error text (If there was one)
                 lbRecError.Visible = false;
@@ -252,19 +258,13 @@ namespace Gestures.HMMs
                     chartPattern.Refresh();
                 }
 
+                _timeleft = 2000;
                 Recording = true;
-                btnRecord.Text = "Stop Recording...";
+                recordTimer.Enabled = true;
+                recordTimer.Start();
+                btnRecord.Text = "Recording...";
                 btnRecord.BackColor = Color.Red;
                 btnRecord.ForeColor = Color.White;
-            }
-            else
-            {
-                Recording = false;
-                btnRecord.Text = "Start Recording...";
-                btnRecord.BackColor = Color.FromKnownColor(KnownColor.ControlLight);
-                btnRecord.ForeColor = Color.Black;
-
-                RunAnalysis();
             }
         }
 
@@ -298,6 +298,130 @@ namespace Gestures.HMMs
         {
             _kinectHandle.SetGesture(cbGesture.SelectedItem.ToString());
             lbLoadedGesture.Text = $"Gesture {cbGesture.SelectedItem} loaded";
+        }
+
+        private void captureTime_Tick(object sender, EventArgs e)
+        {
+            if (_timeleft > 0)
+            {
+                _timeleft -= captureTime.Interval;
+            }
+            else
+            {
+                Recording = false;
+                captureTime.Stop();
+                var dataPoints = chartPattern.Series[0].Points;
+                var label = cbWaveType.SelectedItem.ToString();
+
+                if (_hmm.AddPattern(dataPoints, label) == false)
+                {
+                    MessageBox.Show("Error adding pattern to database");
+                }
+
+                chartPattern.Series[0].Points.Clear();
+                chartPattern.Refresh();
+                _timeleft = _timeintervals[_randomTime.Next(0, _timeintervals.Length)];
+
+                Recording = true;
+                captureTime.Start();
+            }
+
+            UpdateResultText();
+        }
+
+        private void btnautotrain_Click(object sender, EventArgs e)
+        {
+            chartPattern.Series[0].Points.Clear();
+            chartPattern.Refresh();
+
+            if (captureTime.Enabled == false)
+            {
+                cbWaveType.Enabled     = false;
+                captureTime.Enabled    = true;
+                Recording              = true;
+
+                btnautotrain.Text      = "Stop Auto Train...";
+                btnautotrain.BackColor = Color.Red;
+                btnautotrain.ForeColor = Color.White;
+
+                _timeleft = _timeintervals[0];
+                captureTime.Start();
+            }
+            else
+            {
+                Recording              = false;
+                captureTime.Enabled    = false;
+                cbWaveType.Enabled     = true;
+
+                captureTime.Stop();
+
+                btnautotrain.Text      = "Start Auto Training";
+                btnautotrain.BackColor = Color.FromKnownColor(KnownColor.ControlLight);
+                btnautotrain.ForeColor = Color.Black;
+            }
+
+        }
+
+        private void UpdateResultText()
+        {
+            int totalHmmPercent  = 0;
+            int totalHcrfPercent = 0;
+
+            if (_hmm.CLASSIFYDB.Count != 0)
+            {
+                totalHmmPercent  = (_hmm.HmmMatches*100) / _hmm.CLASSIFYDB.Count;
+                totalHcrfPercent = (_hmm.HcrfMatches*100) / _hmm.CLASSIFYDB.Count;
+            }
+
+            lbHmmMatch.Text      = $"HMM Total Matched {_hmm.HmmMatches} : {totalHmmPercent}%";
+            lbHcrfMatch.Text     = $"HCRF Total Matched {_hmm.HcrfMatches} : {totalHcrfPercent}%";
+
+            lbHmmGoodWave.Text   = $"HMM Good wave {_hmm.HmmGoodMatches}";
+            lbHcrfGoodWave.Text  = $"HCRF Good wave {_hmm.HcrfGoodMatches}";
+
+            lbHcrfBadWave.Text   = $"HCRF Bad Wave: {_hmm.HcrfBadMatches}";
+            lbHmmBadWave.Text    = $"HMM Bad Wave: {_hmm.HmmBadMatches}";
+
+            lbTotalRecs.Text     = $"Total Records: {_hmm.CLASSIFYDB.Count}";
+        }
+
+        private void btnCompAuto_Click(object sender, EventArgs e)
+        {
+            if (_hmm.CanLearn())
+            {
+                _hmm.LearnHmm();
+                _hmm.LearnHcrf();
+            }
+            else
+            {
+                MessageBox.Show("We need more samples & classifiers to compute!");
+            }
+
+            UpdateResultText();
+        }
+
+        private void recordTimer_Tick(object sender, EventArgs e)
+        {
+            if (_timeleft > 0)
+            {
+                _timeleft -= recordTimer.Interval;
+            }
+            else
+            {
+                recordTimer.Stop();
+                Recording = false;
+                recordTimer.Enabled = false;
+
+                btnRecord.Text = "Start Recording...";
+                btnRecord.BackColor = Color.FromKnownColor(KnownColor.ControlLight);
+                btnRecord.ForeColor = Color.Black;
+                RunAnalysis();
+            }
+        }
+
+        private void saveFileWaveDialog_FileOk(object sender, CancelEventArgs e)
+        {
+
         }
     }
 }

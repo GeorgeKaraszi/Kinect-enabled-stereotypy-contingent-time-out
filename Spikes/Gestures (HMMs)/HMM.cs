@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Accord.Statistics.Distributions.Fitting;
 using Accord.Statistics.Distributions.Multivariate;
@@ -21,6 +22,13 @@ namespace Gestures.HMMs
         /// </summary>
         public Database CLASSIFYDB { get; }
 
+        public int HmmMatches { get; set; }
+        public int HcrfMatches { get; set; }
+        public int HmmGoodMatches { get; set; }
+        public int HcrfGoodMatches { get; set; }
+        public int HcrfBadMatches { get; set; }
+        public int HmmBadMatches { get; set; }
+
         /// <summary>
         /// Markov Model using Normal distribution learning tool
         /// </summary>
@@ -34,9 +42,15 @@ namespace Gestures.HMMs
         //--------------------------------------------------------------------------------
         public Hmm()
         {
-            CLASSIFYDB = new Database(); //Initialize database of samples.
-            _hmm       = null;
-            _hcrf      = null;
+            CLASSIFYDB      = new Database(); //Initialize database of samples.
+            _hmm            = null;
+            _hcrf           = null;
+            HmmMatches      = 0;
+            HcrfMatches     = 0;
+            HmmGoodMatches  = 0;
+            HcrfGoodMatches = 0;
+            HcrfBadMatches  = 0;
+            HmmBadMatches   = 0;
         }
 
         /// <summary>
@@ -44,9 +58,16 @@ namespace Gestures.HMMs
         /// </summary>
         public void Clear()
         {
-            _hmm = null;
+            _hmm  = null;
             _hcrf = null;
         }
+
+        public void LoadHcrf(Object hcrf)
+        {
+            _hcrf = (HiddenConditionalRandomField < double[] >)hcrf;
+        }
+
+        public HiddenConditionalRandomField<double[]> GetHcrf() { return _hcrf; }
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -201,9 +222,9 @@ namespace Gestures.HMMs
             BindingList<String> classes   = CLASSIFYDB.Classes;
             double[][][] inputs           = new double[samples.Count][][];
             int[] outputs                 = new int[samples.Count];
-            int states                    = 5;
-            int iterations                = 0;
-            double tolerance              = 0.01;
+            int states                    = 10;
+            int iterations                = 200;
+            double tolerance              = 1E-5;
             bool rejection                = false;
             _hmm                          = new HiddenMarkovClassifier
                                                 <MultivariateNormalDistribution>(
@@ -230,7 +251,7 @@ namespace Gestures.HMMs
 
                             FittingOptions = new NormalOptions()
                                              {
-                                                 Regularization = 1e-5
+                                Regularization = 1e-5
                                              }
                         }
                     );
@@ -243,24 +264,27 @@ namespace Gestures.HMMs
             double error = teacher.Run(inputs, outputs);
 
 
+            HmmMatches = 0;
+            HmmBadMatches = 0;
+            HmmGoodMatches = 0;
+
             // Classify all training instances
             foreach (var sample in CLASSIFYDB.Samples)
             {
                 sample.RecognizedAs = _hmm.Compute(sample.Input);
+                if (sample.RecognizedAs == sample.Output)
+                {
+                    HmmMatches++;
+                    if (sample.RecognizedAs == 0)
+                        HmmGoodMatches++;
+                    else
+                    {
+                        HmmBadMatches++;
+                    }
+                }
             }
 
             return true;
-
-            //WINFORM MODIFICATION
-            //            foreach (DataGridViewRow row in gridSamples.Rows)
-            //            {
-            //                var sample = row.DataBoundItem as Sequence;
-            //                row.DefaultCellStyle.BackColor = (sample.RecognizedAs == sample.Output) ?
-            //                    Color.LightGreen : Color.White;
-            //            }
-            //
-            //            btnLearnHCRF.Enabled = true;
-            //            hcrf = null;
         }
 
         //--------------------------------------------------------------------------------
@@ -279,8 +303,8 @@ namespace Gestures.HMMs
             var classes         = CLASSIFYDB.Classes;
             double[][][] inputs = new double[samples.Count][][];
             int[] outputs       = new int[samples.Count];
-            int iterations      = 100;
-            double tolerance    = 0.01;
+            int iterations      = 1500;
+            double tolerance    = 1E-7;
             _hcrf               = new HiddenConditionalRandomField<double[]>(
                                      new MarkovMultivariateFunction(_hmm));
 
@@ -301,10 +325,25 @@ namespace Gestures.HMMs
             // Run the learning algorithm
             teacher.Run(inputs, outputs);
 
-
+            HcrfMatches     = 0;
+            HcrfBadMatches  = 0;
+            HcrfGoodMatches = 0;
             foreach (var sample in CLASSIFYDB.Samples)
             {
                 sample.RecognizedAs = _hcrf.Compute(sample.Input);
+
+                if (sample.RecognizedAs == sample.Output)
+                {
+                    HcrfMatches++;
+                    if (sample.RecognizedAs == 0)
+                    {
+                        HcrfGoodMatches++;
+                    }
+                    else
+                    {
+                        HcrfBadMatches++;
+                    }
+                }
             }
 
             return true;

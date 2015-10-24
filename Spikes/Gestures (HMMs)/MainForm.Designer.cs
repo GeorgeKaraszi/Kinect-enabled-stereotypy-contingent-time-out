@@ -89,9 +89,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.button4 = new System.Windows.Forms.Button();
-            this.gridSamples = new System.Windows.Forms.DataGridView();
-            this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
-            this.colClassification = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnLearnHMM = new System.Windows.Forms.Button();
             this.btnLearnHCRF = new System.Windows.Forms.Button();
             this.panel = new System.Windows.Forms.Panel();
@@ -114,6 +111,19 @@
             this.lbDoesPatternEql = new System.Windows.Forms.Label();
             this.cbGesture = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lbHmmMatch = new System.Windows.Forms.Label();
+            this.lbHcrfMatch = new System.Windows.Forms.Label();
+            this.captureTime = new System.Windows.Forms.Timer(this.components);
+            this.btnautotrain = new System.Windows.Forms.Button();
+            this.cbWaveType = new System.Windows.Forms.ComboBox();
+            this.lbHcrfGoodWave = new System.Windows.Forms.Label();
+            this.lbHcrfBadWave = new System.Windows.Forms.Label();
+            this.lbHmmBadWave = new System.Windows.Forms.Label();
+            this.lbHmmGoodWave = new System.Windows.Forms.Label();
+            this.lbTotalRecs = new System.Windows.Forms.Label();
+            this.btnCompAuto = new System.Windows.Forms.Button();
+            this.recordTimer = new System.Windows.Forms.Timer(this.components);
+            this.saveFileWaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.tabSamples.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
@@ -148,7 +158,6 @@
             this.groupBox17.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.menuFile.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridSamples)).BeginInit();
             this.panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartPattern)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartKinectRaw)).BeginInit();
@@ -677,40 +686,6 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnFile_MouseDown);
             // 
-            // gridSamples
-            // 
-            this.gridSamples.AllowUserToAddRows = false;
-            this.gridSamples.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.gridSamples.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridSamples.BackgroundColor = System.Drawing.Color.White;
-            this.gridSamples.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridSamples.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colImage,
-            this.colClassification});
-            this.gridSamples.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.gridSamples.Location = new System.Drawing.Point(684, 12);
-            this.gridSamples.Name = "gridSamples";
-            this.gridSamples.Size = new System.Drawing.Size(290, 639);
-            this.gridSamples.TabIndex = 34;
-            // 
-            // colImage
-            // 
-            this.colImage.DataPropertyName = "Bitmap";
-            this.colImage.FillWeight = 30F;
-            this.colImage.HeaderText = "Pattern";
-            this.colImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
-            this.colImage.Name = "colImage";
-            this.colImage.ReadOnly = true;
-            // 
-            // colClassification
-            // 
-            this.colClassification.DataPropertyName = "OutputName";
-            this.colClassification.FillWeight = 40F;
-            this.colClassification.HeaderText = "Class";
-            this.colClassification.Name = "colClassification";
-            this.colClassification.ReadOnly = true;
-            // 
             // btnLearnHMM
             // 
             this.btnLearnHMM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -720,7 +695,7 @@
             this.btnLearnHMM.Size = new System.Drawing.Size(144, 40);
             this.btnLearnHMM.TabIndex = 35;
             this.btnLearnHMM.Text = "Create a Hidden Markov Model Classifier";
-            this.btnLearnHMM.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnLearnHMM.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
             this.btnLearnHMM.UseCompatibleTextRendering = true;
             this.btnLearnHMM.UseVisualStyleBackColor = true;
             this.btnLearnHMM.Click += new System.EventHandler(this.btnLearnHMM_Click);
@@ -731,10 +706,9 @@
             this.btnLearnHCRF.Enabled = false;
             this.btnLearnHCRF.Location = new System.Drawing.Point(161, 657);
             this.btnLearnHCRF.Name = "btnLearnHCRF";
-            this.btnLearnHCRF.Size = new System.Drawing.Size(150, 40);
+            this.btnLearnHCRF.Size = new System.Drawing.Size(158, 40);
             this.btnLearnHCRF.TabIndex = 35;
             this.btnLearnHCRF.Text = "Create a Hidden Conditional Random Field";
-            this.btnLearnHCRF.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnLearnHCRF.UseCompatibleTextRendering = true;
             this.btnLearnHCRF.UseVisualStyleBackColor = true;
             this.btnLearnHCRF.Click += new System.EventHandler(this.btnLearnHCRF_Click);
@@ -1012,25 +986,154 @@
             this.label1.TabIndex = 45;
             this.label1.Text = "Target Gesture";
             // 
+            // lbHmmMatch
+            // 
+            this.lbHmmMatch.AutoSize = true;
+            this.lbHmmMatch.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHmmMatch.Location = new System.Drawing.Point(692, 12);
+            this.lbHmmMatch.Name = "lbHmmMatch";
+            this.lbHmmMatch.Size = new System.Drawing.Size(295, 27);
+            this.lbHmmMatch.TabIndex = 46;
+            this.lbHmmMatch.Text = "HMM Total Matched {foo} : {centfoo}";
+            this.lbHmmMatch.UseCompatibleTextRendering = true;
+            // 
+            // lbHcrfMatch
+            // 
+            this.lbHcrfMatch.AutoSize = true;
+            this.lbHcrfMatch.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHcrfMatch.Location = new System.Drawing.Point(692, 161);
+            this.lbHcrfMatch.Name = "lbHcrfMatch";
+            this.lbHcrfMatch.Size = new System.Drawing.Size(293, 27);
+            this.lbHcrfMatch.TabIndex = 47;
+            this.lbHcrfMatch.Text = "HCRF Total Matched {foo} : {centfoo}";
+            this.lbHcrfMatch.UseCompatibleTextRendering = true;
+            // 
+            // captureTime
+            // 
+            this.captureTime.Tick += new System.EventHandler(this.captureTime_Tick);
+            // 
+            // btnautotrain
+            // 
+            this.btnautotrain.Location = new System.Drawing.Point(692, 443);
+            this.btnautotrain.Name = "btnautotrain";
+            this.btnautotrain.Size = new System.Drawing.Size(175, 23);
+            this.btnautotrain.TabIndex = 48;
+            this.btnautotrain.Text = "Start Auto Training";
+            this.btnautotrain.UseVisualStyleBackColor = true;
+            this.btnautotrain.Click += new System.EventHandler(this.btnautotrain_Click);
+            // 
+            // cbWaveType
+            // 
+            this.cbWaveType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWaveType.Items.AddRange(new object[] {
+            "Good Wave",
+            "Bad Wave"});
+            this.cbWaveType.Location = new System.Drawing.Point(873, 445);
+            this.cbWaveType.Name = "cbWaveType";
+            this.cbWaveType.Size = new System.Drawing.Size(101, 21);
+            this.cbWaveType.TabIndex = 49;
+            // 
+            // lbHcrfGoodWave
+            // 
+            this.lbHcrfGoodWave.AutoSize = true;
+            this.lbHcrfGoodWave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHcrfGoodWave.Location = new System.Drawing.Point(692, 202);
+            this.lbHcrfGoodWave.Name = "lbHcrfGoodWave";
+            this.lbHcrfGoodWave.Size = new System.Drawing.Size(187, 27);
+            this.lbHcrfGoodWave.TabIndex = 50;
+            this.lbHcrfGoodWave.Text = "HCRF Good wave: {foo}";
+            this.lbHcrfGoodWave.UseCompatibleTextRendering = true;
+            // 
+            // lbHcrfBadWave
+            // 
+            this.lbHcrfBadWave.AutoSize = true;
+            this.lbHcrfBadWave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHcrfBadWave.Location = new System.Drawing.Point(692, 239);
+            this.lbHcrfBadWave.Name = "lbHcrfBadWave";
+            this.lbHcrfBadWave.Size = new System.Drawing.Size(178, 27);
+            this.lbHcrfBadWave.TabIndex = 51;
+            this.lbHcrfBadWave.Text = "HCRF Bad Wave: {foo}";
+            this.lbHcrfBadWave.UseCompatibleTextRendering = true;
+            // 
+            // lbHmmBadWave
+            // 
+            this.lbHmmBadWave.AutoSize = true;
+            this.lbHmmBadWave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHmmBadWave.Location = new System.Drawing.Point(692, 93);
+            this.lbHmmBadWave.Name = "lbHmmBadWave";
+            this.lbHmmBadWave.Size = new System.Drawing.Size(180, 27);
+            this.lbHmmBadWave.TabIndex = 53;
+            this.lbHmmBadWave.Text = "HMM Bad Wave: {foo}";
+            this.lbHmmBadWave.UseCompatibleTextRendering = true;
+            // 
+            // lbHmmGoodWave
+            // 
+            this.lbHmmGoodWave.AutoSize = true;
+            this.lbHmmGoodWave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbHmmGoodWave.Location = new System.Drawing.Point(692, 56);
+            this.lbHmmGoodWave.Name = "lbHmmGoodWave";
+            this.lbHmmGoodWave.Size = new System.Drawing.Size(189, 27);
+            this.lbHmmGoodWave.TabIndex = 52;
+            this.lbHmmGoodWave.Text = "HMM Good wave: {foo}";
+            this.lbHmmGoodWave.UseCompatibleTextRendering = true;
+            // 
+            // lbTotalRecs
+            // 
+            this.lbTotalRecs.AutoSize = true;
+            this.lbTotalRecs.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotalRecs.Location = new System.Drawing.Point(741, 293);
+            this.lbTotalRecs.Name = "lbTotalRecs";
+            this.lbTotalRecs.Size = new System.Drawing.Size(159, 27);
+            this.lbTotalRecs.TabIndex = 54;
+            this.lbTotalRecs.Text = "Total Records: {foo}";
+            this.lbTotalRecs.UseCompatibleTextRendering = true;
+            // 
+            // btnCompAuto
+            // 
+            this.btnCompAuto.Location = new System.Drawing.Point(741, 518);
+            this.btnCompAuto.Name = "btnCompAuto";
+            this.btnCompAuto.Size = new System.Drawing.Size(175, 23);
+            this.btnCompAuto.TabIndex = 55;
+            this.btnCompAuto.Text = "Compute Auto Train";
+            this.btnCompAuto.UseVisualStyleBackColor = true;
+            this.btnCompAuto.Click += new System.EventHandler(this.btnCompAuto_Click);
+            // 
+            // recordTimer
+            // 
+            this.recordTimer.Tick += new System.EventHandler(this.recordTimer_Tick);
+            // 
+            // saveFileWaveDialog
+            // 
+            this.saveFileWaveDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileWaveDialog_FileOk);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(988, 704);
+            this.Controls.Add(this.btnCompAuto);
+            this.Controls.Add(this.lbTotalRecs);
+            this.Controls.Add(this.lbHmmBadWave);
+            this.Controls.Add(this.lbHmmGoodWave);
+            this.Controls.Add(this.lbHcrfBadWave);
+            this.Controls.Add(this.lbHcrfGoodWave);
+            this.Controls.Add(this.cbWaveType);
+            this.Controls.Add(this.btnautotrain);
+            this.Controls.Add(this.lbHcrfMatch);
+            this.Controls.Add(this.lbHmmMatch);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbGesture);
             this.Controls.Add(this.panel);
-            this.Controls.Add(this.gridSamples);
             this.Controls.Add(this.btnLearnHMM);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.btnLearnHCRF);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Continuous density Hidden Markov Models for Sequence Recognition";
+            this.Text = " ";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabSamples.ResumeLayout(false);
             this.splitContainer3.Panel1.ResumeLayout(false);
@@ -1068,7 +1171,6 @@
             this.groupBox17.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.menuFile.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridSamples)).EndInit();
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartPattern)).EndInit();
@@ -1136,11 +1238,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.DataGridView gridSamples;
         private System.Windows.Forms.Button btnLearnHMM;
         private System.Windows.Forms.Button btnLearnHCRF;
-        private System.Windows.Forms.DataGridViewImageColumn colImage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colClassification;
         private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Label lbRecError;
         private System.Windows.Forms.Button btnRecord;
@@ -1161,6 +1260,19 @@
         private System.Windows.Forms.Label lbLoadedGesture;
         private System.Windows.Forms.ComboBox cbGesture;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbHmmMatch;
+        private System.Windows.Forms.Label lbHcrfMatch;
+        private System.Windows.Forms.Timer captureTime;
+        private System.Windows.Forms.Button btnautotrain;
+        private System.Windows.Forms.ComboBox cbWaveType;
+        private System.Windows.Forms.Label lbHcrfGoodWave;
+        private System.Windows.Forms.Label lbHcrfBadWave;
+        private System.Windows.Forms.Label lbHmmBadWave;
+        private System.Windows.Forms.Label lbHmmGoodWave;
+        private System.Windows.Forms.Label lbTotalRecs;
+        private System.Windows.Forms.Button btnCompAuto;
+        private System.Windows.Forms.Timer recordTimer;
+        private System.Windows.Forms.SaveFileDialog saveFileWaveDialog;
     }
 }
 
