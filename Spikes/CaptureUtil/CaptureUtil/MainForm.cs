@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using CaptureUtil.Algorithms;
 using CaptureUtil.Properties;
 
@@ -138,7 +137,7 @@ namespace CaptureUtil
                 btnRecord.Text = Resources.start_recording;
 
                 //Open save dialog to save the recorded points
-                saveFileDialog.ShowDialog();
+                //saveFileDialog.ShowDialog();
 
                 udRecTime_ValueChanged(sender, e);
             }
