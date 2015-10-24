@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnRecord = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,6 +45,10 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rbHillBuild = new System.Windows.Forms.RadioButton();
+            this.rbPV = new System.Windows.Forms.RadioButton();
+            this.label5 = new System.Windows.Forms.Label();
             this.lbCapDis = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.chartRecording = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -55,17 +59,14 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.timerRecord = new System.Windows.Forms.Timer(this.components);
             this.label2 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.rbPV = new System.Windows.Forms.RadioButton();
-            this.rbHillBuild = new System.Windows.Forms.RadioButton();
+            this.btnAlgorRun = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartRecording)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartKinectRaw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRecTime)).BeginInit();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnRecord
@@ -138,14 +139,14 @@
             // toolStripOpen
             // 
             this.toolStripOpen.Name = "toolStripOpen";
-            this.toolStripOpen.Size = new System.Drawing.Size(103, 22);
+            this.toolStripOpen.Size = new System.Drawing.Size(152, 22);
             this.toolStripOpen.Text = "Open";
             this.toolStripOpen.Click += new System.EventHandler(this.toolStripOpen_Click);
             // 
             // toolStripSave
             // 
             this.toolStripSave.Name = "toolStripSave";
-            this.toolStripSave.Size = new System.Drawing.Size(103, 22);
+            this.toolStripSave.Size = new System.Drawing.Size(152, 22);
             this.toolStripSave.Text = "Save";
             this.toolStripSave.Click += new System.EventHandler(this.toolStripSave_Click);
             // 
@@ -178,6 +179,50 @@
             this.panel2.Size = new System.Drawing.Size(748, 401);
             this.panel2.TabIndex = 4;
             // 
+            // panel3
+            // 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel3.Controls.Add(this.btnAlgorRun);
+            this.panel3.Controls.Add(this.rbHillBuild);
+            this.panel3.Controls.Add(this.rbPV);
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Location = new System.Drawing.Point(231, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(517, 28);
+            this.panel3.TabIndex = 7;
+            // 
+            // rbHillBuild
+            // 
+            this.rbHillBuild.AutoSize = true;
+            this.rbHillBuild.Location = new System.Drawing.Point(247, 6);
+            this.rbHillBuild.Name = "rbHillBuild";
+            this.rbHillBuild.Size = new System.Drawing.Size(79, 17);
+            this.rbHillBuild.TabIndex = 9;
+            this.rbHillBuild.TabStop = true;
+            this.rbHillBuild.Text = "Hill Building";
+            this.rbHillBuild.UseVisualStyleBackColor = true;
+            // 
+            // rbPV
+            // 
+            this.rbPV.AutoSize = true;
+            this.rbPV.Location = new System.Drawing.Point(152, 6);
+            this.rbPV.Name = "rbPV";
+            this.rbPV.Size = new System.Drawing.Size(75, 17);
+            this.rbPV.TabIndex = 8;
+            this.rbPV.TabStop = true;
+            this.rbPV.Text = "PV  Period";
+            this.rbPV.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.label5.Location = new System.Drawing.Point(10, 6);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(123, 17);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Algorithm Method";
+            // 
             // lbCapDis
             // 
             this.lbCapDis.AutoSize = true;
@@ -205,30 +250,33 @@
             this.chartRecording.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartRecording.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            chartArea5.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.AxisY.Maximum = 1D;
-            chartArea5.AxisY.Minimum = 0D;
-            chartArea5.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            chartArea5.Name = "ChartArea1";
-            this.chartRecording.ChartAreas.Add(chartArea5);
+            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Red;
+            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            chartArea1.AxisY.LabelStyle.Format = "{0:#.#####}";
+            chartArea1.AxisY.Maximum = 1D;
+            chartArea1.AxisY.Minimum = 0D;
+            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            chartArea1.Name = "ChartArea1";
+            this.chartRecording.ChartAreas.Add(chartArea1);
             this.chartRecording.Location = new System.Drawing.Point(-29, 28);
             this.chartRecording.Name = "chartRecording";
             this.chartRecording.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series7.Color = System.Drawing.Color.Black;
-            series7.Name = "Series1";
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series8.Color = System.Drawing.Color.OrangeRed;
-            series8.IsValueShownAsLabel = true;
-            series8.Label = "#VAL";
-            series8.Name = "Series2";
-            this.chartRecording.Series.Add(series7);
-            this.chartRecording.Series.Add(series8);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Color = System.Drawing.Color.Black;
+            series1.Name = "Series1";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series2.Color = System.Drawing.Color.OrangeRed;
+            series2.IsValueShownAsLabel = true;
+            series2.Label = "X = #VALX\\nY = #VAL{0.#####}";
+            series2.Name = "Series2";
+            this.chartRecording.Series.Add(series1);
+            this.chartRecording.Series.Add(series2);
             this.chartRecording.Size = new System.Drawing.Size(816, 171);
             this.chartRecording.TabIndex = 3;
             this.chartRecording.Text = "chart1";
@@ -238,24 +286,24 @@
             this.chartKinectRaw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartKinectRaw.BackColor = System.Drawing.Color.Maroon;
-            chartArea6.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.AxisY.Maximum = 1D;
-            chartArea6.AxisY.Minimum = 0D;
-            chartArea6.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea6.BackColor = System.Drawing.Color.Maroon;
-            chartArea6.BorderColor = System.Drawing.Color.Maroon;
-            chartArea6.Name = "ChartArea1";
-            this.chartKinectRaw.ChartAreas.Add(chartArea6);
+            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.AxisY.Maximum = 1D;
+            chartArea2.AxisY.Minimum = 0D;
+            chartArea2.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea2.BackColor = System.Drawing.Color.Maroon;
+            chartArea2.BorderColor = System.Drawing.Color.Maroon;
+            chartArea2.Name = "ChartArea1";
+            this.chartKinectRaw.ChartAreas.Add(chartArea2);
             this.chartKinectRaw.Location = new System.Drawing.Point(-29, 227);
             this.chartKinectRaw.Name = "chartKinectRaw";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series9.Color = System.Drawing.Color.White;
-            series9.CustomProperties = "LineTension=0.5";
-            series9.Name = "Series1";
-            this.chartKinectRaw.Series.Add(series9);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series3.Color = System.Drawing.Color.White;
+            series3.CustomProperties = "LineTension=0.5";
+            series3.Name = "Series1";
+            this.chartKinectRaw.Series.Add(series3);
             this.chartKinectRaw.Size = new System.Drawing.Size(816, 171);
             this.chartKinectRaw.TabIndex = 2;
             this.chartKinectRaw.Text = "chart1";
@@ -304,49 +352,15 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Sec\'s";
             // 
-            // panel3
+            // btnAlgorRun
             // 
-            this.panel3.Controls.Add(this.rbHillBuild);
-            this.panel3.Controls.Add(this.rbPV);
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Location = new System.Drawing.Point(231, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(517, 28);
-            this.panel3.TabIndex = 7;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            this.label5.Location = new System.Drawing.Point(10, 6);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(123, 17);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Algorithm Method";
-            // 
-            // rbPV
-            // 
-            this.rbPV.AutoSize = true;
-            this.rbPV.Location = new System.Drawing.Point(152, 6);
-            this.rbPV.Name = "rbPV";
-            this.rbPV.Size = new System.Drawing.Size(75, 17);
-            this.rbPV.TabIndex = 8;
-            this.rbPV.TabStop = true;
-            this.rbPV.Text = "PV  Period";
-            this.rbPV.UseVisualStyleBackColor = true;
-            this.rbPV.CheckedChanged += new System.EventHandler(this.Algorithm_CheckedChanged);
-            // 
-            // rbHillBuild
-            // 
-            this.rbHillBuild.AutoSize = true;
-            this.rbHillBuild.Location = new System.Drawing.Point(247, 6);
-            this.rbHillBuild.Name = "rbHillBuild";
-            this.rbHillBuild.Size = new System.Drawing.Size(79, 17);
-            this.rbHillBuild.TabIndex = 9;
-            this.rbHillBuild.TabStop = true;
-            this.rbHillBuild.Text = "Hill Building";
-            this.rbHillBuild.UseVisualStyleBackColor = true;
-            this.rbHillBuild.CheckedChanged += new System.EventHandler(this.Algorithm_CheckedChanged);
+            this.btnAlgorRun.Location = new System.Drawing.Point(341, 2);
+            this.btnAlgorRun.Name = "btnAlgorRun";
+            this.btnAlgorRun.Size = new System.Drawing.Size(96, 24);
+            this.btnAlgorRun.TabIndex = 8;
+            this.btnAlgorRun.Text = "Run";
+            this.btnAlgorRun.UseVisualStyleBackColor = true;
+            this.btnAlgorRun.Click += new System.EventHandler(this.btnAlgorRun_Click);
             // 
             // MainForm
             // 
@@ -369,11 +383,11 @@
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartRecording)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartKinectRaw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRecTime)).EndInit();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -406,6 +420,7 @@
         private System.Windows.Forms.RadioButton rbHillBuild;
         private System.Windows.Forms.RadioButton rbPV;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnAlgorRun;
     }
 }
 

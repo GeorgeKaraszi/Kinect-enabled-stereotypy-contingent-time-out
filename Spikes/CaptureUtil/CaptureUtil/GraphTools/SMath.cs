@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CaptureUtil.GraphTools
 {
-    public static class CMath
+    public static class SMath
     {
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -53,7 +53,7 @@ namespace CaptureUtil.GraphTools
             if (enumerable.Any())
             {
                 avg = enumerable.Average();
-                sum = enumerable.Sum(d => CMath.Pow(d - avg, 2));
+                sum = enumerable.Sum(d => Math.Pow(d - avg, 2));
                 sdReturn = Math.Sqrt((sum) / (enumerable.Count() - 1));
                 
             }

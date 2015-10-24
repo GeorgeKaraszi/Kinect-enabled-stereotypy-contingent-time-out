@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using CaptureUtil.Algorithms;
 
 namespace CaptureUtil
 {
@@ -221,31 +222,55 @@ namespace CaptureUtil
         }
 
         /// <summary>
-        /// 
+        /// Check for a change in the algorithm and run the Analyst when the run button 
+        /// is clicked on.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Algorithm_CheckedChanged(object sender, EventArgs e)
+        private void btnAlgorRun_Click(object sender, EventArgs e)
         {
+            //Check to see if one of the algorithms where checked.
             if (rbPV.Checked)
             {
                 _AlgorithmSelected = 1;
             }
-            else
+            else if (rbHillBuild.Checked)
             {
                 _AlgorithmSelected = 2;
             }
+            else
+            {
+                _AlgorithmSelected = 0;
+            }
+
+            //Gather the wave datapoints
+            var wave = new List<double>();
+            foreach (var point in chartRecording.Series[0].Points)
+            {
+                wave.Add(point.YValues[0]);
+            }
+
+            //Run the analyst
+            RunAnalyst(wave);
         }
 
         /// <summary>
         /// Runs the given wave through a selected algorithm to produce a analysis.
         /// </summary>
         /// <param name="wave"></param>
-        private void RunAnalyist(List<double> wave)
+        private void RunAnalyst(List<double> wave)
         {
+            chartRecording.Series[1].Points.Clear();
+
             switch (_AlgorithmSelected)
             {
                 case 1:
+                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
+
+                    foreach (var p in pv)
+                    {
+                        chartRecording.Series[1].Points.AddXY(p.Item1, p.Item2);
+                    }
                     //Do something with peaks and valleys here.
                     break;
                 case 2:
@@ -254,6 +279,8 @@ namespace CaptureUtil
                 default:
                     break;
             }
+
+            //chartRecording.Series[1].LabelFormat = "{0:0,}K";
         }
     }
 }

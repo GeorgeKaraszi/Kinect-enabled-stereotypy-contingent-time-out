@@ -67,7 +67,7 @@ namespace CaptureUtil.GraphTools
             int sections = (int)wave.Count() / 6;
 
             //Check to see if the wave is even worth the time working on
-            if (CMath.CaculateStdDev(newWave) < 0.2)
+            if (SMath.CaculateStdDev(newWave) < 0.2)
             {
                 return null;
             }
@@ -76,7 +76,7 @@ namespace CaptureUtil.GraphTools
             {
                 var datapoints = newWave.Skip(i * sections).Take(sections);
 
-                if (CMath.CaculateStdDev(datapoints) < 0.23)
+                if (SMath.CaculateStdDev(datapoints) < 0.23)
                 {
                     var avg = datapoints.Min();
                     for (int j = 0; j < sections; j++)
@@ -165,7 +165,7 @@ namespace CaptureUtil.GraphTools
 
                 if (matchFound)                     //if true, average all temp points
                 {
-                    smoothPoints.Add(CMath.AverageArray(tempList));
+                    smoothPoints.Add(SMath.AverageArray(tempList));
                 }
                 else                 //Otherwise add all points as they are clear and good
                 {

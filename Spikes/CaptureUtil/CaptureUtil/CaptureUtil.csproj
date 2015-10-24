@@ -56,7 +56,7 @@
     <Compile Include="GestureDetector.cs" />
     <Compile Include="GestureResultView.cs" />
     <Compile Include="Algorithms\HillBuilding.cs" />
-    <Compile Include="GraphTools\CMath.cs" />
+    <Compile Include="GraphTools\SMath.cs" />
     <Compile Include="GraphTools\SmoothIteration.cs" />
     <Compile Include="KinectHandle.cs" />
     <Compile Include="MainForm.cs">
