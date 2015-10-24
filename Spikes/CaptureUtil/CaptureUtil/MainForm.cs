@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using CaptureUtil.Algorithms;
 using CaptureUtil.Properties;
 
@@ -203,16 +205,54 @@ namespace CaptureUtil
         /// <param name="e"></param>
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
         {
+            //Get the extension of the given file
+            string extentionType = Path.GetExtension(openFileDialog.FileName);
+
             var pv = new List<Tuple<int, double>>();
             var datapoints = new List<double>();
 
             //Open the selected file
             using (var stream = openFileDialog.OpenFile())
             {
-                //Load the Peak's and valley, and base data points to the wave
-                _algorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
-                pv = (List<Tuple<int, double>>) new BinaryFormatter().Deserialize(stream);
-                datapoints = (List<double>) new BinaryFormatter().Deserialize(stream);
+                //Check to see if file type is text or otherwise binary
+                if (extentionType == ".txt")
+                {
+                    string lineread = String.Empty;
+
+                    using (var sr = new StreamReader(stream))
+                    {
+                        _algorithmSelected = Convert.ToInt32(sr.ReadLine());
+                        if (sr.ReadLine() == "dp start")
+                        {
+                            
+                            while (( lineread = sr.ReadLine() ) != "dp end")
+                            {
+                                datapoints.Add(Convert.ToDouble(lineread));
+                            }
+                        }
+
+                        if (sr.ReadLine() == "pv start")
+                        {
+                            while ((lineread = sr.ReadLine()) != "pv end")
+                            {
+                                var split = lineread.Split(':');
+                                var tmp =
+                                    new Tuple<int, double>(Convert.ToInt32(split[0]),
+                                                           Convert.ToDouble(split[1]));
+                                pv.Add(tmp);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //Load the Peak's and valley, and base data points to the wave
+                    _algorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
+                    datapoints = (List<double>)new BinaryFormatter().Deserialize(stream);
+                    pv =
+                        (List<Tuple<int, double>>)
+                            new BinaryFormatter().Deserialize(stream);
+                }
             }
 
             //Clear all points from the chart
@@ -242,6 +282,9 @@ namespace CaptureUtil
         /// <param name="e"></param>
         private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
+            //Get the saving data type
+            string extentionType = Path.GetExtension(saveFileDialog.FileName);
+
             var series0Points = chartRecording.Series[0].Points;
             var series1Points = chartRecording.Series[1].Points;
 
@@ -252,10 +295,31 @@ namespace CaptureUtil
 
             using (var stream = saveFileDialog.OpenFile())
             {
-                var bf = new BinaryFormatter();
-                bf.Serialize(stream,_algorithmSelected);
-                bf.Serialize(stream, pv);
-                bf.Serialize(stream, datapoints);
+                //Save data in a text file format
+                if (extentionType == ".txt")
+                {
+                    using (var sw = new StreamWriter(stream))
+                    {
+                        sw.WriteLine("{0}\ndp start",_algorithmSelected);
+                        foreach (var point in datapoints)
+                        {
+                            sw.WriteLine("{0}", point);
+                        }
+                        sw.WriteLine("dp end\npv start");
+                        foreach (var point in pv)
+                        {
+                            sw.WriteLine("{0}:{1}", point.Item1,point.Item2);
+                        }
+                        sw.WriteLine("pv end");
+                    }
+                }
+                else //Otherwise save it as binary, more accurate format
+                {
+                    var bf = new BinaryFormatter();
+                    bf.Serialize(stream, _algorithmSelected);
+                    bf.Serialize(stream, datapoints);
+                    bf.Serialize(stream, pv);
+                }
             }
         }
 
@@ -304,7 +368,7 @@ namespace CaptureUtil
                 case 1:
                     var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
 
-                    foreach (var p in pv)
+                    foreach (Tuple<int, double> p in pv)
                     {
                         chartRecording.Series[1].Points.AddXY(p.Item1, p.Item2);
                     }

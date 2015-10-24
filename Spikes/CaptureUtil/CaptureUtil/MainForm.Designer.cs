@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnRecord = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -262,33 +262,33 @@
             this.chartRecording.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartRecording.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Red;
-            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            chartArea1.AxisY.LabelStyle.Format = "{0:#.#####}";
-            chartArea1.AxisY.Maximum = 1D;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            chartArea1.Name = "ChartArea1";
-            this.chartRecording.ChartAreas.Add(chartArea1);
+            chartArea7.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea7.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Red;
+            chartArea7.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea7.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea7.AxisY.LabelStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            chartArea7.AxisY.LabelStyle.Format = "{0:#.#####}";
+            chartArea7.AxisY.Maximum = 1D;
+            chartArea7.AxisY.Minimum = 0D;
+            chartArea7.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            chartArea7.Name = "ChartArea1";
+            this.chartRecording.ChartAreas.Add(chartArea7);
             this.chartRecording.Location = new System.Drawing.Point(-29, 28);
             this.chartRecording.Name = "chartRecording";
             this.chartRecording.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Color = System.Drawing.Color.Black;
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series2.Color = System.Drawing.Color.OrangeRed;
-            series2.IsValueShownAsLabel = true;
-            series2.Label = "X = #VALX\\nY = #VAL{0.#####}";
-            series2.Name = "Series2";
-            this.chartRecording.Series.Add(series1);
-            this.chartRecording.Series.Add(series2);
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series10.Color = System.Drawing.Color.Black;
+            series10.Name = "Series1";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series11.Color = System.Drawing.Color.OrangeRed;
+            series11.IsValueShownAsLabel = true;
+            series11.Label = "X = #VALX\\nY = #VAL{0.#####}";
+            series11.Name = "Series2";
+            this.chartRecording.Series.Add(series10);
+            this.chartRecording.Series.Add(series11);
             this.chartRecording.Size = new System.Drawing.Size(816, 171);
             this.chartRecording.TabIndex = 3;
             this.chartRecording.Text = "chart1";
@@ -298,24 +298,24 @@
             this.chartKinectRaw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartKinectRaw.BackColor = System.Drawing.Color.Maroon;
-            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.AxisY.Maximum = 1D;
-            chartArea2.AxisY.Minimum = 0D;
-            chartArea2.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea2.BackColor = System.Drawing.Color.Maroon;
-            chartArea2.BorderColor = System.Drawing.Color.Maroon;
-            chartArea2.Name = "ChartArea1";
-            this.chartKinectRaw.ChartAreas.Add(chartArea2);
+            chartArea8.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea8.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea8.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea8.AxisY.Maximum = 1D;
+            chartArea8.AxisY.Minimum = 0D;
+            chartArea8.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chartArea8.BackColor = System.Drawing.Color.Maroon;
+            chartArea8.BorderColor = System.Drawing.Color.Maroon;
+            chartArea8.Name = "ChartArea1";
+            this.chartKinectRaw.ChartAreas.Add(chartArea8);
             this.chartKinectRaw.Location = new System.Drawing.Point(-29, 227);
             this.chartKinectRaw.Name = "chartKinectRaw";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series3.Color = System.Drawing.Color.White;
-            series3.CustomProperties = "LineTension=0.5";
-            series3.Name = "Series1";
-            this.chartKinectRaw.Series.Add(series3);
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series12.Color = System.Drawing.Color.White;
+            series12.CustomProperties = "LineTension=0.5";
+            series12.Name = "Series1";
+            this.chartKinectRaw.Series.Add(series12);
             this.chartKinectRaw.Size = new System.Drawing.Size(816, 171);
             this.chartKinectRaw.TabIndex = 2;
             this.chartKinectRaw.Text = "chart1";
@@ -342,12 +342,12 @@
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog";
-            this.openFileDialog.Filter = "Compressed Database files|*.cdb|All files|*.*";
+            this.openFileDialog.Filter = "Compressed Database files|*.cdb|Text File|*.txt|All files|*.*";
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
             // saveFileDialog
             // 
-            this.saveFileDialog.Filter = "Compressed Database files|*.cdb|All files|*.*";
+            this.saveFileDialog.Filter = "Compressed Database files|*.cdb|Text File|*.txt|All files|*.*";
             this.saveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog_FileOk);
             // 
             // timerRecord
