@@ -197,131 +197,7 @@ namespace CaptureUtil
             }
         }
 
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Load a chart that was saved from an earlier time.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void openFileDialog_FileOk(object sender, CancelEventArgs e)
-        {
-            //Get the extension of the given file
-            string extentionType = Path.GetExtension(openFileDialog.FileName);
-
-            var pv = new List<Tuple<int, double>>();
-            var datapoints = new List<double>();
-
-            //Open the selected file
-            using (var stream = openFileDialog.OpenFile())
-            {
-                //Check to see if file type is text or otherwise binary
-                if (extentionType == ".txt")
-                {
-                    string lineread = String.Empty;
-
-                    using (var sr = new StreamReader(stream))
-                    {
-                        _algorithmSelected = Convert.ToInt32(sr.ReadLine());
-                        if (sr.ReadLine() == "dp start")
-                        {
-                            
-                            while (( lineread = sr.ReadLine() ) != "dp end")
-                            {
-                                datapoints.Add(Convert.ToDouble(lineread));
-                            }
-                        }
-
-                        if (sr.ReadLine() == "pv start")
-                        {
-                            while ((lineread = sr.ReadLine()) != "pv end")
-                            {
-                                var split = lineread.Split(':');
-                                var tmp =
-                                    new Tuple<int, double>(Convert.ToInt32(split[0]),
-                                                           Convert.ToDouble(split[1]));
-                                pv.Add(tmp);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    //Load the Peak's and valley, and base data points to the wave
-                    _algorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
-                    datapoints = (List<double>)new BinaryFormatter().Deserialize(stream);
-                    pv =
-                        (List<Tuple<int, double>>)
-                            new BinaryFormatter().Deserialize(stream);
-                }
-            }
-
-            //Clear all points from the chart
-            chartRecording.Series[0].Points.Clear();
-            chartRecording.Series[1].Points.Clear();
-
-            //Load the data points into the chart to display
-            for (int i = 0; i < datapoints.Count; i++)
-            {
-                chartRecording.Series[0].Points.AddXY(i, datapoints[i]);
-            }
-
-            foreach (var point in pv)
-            {
-                chartRecording.Series[1].Points.AddXY(point.Item1, point.Item2);
-            }
-
-            lbCapDis.Text = Resources.load_and_display_data;
-            panelAlgorithm.Visible = true;
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Save the results from the recording chart display
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
-        {
-            //Get the saving data type
-            string extentionType = Path.GetExtension(saveFileDialog.FileName);
-
-            var series0Points = chartRecording.Series[0].Points;
-            var series1Points = chartRecording.Series[1].Points;
-
-            //Gather all points from the recored chart
-            var datapoints = series0Points.Select(point => point.YValues[0]).ToList();
-            var pv = series1Points.Select(point => 
-                new Tuple<int, double>((int) point.XValue, point.YValues[0])).ToList();
-
-            using (var stream = saveFileDialog.OpenFile())
-            {
-                //Save data in a text file format
-                if (extentionType == ".txt")
-                {
-                    using (var sw = new StreamWriter(stream))
-                    {
-                        sw.WriteLine("{0}\ndp start",_algorithmSelected);
-                        foreach (var point in datapoints)
-                        {
-                            sw.WriteLine("{0}", point);
-                        }
-                        sw.WriteLine("dp end\npv start");
-                        foreach (var point in pv)
-                        {
-                            sw.WriteLine("{0}:{1}", point.Item1,point.Item2);
-                        }
-                        sw.WriteLine("pv end");
-                    }
-                }
-                else //Otherwise save it as binary, more accurate format
-                {
-                    var bf = new BinaryFormatter();
-                    bf.Serialize(stream, _algorithmSelected);
-                    bf.Serialize(stream, datapoints);
-                    bf.Serialize(stream, pv);
-                }
-            }
-        }
+      
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -379,6 +255,132 @@ namespace CaptureUtil
                     break;
                 default:
                     break;
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Load a chart that was saved from an earlier time.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openFileDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            //Get the extension of the given file
+            string extentionType = Path.GetExtension(openFileDialog.FileName);
+
+            var pv = new List<Tuple<int, double>>();
+            var datapoints = new List<double>();
+
+            //Open the selected file
+            using (var stream = openFileDialog.OpenFile())
+            {
+                //Check to see if file type is text or otherwise binary
+                if (extentionType == ".txt")
+                {
+                    string lineread = String.Empty;
+
+                    using (var sr = new StreamReader(stream))
+                    {
+                        _algorithmSelected = Convert.ToInt32(sr.ReadLine());
+                        if (sr.ReadLine() == "dp start")
+                        {
+
+                            while ((lineread = sr.ReadLine()) != "dp end")
+                            {
+                                datapoints.Add(Convert.ToDouble(lineread));
+                            }
+                        }
+
+                        if (sr.ReadLine() == "pv start")
+                        {
+                            while ((lineread = sr.ReadLine()) != "pv end")
+                            {
+                                var split = lineread.Split(':');
+                                var tmp =
+                                    new Tuple<int, double>(Convert.ToInt32(split[0]),
+                                                           Convert.ToDouble(split[1]));
+                                pv.Add(tmp);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //Load the Peak's and valley, and base data points to the wave
+                    _algorithmSelected = (int)new BinaryFormatter().Deserialize(stream);
+                    datapoints = (List<double>)new BinaryFormatter().Deserialize(stream);
+                    pv =
+                        (List<Tuple<int, double>>)
+                            new BinaryFormatter().Deserialize(stream);
+                }
+            }
+
+            //Clear all points from the chart
+            chartRecording.Series[0].Points.Clear();
+            chartRecording.Series[1].Points.Clear();
+
+            //Load the data points into the chart to display
+            for (int i = 0; i < datapoints.Count; i++)
+            {
+                chartRecording.Series[0].Points.AddXY(i, datapoints[i]);
+            }
+
+            foreach (var point in pv)
+            {
+                chartRecording.Series[1].Points.AddXY(point.Item1, point.Item2);
+            }
+
+            lbCapDis.Text = Resources.load_and_display_data;
+            panelAlgorithm.Visible = true;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Save the results from the recording chart display
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveFileDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            //Get the saving data type
+            string extentionType = Path.GetExtension(saveFileDialog.FileName);
+
+            var series0Points = chartRecording.Series[0].Points;
+            var series1Points = chartRecording.Series[1].Points;
+
+            //Gather all points from the recored chart
+            var datapoints = series0Points.Select(point => point.YValues[0]).ToList();
+            var pv = series1Points.Select(point =>
+                new Tuple<int, double>((int)point.XValue, point.YValues[0])).ToList();
+
+            using (var stream = saveFileDialog.OpenFile())
+            {
+                //Save data in a text file format
+                if (extentionType == ".txt")
+                {
+                    using (var sw = new StreamWriter(stream))
+                    {
+                        sw.WriteLine("{0}\ndp start", _algorithmSelected);
+                        foreach (var point in datapoints)
+                        {
+                            sw.WriteLine("{0}", point);
+                        }
+                        sw.WriteLine("dp end\npv start");
+                        foreach (var point in pv)
+                        {
+                            sw.WriteLine("{0}:{1}", point.Item1, point.Item2);
+                        }
+                        sw.WriteLine("pv end");
+                    }
+                }
+                else //Otherwise save it as binary, more accurate format
+                {
+                    var bf = new BinaryFormatter();
+                    bf.Serialize(stream, _algorithmSelected);
+                    bf.Serialize(stream, datapoints);
+                    bf.Serialize(stream, pv);
+                }
             }
         }
     }
