@@ -14,9 +14,20 @@ namespace CaptureUtil
         /// </summary>
         private KinectHandle _kinectHandle;
 
+        /// <summary>
+        /// Global timer for handling recording time.
+        /// </summary>
         private int _recordingTimer;
 
+        /// <summary>
+        /// Signal flag to tell the confidence capture to gather more values.
+        /// </summary>
         public static bool Recording = false;
+
+        /// <summary>
+        /// Flag to which algorithm is used to analyze the captured wave.
+        /// </summary>
+        private int _AlgorithmSelected;
 
         public MainForm()
         {
@@ -160,6 +171,7 @@ namespace CaptureUtil
             using (var stream = openFileDialog.OpenFile())
             {
                 //Load the Peak's and valley, and base data points to the wave
+                _AlgorithmSelected = (int) new BinaryFormatter().Deserialize(stream);
                 pv = (List<Tuple<int, double>>) new BinaryFormatter().Deserialize(stream);
                 datapoints = (List<double>) new BinaryFormatter().Deserialize(stream);
             }
@@ -202,8 +214,45 @@ namespace CaptureUtil
             using (var stream = saveFileDialog.OpenFile())
             {
                 var bf = new BinaryFormatter();
+                bf.Serialize(stream,_AlgorithmSelected);
                 bf.Serialize(stream, pv);
                 bf.Serialize(stream, datapoints);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Algorithm_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbPV.Checked)
+            {
+                _AlgorithmSelected = 1;
+            }
+            else
+            {
+                _AlgorithmSelected = 2;
+            }
+        }
+
+        /// <summary>
+        /// Runs the given wave through a selected algorithm to produce a analysis.
+        /// </summary>
+        /// <param name="wave"></param>
+        private void RunAnalyist(List<double> wave)
+        {
+            switch (_AlgorithmSelected)
+            {
+                case 1:
+                    //Do something with peaks and valleys here.
+                    break;
+                case 2:
+                    //Do something with hill building here
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -55,6 +55,9 @@
     <Compile Include="ChartInteraction.cs" />
     <Compile Include="GestureDetector.cs" />
     <Compile Include="GestureResultView.cs" />
+    <Compile Include="Algorithms\HillBuilding.cs" />
+    <Compile Include="GraphTools\CMath.cs" />
+    <Compile Include="GraphTools\SmoothIteration.cs" />
     <Compile Include="KinectHandle.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -62,6 +65,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Algorithms\PeaksAndValleys.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
