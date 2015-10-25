@@ -24,23 +24,25 @@ namespace CaptureUtil.GraphTools
         /// </returns>
         public List<double> SmoothGraph(List<double> points, int level = 1)
         {
-            List<double> smoothedGraph = null;       //Final list of plot points
 
             if (points == null)
                 throw new ArgumentNullException(nameof(points));
 
+            //Final list of plot points
+            List<double> smoothedGraph = new List<double>(points.ToArray());
+
             switch (level)
             {
                 case 2:
-                    smoothedGraph = AveragePlotPoints(points, 4, 3);
+                    smoothedGraph = AveragePlotPoints(smoothedGraph, 4, 3);
                     smoothedGraph = SmoothRange(smoothedGraph);
                     break;
                 case 3:
-                    smoothedGraph = AveragePlotPoints(points, 5, 3);
+                    smoothedGraph = AveragePlotPoints(smoothedGraph, 5, 3);
                     smoothedGraph = SmoothRange(smoothedGraph);
                     break;
                 default:
-                    smoothedGraph = AveragePlotPoints(points);
+                    smoothedGraph = AveragePlotPoints(smoothedGraph);
                     smoothedGraph = SmoothRange(smoothedGraph);
                     break;
             }
@@ -76,7 +78,7 @@ namespace CaptureUtil.GraphTools
             {
                 var datapoints = newWave.Skip(i * sections).Take(sections);
 
-                if (SMath.CaculateStdDev(datapoints) < 0.23)
+                if (SMath.CaculateStdDev(datapoints) < 0.15)
                 {
                     var avg = datapoints.Min();
                     for (int j = 0; j < sections; j++)

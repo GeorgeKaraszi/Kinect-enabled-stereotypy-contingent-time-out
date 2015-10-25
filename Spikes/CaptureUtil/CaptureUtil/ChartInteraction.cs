@@ -42,7 +42,6 @@ namespace CaptureUtil
                              .Controls["panel2"]
                              .Controls[chartName] as Chart;
             int index      = -1;      //Latest Index place in the plot table
-            int convertedY = -1;      //Converts all float decimals points to whole number
 
             if (chart != null)       //Did we find our object?
             {

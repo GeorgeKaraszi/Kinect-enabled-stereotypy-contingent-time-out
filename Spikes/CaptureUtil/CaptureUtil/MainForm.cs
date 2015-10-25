@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using CaptureUtil.Algorithms;
+using CaptureUtil.GraphTools;
 using CaptureUtil.Properties;
 
 namespace CaptureUtil
@@ -241,7 +242,14 @@ namespace CaptureUtil
             switch (_algorithmSelected)
             {
                 case 1:
-                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
+                    var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
+                    var pv = new PeaksAndValleys().FindPeaksAndValleys(smooth);
+
+                    chartRecording.Series[0].Points.Clear();
+                    for(int i = 0; i < smooth.Count;i++)
+                    {
+                        chartRecording.Series[0].Points.AddXY(i, smooth[i]);
+                    }
 
                     foreach (Tuple<int, double> p in pv)
                     {
