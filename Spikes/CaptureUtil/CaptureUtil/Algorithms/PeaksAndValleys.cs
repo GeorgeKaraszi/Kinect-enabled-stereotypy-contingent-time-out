@@ -31,14 +31,13 @@ namespace CaptureUtil.Algorithms
                         //Be sure the valley is less then the last captured peak
                         if (pvList.Count > 0 && valley >= pvList.Last().Item2)
                         {
+                            valset = i;
+                            valley = 1;
                             continue;
                         }
-
-
+                        
                         pvList.Add(new Tuple<int, double>(valset, valley));
-
                         valley = 1;
-                        i--;
 
                         continue;
                     }
@@ -49,9 +48,10 @@ namespace CaptureUtil.Algorithms
                         //Be sure the peak is higher then the last captured valley
                         if (pvList.Count > 0 && peak <= pvList.Last().Item2)
                         {
-                          continue;
+                            peakset = i;
+                            peak = wave[i];
+                            continue;
                         }
-
 
                         pvList.Add(new Tuple<int, double>(peakset, peak));
                         peak = 0;

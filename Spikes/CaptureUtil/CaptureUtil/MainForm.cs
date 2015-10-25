@@ -242,13 +242,13 @@ namespace CaptureUtil
             switch (_algorithmSelected)
             {
                 case 1:
-                    var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
-                    var pv = new PeaksAndValleys().FindPeaksAndValleys(smooth);
+                    //var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
+                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
 
                     chartRecording.Series[0].Points.Clear();
-                    for(int i = 0; i < smooth.Count;i++)
+                    for(int i = 0; i < wave.Count;i++)
                     {
-                        chartRecording.Series[0].Points.AddXY(i, smooth[i]);
+                        chartRecording.Series[0].Points.AddXY(i, wave[i]);
                     }
 
                     foreach (Tuple<int, double> p in pv)
