@@ -242,22 +242,45 @@ namespace CaptureUtil
             switch (_algorithmSelected)
             {
                 case 1:
-                    //var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
-                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
-
                     chartRecording.Series[0].Points.Clear();
                     for(int i = 0; i < wave.Count;i++)
                     {
                         chartRecording.Series[0].Points.AddXY(i, wave[i]);
                     }
+                    var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
+                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
+
+//                    chartRecording.Series[0].Points.Clear();
+//                    for(int i = 0; i < smooth.Count;i++)
+//                    {
+//                        chartRecording.Series[0].Points.AddXY(i, smooth[i]);
+//                    }
 
                     foreach (Tuple<int, double> p in pv)
                     {
                         chartRecording.Series[1].Points.AddXY(p.Item1, p.Item2);
                     }
+                    chartRecording.Refresh();
+
+                    var period = new PeaksAndValleys().CalculateThePeriod(wave, pv);
+                    MessageBox.Show($"The Periods are: {period}");
+
                     //Do something with peaks and valleys here.
                     break;
                 case 2:
+                    chartRecording.Series[0].Points.Clear();
+                    for (int i = 0; i < wave.Count; i++)
+                    {
+                        chartRecording.Series[0].Points.AddXY(i, wave[i]);
+                    }
+                    var hills = new HillBuilding().BuildHills(wave);
+
+                    foreach (Tuple<int, int> h in hills)
+                    {
+                        chartRecording.Series[1].Points.AddXY(h.Item1, wave[h.Item1]);
+                        chartRecording.Series[1].Points.AddXY(h.Item2, wave[h.Item2]);
+                    }
+                    chartRecording.Refresh();
                     //Do something with hill building here
                     break;
                 default:

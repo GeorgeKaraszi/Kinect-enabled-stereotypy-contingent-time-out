@@ -284,8 +284,9 @@
             series11.ChartArea = "ChartArea1";
             series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series11.Color = System.Drawing.Color.OrangeRed;
-            series11.IsValueShownAsLabel = true;
-            series11.Label = "X = #VALX\\nY = #VAL{0.#####}";
+            series11.IsValueShownAsLabel = false;
+            //series11.IsValueShownAsLabel = true;
+            //series11.Label = "X = #VALX\\nY = #VAL{0.#####}";
             series11.Name = "Series2";
             this.chartRecording.Series.Add(series10);
             this.chartRecording.Series.Add(series11);
