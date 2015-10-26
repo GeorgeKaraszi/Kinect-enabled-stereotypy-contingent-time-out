@@ -243,18 +243,24 @@ namespace CaptureUtil
             {
                 case 1:
                     var smooth = new SmoothIteration().HandleDeviation(wave.ToArray());
-                    var pv = new PeaksAndValleys().FindPeaksAndValleys(smooth);
+                    var pv = new PeaksAndValleys().FindPeaksAndValleys(wave);
 
-                    chartRecording.Series[0].Points.Clear();
-                    for(int i = 0; i < smooth.Count;i++)
-                    {
-                        chartRecording.Series[0].Points.AddXY(i, smooth[i]);
-                    }
+//                    chartRecording.Series[0].Points.Clear();
+//                    for(int i = 0; i < smooth.Count;i++)
+//                    {
+//                        chartRecording.Series[0].Points.AddXY(i, smooth[i]);
+//                    }
+
 
                     foreach (Tuple<int, double> p in pv)
                     {
                         chartRecording.Series[1].Points.AddXY(p.Item1, p.Item2);
                     }
+                    chartRecording.Refresh();
+
+                    var period = new PeaksAndValleys().CalculateThePeriod(wave, pv);
+                    MessageBox.Show($"The Periods are: {period}");
+
                     //Do something with peaks and valleys here.
                     break;
                 case 2:
