@@ -53,8 +53,8 @@ namespace CaptureUtil
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //Set default timer to two seconds.
-            udRecTime.Value = 2;
+            //Set default timer to 0 seconds.
+            udRecTime.Value = 0;
 
             cbGestureTarget.Items.Clear();
             //Load the kinect gestures name's into the drop down menu
