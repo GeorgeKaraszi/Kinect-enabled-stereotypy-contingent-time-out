@@ -31,7 +31,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private VisualGestureBuilderFrameSource _vgbFrameSource;
 
-        private int RecordingLimit { get; } = 60;
+        private int RecordingLimit { get; } = 52;
 
         /// <summary>
         /// Holds all the recordings from the gesture confidence detector

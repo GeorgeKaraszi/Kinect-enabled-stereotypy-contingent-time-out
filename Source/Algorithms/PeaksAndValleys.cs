@@ -28,7 +28,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
         /// </param>
         /// <returns>Number of periods in the wave dataset</returns>
         public int GetPeriodOfWave(List<double> wave, 
-                                   bool clearInconsistantPeriods = true,
+                                   bool clearInconsistantPeriods = false,
                                    int clearReturnTheshold = 3)
         {
             var pv = FindPeaksAndValleys(wave);
