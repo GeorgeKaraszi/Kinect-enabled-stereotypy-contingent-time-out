@@ -107,16 +107,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Analysis\GestureAnalysis.cs" />
-    <Compile Include="Analysis\GraphTools.cs" />
+    <Compile Include="Algorithms\HillBuilding.cs" />
+    <Compile Include="Algorithms\PeaksAndValleys.cs" />
+    <Compile Include="GraphTools\SMath.cs" />
+    <Compile Include="GraphTools\SmoothIteration.cs" />
+    <Compile Include="KinectHandle.cs" />
     <Compile Include="QuietHandsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="QuietHandsWindow.Designer.cs">
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Recording\GestureSnapNode.cs" />
-    <Compile Include="Recording\GestureSnapshot.cs" />
     <Compile Include="Recording\Recording.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -156,9 +157,7 @@
     <EmbeddedResource Include="QuietHandsWindow.resx">
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Database\HandFlap2.gbd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Database\HandFlap.gbd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -193,6 +192,10 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="vgbtechs\AdaBoostTech.dll" />
+    <Content Include="vgbtechs\RFRProgressTech.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

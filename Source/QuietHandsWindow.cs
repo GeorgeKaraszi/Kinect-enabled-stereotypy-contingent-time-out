@@ -41,7 +41,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             if (keyData == (Keys.Control | Keys.Q) || keyData == Keys.Escape)
             {
 
-                this.Close();
+                Close();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -53,9 +53,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void Setupwindow()
         {
             Cursor.Hide();
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
-            this.TopMost = true;
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+            TopMost = true;
         }
 
         /// <summary>
@@ -89,14 +89,14 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
             //Center the text with the screen.
             //Move the text slightly up to make it more appealing
-            int xQhands = this.Size.Width / 2 - qhands_lbl.Width / 2;
-            int yQhands = (this.Size.Height / 2 - qhands_lbl.Height / 2) - 150;
+            int xQhands = Size.Width / 2 - qhands_lbl.Width / 2;
+            int yQhands = (Size.Height / 2 - qhands_lbl.Height / 2) - 150;
 
-            int xTimer = this.Size.Width / 2 - timer_lbl.Width / 2;
-            int yTimer = (this.Size.Height / 2 - timer_lbl.Height / 2) + 100;
+            int xTimer = Size.Width / 2 - timer_lbl.Width / 2;
+            int yTimer = (Size.Height / 2 - timer_lbl.Height / 2) + 100;
 
-            int xPbar = this.Size.Width / 2 - progressBar1.Width / 2;
-            int yPbar = (this.Size.Height / 2 - progressBar1.Height / 2) + 150;
+            int xPbar = Size.Width / 2 - progressBar1.Width / 2;
+            int yPbar = (Size.Height / 2 - progressBar1.Height / 2) + 150;
 
             //Center objects
             qhands_lbl.Location = new Point(xQhands, yQhands);
@@ -126,7 +126,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 qhand_timer.Stop();
                 timer_lbl.Text = "Times up! You may continue!";
                 SetupDisplay();
-                this.quitTimer.Start();
+                quitTimer.Start();
 
             }
         }
@@ -137,8 +137,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 _quitTime -= 1;
             else
             {
-                this.quitTimer.Stop();
-                this.Close();
+                quitTimer.Stop();
+                Close();
             }
         }
 

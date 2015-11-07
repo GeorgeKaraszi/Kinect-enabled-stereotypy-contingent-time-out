@@ -1,133 +1,210 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 {
-    class Recording<T>
+    public delegate void AnalysisEventHandeler(object source, RecordEventArgs e);
+
+    //====================================================================================
+    /// <summary>
+    /// Event Argument parameter class is designed to carry the information we need for 
+    /// an event to be casted.
+    /// </summary>
+    public class RecordEventArgs : EventArgs
     {
-        private StreamWriter _file;                 //File stream
-        private readonly string _fileName;          //File name to written data
+        /// <summary>
+        /// Holds the gesture name that has triggered the event
+        /// </summary>
+        private readonly string _gestureName;
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// To initialize a new file that records data.
         /// </summary>
-        /// <param name="filepath">Path to the file that will be saved to</param>
-        public Recording(string filepath)
+        /// <param name="name">Gesture name</param>
+        public RecordEventArgs(string name) { _gestureName = name; }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Gets the gesture name that is being held in the event argument
+        /// </summary>
+        /// <returns>Gesture name</returns>
+        public string GetInfo()
         {
-            _fileName = filepath;
+            return _gestureName;
+        }
+
+    }
+
+    //====================================================================================
+    /// <summary>
+    /// Hash table used to keep individual gesture recording records.
+    /// </summary>
+    public class RecordingTable
+    {
+        /// <summary>
+        /// Hash table that holds class objects of individual gestures, to access to, 
+        /// for better performance.
+        /// </summary>
+        private readonly Hashtable _hashTblRecord;
+
+        /// <summary>
+        /// Event that is activated when the capture limit has been hit
+        /// </summary>
+        public event AnalysisEventHandeler OnLimitReach;
+
+        public bool TriggeredWindow { get; set; }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Initialize the hash table routine
+        /// </summary>
+        public RecordingTable()
+        {
+            TriggeredWindow = false;
+            _hashTblRecord = new Hashtable();
         }
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// To initialize a new file that records data.
+        /// Add a gesture to the database of gestures that are going to be recored from
         /// </summary>
-        /// <param name="filepath">Path to the file that will be saved to</param>
-        /// <param name="append">False will delete current file</param>
-        public Recording(string filepath, bool append)
+        /// <param name="name">Name of gesture</param>
+        /// <param name="captureLimitEvent">
+        /// Maximum recording values for an 
+        /// event to trigger 
+        /// </param>
+        /// <returns>
+        /// -1 = Hash table is null and needs to be initialized
+        ///  0 = A Gesture by the inserted name, already exists
+        ///  1 = The gesture was inserted successfully
+        /// </returns>
+        public int AddGesture(string name, int captureLimitEvent)
         {
-            if (append == false)
+            int returnValue = -1;
+            if (_hashTblRecord != null)
             {
-                if(File.Exists(filepath))
-                    File.Delete(filepath);
-            }
-            _fileName = filepath;
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// To initialize a new file that does not exist
-        /// </summary>
-        /// <param name="filepath">Path to the file that will be saved to</param>
-        /// <param name="newFile">If file exists, create a new one with a postfix</param>
-        /// <param name="postfixRange">Range of postfix (-1 default to infinite)</param>
-        public Recording(string filepath, string filetype, bool newFile, 
-            int postfixRange = -1)
-        {
-            int postfix = 0;                        //Added postfix to newly created file
-            string appendedFileName = filepath + filetype;//Filename with needed postfix
-
-            if (newFile)                            //Do we create a file if exists?
-            {
-                if (File.Exists(appendedFileName))
+                if (_hashTblRecord.ContainsKey(name) == false)
                 {
-                    //Loop until a file is not found or if range has ran out
-                    while(File.Exists(appendedFileName) && postfixRange != 0)
-                    {
-                        //Create new filename with added postfix number
-                        appendedFileName = filepath + postfix++ + filetype;
-                        postfixRange--;
-                    }
-
-                    //Error check if any files exist after loop
-                    if (postfixRange == 0 && File.Exists(appendedFileName))
-                    {
-                        throw new Exception("Could not create new file " +
-                                            "based on postfix range.");
-                    }
+                    _hashTblRecord.Add(name, new Recording(captureLimitEvent));
+                    returnValue = 1;
+                }
+                else
+                {
+                    returnValue = 0;
                 }
             }
-            else if (File.Exists(appendedFileName)) //Check if file exists
-            {
-                File.Delete(appendedFileName);
-            }
 
-            _fileName = appendedFileName;           //Initialize new file
+            return returnValue;
         }
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// Adds a data value to a single line in a file
+        /// Adds a confidence value from the kinect to the recordings of select gesture
         /// </summary>
-        /// <param name="value">Value object to be printed</param>
-        public void Add(T value)
+        /// <param name="name">Gesture name</param>
+        /// <param name="value">Value to be added</param>
+        /// <returns>
+        /// -1 = Hash table does not contain the gesture requested
+        ///  0 = Value was added with no event triggered
+        ///  1 = Value was added but an event was triggered
+        /// </returns>
+        public int AddValue(string name, double value)
         {
-            _file = new StreamWriter(_fileName,true);
+            int returnValue = -1;
 
-            if (_file != null)
+            if (_hashTblRecord.ContainsKey(name) && TriggeredWindow == false)
             {
-                _file.WriteLine($"{value}");
-                _file.Close();
-            }
-            else
-            {
-                throw new FileLoadException("File is null");
-            }
-        }
+                var recording = (Recording) _hashTblRecord[name];
 
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Add a range of values to the file stream
-        /// </summary>
-        /// <param name="value">List of values</param>
-        public void AddRange(List<T> value)
-        {
-            AddRange(value.ToArray());
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Add a range of values to the file stream
-        /// </summary>
-        /// <param name="value">Array of values</param>
-        public void AddRange(T[] value)
-        {
-            _file = new StreamWriter(_fileName, true);
-            if (_file != null)
-            {
-                foreach (T obj in value)
+                if (recording.AddValue(value))
                 {
-                    _file.WriteLine($"{obj}");
+                    //trigger event
+                    OnLimitReach?.Invoke(this, new RecordEventArgs(name));
+                    returnValue = 1;
                 }
-                _file.Close();
-            }
-            else
-            {
-                throw new FileLoadException("File is null");
+                else
+                {
+                    returnValue = 0;
+                }
             }
 
+            return returnValue;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Obtains the recording class of the gesture
+        /// </summary>
+        /// <param name="name">Gesture name</param>
+        /// <returns></returns>
+        public Recording GetGestureRecording(string name) {
+            return _hashTblRecord.ContainsKey(name)
+                ? (Recording) _hashTblRecord[name]
+                : null;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Clears all the recorded values from all recording gestures
+        /// </summary>
+        public void ClearAllValues()
+        {
+            if (_hashTblRecord == null)
+                return;
+
+            foreach (DictionaryEntry record in _hashTblRecord)
+            {
+                ((Recording)record.Value).Clear();
+            }
+        }
+    }
+
+    //====================================================================================
+    /// <summary>
+    /// Recording structure that contains all the values of a selected gesture
+    /// </summary>
+    public class Recording
+    {
+        private readonly int _captureLimitEvent;
+        private readonly List<double> _recoredValues;
+
+        public Recording(int captureLimitEvent)
+        {
+            _captureLimitEvent = captureLimitEvent;
+            _recoredValues = new List<double>(captureLimitEvent);
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Adds a value to the recording list
+        /// </summary>
+        /// <param name="value">Value that is going to be added</param>
+        /// <returns>True if the amount of recordings equal the capture limit</returns>
+        public bool AddValue(double value)
+        {
+            _recoredValues.Add(value);
+
+            return _recoredValues.Count == _captureLimitEvent;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Gets the list of recordings that has been captured
+        /// </summary>
+        /// <returns></returns>
+        public List<double> GetRecordValues()
+        {
+            return _recoredValues;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Clears the list of recorded values
+        /// </summary>
+        public void Clear()
+        {
+            _recoredValues.Clear();
         }
     }
 }

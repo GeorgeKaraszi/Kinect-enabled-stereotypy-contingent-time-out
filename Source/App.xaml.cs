@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Windows;
+
 namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 {
-    using System;
-    using System.Windows;
-
     /// <summary>
     /// Interaction logic for App
     /// </summary>

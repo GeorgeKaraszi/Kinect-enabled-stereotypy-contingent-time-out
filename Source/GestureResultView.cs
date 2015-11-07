@@ -1,9 +1,7 @@
 ﻿#region
 
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 using System.Windows.Media;
 
 #endregion
@@ -16,12 +14,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
     /// </summary>
     public sealed class GestureResultView : INotifyPropertyChanged
     {
-        private const int COUNT_CONST = 10;
-
-        /// <summary> Timer </summary>
-        private readonly Timer _timer;
-
-        //private readonly ImageSource notTrackedImage = new BitmapImage(new Uri(@"Images\NotTracked.png", UriKind.Relative));
         /// <summary> Image to show when the 'detected' property is true for a tracked body </summary>
         /// <summary> Image to show when the 'detected' property is false for a tracked body </summary>
         /// <summary> Image to show when the body associated with the GestureResultView object is not being tracked </summary>
@@ -45,23 +37,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary> The body index (0-5) associated with the current gesture detector </summary>
         private int _bodyIndex;
 
-        /// <summary> Current confidence value reported by the discrete gesture </summary>
-        private float _confidence;
-
-        private int _countdown;
-
-        /// <summary> True, if the discrete gesture is currently being detected </summary>
-        private bool _detected;
-
         /// <summary> Image to display in UI which corresponds to tracking/detection state </summary>
         private ImageSource _imageSource;
 
-        private bool _isHandAboveHead, _previous;
-
         /// <summary> True, if the body is currently being tracked </summary>
         private bool _isTracked;
-
-        private bool _quietWindowRunning;
 
         /// <summary>
         ///     Gets the body index associated with the current gesture detector result
@@ -89,7 +69,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
             private set
             {
-                if (_bodyColor != value)
+                if (!Equals(_bodyColor, value))
                 {
                     _bodyColor = value;
                     NotifyPropertyChanged();
@@ -115,40 +95,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         }
 
         /// <summary>
-        ///     Gets a value indicating whether or not the discrete gesture has been detected
-        /// </summary>
-        public bool Detected
-        {
-            get { return _detected; }
-
-            private set
-            {
-                if (_detected != value)
-                {
-                    _detected = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Gets a float value which indicates the detector's confidence that the gesture is occurring for the associated body
-        /// </summary>
-        public float Confidence
-        {
-            get { return _confidence; }
-
-            private set
-            {
-                if (_confidence != value)
-                {
-                    _confidence = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        /// <summary>
         ///     Gets an image for display in the UI which represents the current gesture result for the associated body
         /// </summary>
         public ImageSource ImageSource
@@ -157,7 +103,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
             private set
             {
-                if (ImageSource != value)
+                if (!Equals(ImageSource, value))
                 {
                     _imageSource = value;
                     NotifyPropertyChanged();
@@ -170,98 +116,30 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         /// <param name="bodyIndex">Body Index associated with the current gesture detector</param>
         /// <param name="isTracked">True, if the body is currently tracked</param>
-        /// <param name="detected">True, if the gesture is currently detected for the associated body</param>
-        /// <param name="confidence">Confidence value for detection of the 'Seated' gesture</param>
-        public GestureResultView(int bodyIndex,
-                                 bool isTracked,
-                                 bool detected,
-                                 float confidence,
-                                 bool isHandAboveHead,
-                                 bool previous)
+        public GestureResultView(int bodyIndex, bool isTracked)
         {
             BodyIndex = bodyIndex;
             IsTracked = isTracked;
-            Detected = detected;
-            Confidence = confidence;
-            _isHandAboveHead = isHandAboveHead;
-            _previous = previous;
-            //this.ImageSource = this.notTrackedImage;
-
-            _timer = new Timer();
-            _countdown = COUNT_CONST;
-
-            _timer.Tick += timer_Tick;
         }
 
         /// <summary>
-        ///     INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
+        /// INotifyPropertyChangedPropertyChanged event to allow window controls to 
+        /// bind to changeable data
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            if (_countdown > 0)
-                _countdown -= 1;
-            else
-            {
-                _quietWindowRunning = true;
-                _countdown = COUNT_CONST;
-                QuietHandsWindow win = new QuietHandsWindow();
-                win.ShowDialog();
-                _timer.Stop();
-                _quietWindowRunning = false;
-            }
-        }
 
         /// <summary>
         ///     Updates the values associated with the discrete gesture detection result
         /// </summary>
         /// <param name="isBodyTrackingIdValid">
-        ///     True, if the body associated with the GestureResultView object is still being
-        ///     tracked
+        ///     True, if the body associated with the GestureResultView object is still 
+        ///     being tracked
         /// </param>
-        /// <param name="isGestureDetected">True, if the discrete gesture is currently detected for the associated body</param>
-        /// <param name="detectionConfidence">Confidence value for detection of the discrete gesture</param>
-        public void UpdateGestureResult(bool isBodyTrackingIdValid,
-                                        bool isGestureDetected,
-                                        float detectionConfidence)
+        public void UpdateBodyView(bool isBodyTrackingIdValid)
         {
             IsTracked = isBodyTrackingIdValid;
-            Confidence = 0.0f;
 
-            if (!IsTracked)
-            {
-                //this.ImageSource = this.notTrackedImage;
-                Detected = false;
-                BodyColor = Brushes.Gray;
-            }
-            else
-            {
-                Detected = isGestureDetected;
-                BodyColor = _trackedColors[BodyIndex];
-
-                if (_quietWindowRunning == false)
-                {
-                    if (Detected)
-                    {
-                        Confidence = detectionConfidence;
-                        //this.ImageSource = this.seatedImage;
-
-                        _timer.Start();
-                    }
-                    else
-                    {
-                        //this.ImageSource = this.notSeatedImage;
-                        _timer.Stop();
-                        _countdown = COUNT_CONST;
-                    }
-                }
-                else
-                {
-                    _timer.Stop();
-                    _countdown = COUNT_CONST;
-                }
-            }
+            BodyColor = !IsTracked ? Brushes.Gray : _trackedColors[BodyIndex];
         }
 
         /// <summary>
@@ -270,10 +148,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <param name="propertyName">Name of property that has changed</param>
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

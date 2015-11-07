@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
+using Microsoft.Kinect;
+
 namespace WesternMichgian.SeniorDesign.KinectProject
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Media;
-    using Microsoft.Kinect;
-
     /// <summary>
     /// Visualizes the Kinect Body stream for display in the UI
     /// </summary>
@@ -40,37 +40,37 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary>
         /// Brush used for drawing hands that are currently tracked as closed
         /// </summary>
-        private readonly Brush handClosedBrush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+        private readonly Brush _handClosedBrush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
 
         /// <summary>
         /// Brush used for drawing hands that are currently tracked as opened
         /// </summary>
-        private readonly Brush handOpenBrush = new SolidColorBrush(Color.FromArgb(128, 0, 255, 0));
+        private readonly Brush _handOpenBrush = new SolidColorBrush(Color.FromArgb(128, 0, 255, 0));
 
         /// <summary>
         /// Brush used for drawing hands that are currently tracked as in lasso (pointer) position
         /// </summary>
-        private readonly Brush handLassoBrush = new SolidColorBrush(Color.FromArgb(128, 0, 0, 255));
+        private readonly Brush _handLassoBrush = new SolidColorBrush(Color.FromArgb(128, 0, 0, 255));
 
         /// <summary>
         /// Brush used for drawing joints that are currently tracked
         /// </summary>
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+        private readonly Brush _trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
 
         /// <summary>
         /// Brush used for drawing joints that are currently inferred
         /// </summary>        
-        private readonly Brush inferredJointBrush = Brushes.Yellow;
+        private readonly Brush _inferredJointBrush = Brushes.Yellow;
 
         /// <summary>
         /// Pen used for drawing bones that are currently inferred
         /// </summary>        
-        private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
+        private readonly Pen _inferredBonePen = new Pen(Brushes.Gray, 1);
 
         /// <summary>
         /// Drawing group for body rendering output
         /// </summary>
-        private DrawingGroup drawingGroup;
+        private DrawingGroup _drawingGroup;
 
         /// <summary>
         /// Drawing image that we will display
@@ -80,7 +80,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary>
         /// Coordinate mapper to map one type of point to another
         /// </summary>
-        private CoordinateMapper coordinateMapper = null;
+        private CoordinateMapper coordinateMapper;
 
         /// <summary>
         /// definition of bones
@@ -114,67 +114,67 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             }
 
             // get the coordinate mapper
-            this.coordinateMapper = kinectSensor.CoordinateMapper;
+            coordinateMapper = kinectSensor.CoordinateMapper;
 
             // get the depth (display) extents
             FrameDescription frameDescription = kinectSensor.DepthFrameSource.FrameDescription;
 
             // get size of joint space
-            this.displayWidth = frameDescription.Width;
-            this.displayHeight = frameDescription.Height;
+            displayWidth = frameDescription.Width;
+            displayHeight = frameDescription.Height;
 
             // a bone defined as a line between two joints
-            this.bones = new List<Tuple<JointType, JointType>>();
+            bones = new List<Tuple<JointType, JointType>>();
 
             // Torso
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
+            bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
 
             // Right Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
 
             // Left Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
 
             // Right Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
+            bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
 
             // Left Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
+            bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
 
             // populate body colors, one for each BodyIndex
-            this.bodyColors = new List<Pen>();
+            bodyColors = new List<Pen>();
 
-            this.bodyColors.Add(new Pen(Brushes.Red, 6));
-            this.bodyColors.Add(new Pen(Brushes.Orange, 6));
-            this.bodyColors.Add(new Pen(Brushes.Green, 6));
-            this.bodyColors.Add(new Pen(Brushes.Blue, 6));
-            this.bodyColors.Add(new Pen(Brushes.Indigo, 6));
-            this.bodyColors.Add(new Pen(Brushes.Violet, 6));
+            bodyColors.Add(new Pen(Brushes.Red, 6));
+            bodyColors.Add(new Pen(Brushes.Orange, 6));
+            bodyColors.Add(new Pen(Brushes.Green, 6));
+            bodyColors.Add(new Pen(Brushes.Blue, 6));
+            bodyColors.Add(new Pen(Brushes.Indigo, 6));
+            bodyColors.Add(new Pen(Brushes.Violet, 6));
 
             // Create the drawing group we'll use for drawing
-            this.drawingGroup = new DrawingGroup();
+            _drawingGroup = new DrawingGroup();
 
             // Create an image source that we can use in our image control
-            this.imageSource = new DrawingImage(this.drawingGroup);
+            imageSource = new DrawingImage(_drawingGroup);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         {
             get
             {
-                return this.imageSource;
+                return imageSource;
             }
         }
 
@@ -197,19 +197,19 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         {
             if (bodies != null)
             {
-                using (DrawingContext dc = this.drawingGroup.Open())
+                using (DrawingContext dc = _drawingGroup.Open())
                 {
                     // Draw a transparent background to set the render size
-                    dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                    dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, displayWidth, displayHeight));
 
                     int penIndex = 0;
                     foreach (Body body in bodies)
                     {
-                        Pen drawPen = this.bodyColors[penIndex++];
+                        Pen drawPen = bodyColors[penIndex++];
 
                         if (body.IsTracked)
                         {
-                            this.DrawClippedEdges(body, dc);
+                            DrawClippedEdges(body, dc);
 
                             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
 
@@ -226,19 +226,19 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                                     position.Z = InferredZPositionClamp;
                                 }
 
-                                DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                DepthSpacePoint depthSpacePoint = coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.DrawBody(joints, jointPoints, dc, drawPen);
+                            DrawBody(joints, jointPoints, dc, drawPen);
 
-                            this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
-                            this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+                            DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
+                            DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                         }
                     }
 
                     // prevent drawing outside of our render area
-                    this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                    _drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, displayWidth, displayHeight));
                 }
             }
         }
@@ -253,9 +253,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen)
         {
             // Draw the bones
-            foreach (var bone in this.bones)
+            foreach (var bone in bones)
             {
-                this.DrawBone(joints, jointPoints, bone.Item1, bone.Item2, drawingContext, drawingPen);
+                DrawBone(joints, jointPoints, bone.Item1, bone.Item2, drawingContext, drawingPen);
             }
 
             // Draw the joints
@@ -267,11 +267,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
                 if (trackingState == TrackingState.Tracked)
                 {
-                    drawBrush = this.trackedJointBrush;
+                    drawBrush = _trackedJointBrush;
                 }
                 else if (trackingState == TrackingState.Inferred)
                 {
-                    drawBrush = this.inferredJointBrush;
+                    drawBrush = _inferredJointBrush;
                 }
 
                 if (drawBrush != null)
@@ -303,7 +303,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             }
 
             // We assume all drawn bones are inferred unless BOTH joints are tracked
-            Pen drawPen = this.inferredBonePen;
+            Pen drawPen = _inferredBonePen;
             if ((joint0.TrackingState == TrackingState.Tracked) && (joint1.TrackingState == TrackingState.Tracked))
             {
                 drawPen = drawingPen;
@@ -323,15 +323,15 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             switch (handState)
             {
                 case HandState.Closed:
-                    drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
+                    drawingContext.DrawEllipse(_handClosedBrush, null, handPosition, HandSize, HandSize);
                     break;
 
                 case HandState.Open:
-                    drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
+                    drawingContext.DrawEllipse(_handOpenBrush, null, handPosition, HandSize, HandSize);
                     break;
 
                 case HandState.Lasso:
-                    drawingContext.DrawEllipse(this.handLassoBrush, null, handPosition, HandSize, HandSize);
+                    drawingContext.DrawEllipse(_handLassoBrush, null, handPosition, HandSize, HandSize);
                     break;
             }
         }
@@ -350,7 +350,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, this.displayHeight - ClipBoundsThickness, this.displayWidth, ClipBoundsThickness));
+                    new Rect(0, displayHeight - ClipBoundsThickness, displayWidth, ClipBoundsThickness));
             }
 
             if (clippedEdges.HasFlag(FrameEdges.Top))
@@ -358,7 +358,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, this.displayWidth, ClipBoundsThickness));
+                    new Rect(0, 0, displayWidth, ClipBoundsThickness));
             }
 
             if (clippedEdges.HasFlag(FrameEdges.Left))
@@ -366,7 +366,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(0, 0, ClipBoundsThickness, this.displayHeight));
+                    new Rect(0, 0, ClipBoundsThickness, displayHeight));
             }
 
             if (clippedEdges.HasFlag(FrameEdges.Right))
@@ -374,7 +374,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 drawingContext.DrawRectangle(
                     Brushes.Red,
                     null,
-                    new Rect(this.displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, this.displayHeight));
+                    new Rect(displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, displayHeight));
             }
         }
     }
