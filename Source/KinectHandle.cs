@@ -185,7 +185,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             if (period >= pv.PeriodThreshold)  //Do action
             {
                 LockGestures();             //Mutex lock threads from recording
-               // new QuietHandsWindow().ShowDialog();
+                new QuietHandsWindow().ShowDialog();
                 recTable.ClearAllValues(); //Gesture found, reset all recordings
                 UnlockGestures();           //Mutex unlock threads 
             }
