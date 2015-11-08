@@ -10,7 +10,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WesternMichgian.SeniorDesign.KinectProject</RootNamespace>
-    <AssemblyName>KinectProject-WPF</AssemblyName>
+    <AssemblyName>KinectProject</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -163,9 +163,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="STATSR\.RData" />
-    <None Include="STATSR\.Rhistory" />
-    <None Include="STATSR\displayGraph.R" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -194,13 +191,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\QuietHandsSound.wav" />
     <Content Include="vgbtechs\AdaBoostTech.dll" />
     <Content Include="vgbtechs\RFRProgressTech.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(KINECTSDK20_DIR)Redist\VGB\$(Platform)\vgbtechs" "$(TargetDir)\vgbtechs" /S /R /Y /I
-xcopy "$(SolutionDir)Database" "$(TargetDir)\Database" /S /R /Y /I</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)vgbtechs" "$(TargetDir)\vgbtechs" /S /R /Y /I
+xcopy "$(SolutionDir)Database" "$(TargetDir)\Database" /S /R /Y /I
+xcopy "$(SolutionDir)Resources" "$(TargetDir)\Resources" /S /R /Y /I</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

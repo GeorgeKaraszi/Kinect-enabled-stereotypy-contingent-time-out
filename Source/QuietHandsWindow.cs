@@ -14,6 +14,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 {
     public partial class QuietHandsWindow : Form
     {
+
         private int _timeLeft = 60; //6 seconds
         private int _quitTime = 20; //2 seconds
 
@@ -78,7 +79,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         }
 
         /// <summary>
-        /// Alignes the objects displayed on the screen to their correct posisitions.
+        /// Aligns the objects displayed on the screen to their correct positions.
         /// </summary>
         private void SetupDisplay()
         {
@@ -104,12 +105,13 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             progressBar1.Location = new Point(xPbar, yPbar);
         }
 
+        //WindowsMediaPlayer Player;
         /// <summary>
         /// Launches the audio for saying quite hands to the listener
         /// </summary>
         private void SetupQHSound()
         {
-            SoundPlayer qhandsPlayer = new SoundPlayer(@"..\..\..\QuietHandsSound.wav");
+            SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\QuietHandsSound.wav");
             qhandsPlayer.Play();
         }
 
@@ -143,7 +145,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         }
 
         /// <summary>
-        /// Be sure to reenable the mouse, otherwise course wont display 
+        /// Be sure to re-enable the mouse, otherwise course wont display 
         /// while the rest of the application is running
         /// </summary>
         /// <param name="sender"></param>
