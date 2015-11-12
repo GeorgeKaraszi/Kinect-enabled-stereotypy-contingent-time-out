@@ -27,7 +27,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void QuietHandsWindow_Load(object sender, EventArgs e)
         {
             SetupTimer();
-            SetupDisplay();
+            //SetupDisplay();
             StartTimer();
             SetupQHSound();
         }
@@ -53,10 +53,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private void Setupwindow()
         {
-            Cursor.Hide();
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
-            TopMost = true;
+            //Cursor.Hide();
+            //FormBorderStyle = FormBorderStyle.None;
+            //WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Minimized;
+            //TopMost = true;
         }
 
         /// <summary>
