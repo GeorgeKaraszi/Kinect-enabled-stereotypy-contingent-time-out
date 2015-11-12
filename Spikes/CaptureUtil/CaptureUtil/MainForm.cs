@@ -115,8 +115,10 @@ namespace CaptureUtil
                 timerRecord.Start();
 
                 //Clear chart before recording starts
-                chartRecording.Series[0].Points.Clear();
-                chartRecording.Series[1].Points.Clear();
+                foreach(var series in chartRecording.Series)
+                {
+                    series.Points.Clear();
+                }
 
                 //Change the button display
                 btnRecord.BackColor = Color.Red;
@@ -238,6 +240,8 @@ namespace CaptureUtil
         private void RunAnalyst(List<double> wave)
         {
             chartRecording.Series[1].Points.Clear();
+            chartRecording.Series[2].Points.Clear();
+            chartRecording.Series[3].Points.Clear();
 
             switch (_algorithmSelected)
             {
@@ -275,10 +279,11 @@ namespace CaptureUtil
                     }
                     var hills = new HillBuilding().BuildHills(wave);
 
-                    foreach (Tuple<int, int> h in hills)
+                    foreach (Tuple<int, int, double> h in hills)
                     {
-                        chartRecording.Series[1].Points.AddXY(h.Item1, wave[h.Item1]);
-                        chartRecording.Series[1].Points.AddXY(h.Item2, wave[h.Item2]);
+                        chartRecording.Series[2].Points.AddXY(h.Item1, wave[h.Item1]);
+                        chartRecording.Series[2].Points.AddXY(h.Item2, wave[h.Item2]);
+                        chartRecording.Series[3].Points.AddXY(h.Item2, h.Item3);
                     }
                     chartRecording.Refresh();
                     //Do something with hill building here

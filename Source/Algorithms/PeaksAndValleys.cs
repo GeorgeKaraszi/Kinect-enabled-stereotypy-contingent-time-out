@@ -7,7 +7,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
 {
     public class PeaksAndValleys
     {
-        private double AmplitudeThreshold { get; } = 0.15;
+        private double AmplitudeThreshold { get; } = 0.075;
         private double PeakValleyDistance { get; } = 0.15;
         private int FrequencyThresholdMin { get; } = 5;
         private int FrequencyThresholdMax { get; } = 26;

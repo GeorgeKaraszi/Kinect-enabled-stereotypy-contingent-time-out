@@ -6,7 +6,7 @@ namespace CaptureUtil.Algorithms
     public class HillBuilding
     {
         private double PeakValleyDistance = 0.15;
-        private List<Tuple<int, int>> hills;
+        private List<Tuple<int, int, double>> hills;
         private List<double> wave;
         private double confidence;
         // Length of consecutive hills.
@@ -34,10 +34,10 @@ namespace CaptureUtil.Algorithms
         /// Item2: index of end frame of hill
         /// Note:Return can be in ether Peak Valley Peak or Valley Peak Valley format.
         /// </returns>
-        public List<Tuple<int, int>> BuildHills(List<double> wave)
+        public List<Tuple<int, int, double>> BuildHills(List<double> wave)
         {
             // List of hills.
-            hills = new List<Tuple<int, int>>();
+            hills = new List<Tuple<int, int, double>>();
             // Set the wave variable that can be accessed outside this method.
             this.wave = wave;
 
@@ -69,7 +69,7 @@ namespace CaptureUtil.Algorithms
                     {
                         if (wave[start] - wave[end] >= PeakValleyDistance)
                         {
-                            hills.Add(new Tuple<int, int>(start, end));
+                            hills.Add(new Tuple<int, int, double>(start, end, -1));
                             seriesLength += (end - start - 1);
                             this.CalculateHill();
                         }
@@ -90,7 +90,7 @@ namespace CaptureUtil.Algorithms
                     {
                         if (wave[end] - wave[start] >= PeakValleyDistance)
                         {
-                            hills.Add(new Tuple<int, int>(start, end));
+                            hills.Add(new Tuple<int, int, double>(start, end, -1));
                             seriesLength += (end - start - 1);
                             this.CalculateHill();
                         }
@@ -113,7 +113,7 @@ namespace CaptureUtil.Algorithms
                 return;
             
             // Get last hill.
-            Tuple<int, int> hill = hills[hills.Count - 1];
+            Tuple<int, int, double> hill = hills[hills.Count - 1];
 
 
             // Possibly decay confidence value.
@@ -122,7 +122,7 @@ namespace CaptureUtil.Algorithms
                 // If there is a gap in between this hill and last,
                 // decay confidence value by an appropriate amount,
                 // corresponding to the length of the last hill.
-                Tuple<int, int> lastHill = hills[hills.Count - 2];
+                Tuple<int, int, double> lastHill = hills[hills.Count - 2];
                 int gap = hill.Item1 - lastHill.Item2;
                 double decay = (double) (seriesLength - gap) / (double) seriesLength;
                 confidence *= decay;
@@ -170,6 +170,10 @@ namespace CaptureUtil.Algorithms
             double boost = highAvgSlope * height;
 
             confidence += boost;
+
+            Tuple<int, int, double> new_hill = new Tuple<int, int, double>(hill.Item1, hill.Item2, confidence);
+
+            hills[hills.Count - 1] = new_hill;
 
             System.Console.WriteLine("wave[{0}] = {1}\n" +
                                      "wave[{2}] = {3}\n" +
