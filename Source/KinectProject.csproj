@@ -107,6 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Algorithms\GestureInterpreter.cs" />
     <Compile Include="Algorithms\HillBuilding.cs" />
     <Compile Include="Algorithms\PeaksAndValleys.cs" />
     <Compile Include="GraphTools\SMath.cs" />

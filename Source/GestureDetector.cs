@@ -153,7 +153,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                         continue;
 
                     _vgbFrameSource.AddGesture(gesture);
-                    RecordingTable.AddGesture(gesture.Name, RecordingLimit);
+                    //RecordingTable.AddGesture(gesture.Name, RecordingLimit);
+                    RecordingTable.AddGesture(gesture.Name);
                 }
             }
         }

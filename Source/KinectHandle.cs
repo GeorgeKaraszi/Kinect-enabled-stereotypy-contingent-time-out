@@ -177,22 +177,22 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <param name="e">Name of recorded gesture</param>
         private void OnLimitReachEvent(object source, RecordEventArgs e)
         {
-            PeaksAndValleys pv = new PeaksAndValleys();
-            var recTable = (RecordingTable)source;
-            var recording = recTable.GetGestureRecording(e.GetInfo());
-            var period = pv.GetPeriodOfWave(recording.GetRecordValues());
+            //PeaksAndValleys pv = new PeaksAndValleys();
+            //var recTable = (RecordingTable)source;
+            //var recording = recTable.GetGestureRecording(e.GetInfo());
+            //var period = pv.GetPeriodOfWave(recording.GetRecordValues());
 
-            if (period >= pv.PeriodThreshold)  //Do action
-            {
+            //if (period >= pv.PeriodThreshold)  //Do action
+            //{
                 LockGestures();            //Mutex lock threads from recording
                 new QuietHandsWindow().ShowDialog();
-                recTable.ClearAllValues(); //Gesture found, reset all recordings
+                //recTable.ClearAllValues(); //Gesture found, reset all recordings
                 UnlockGestures();          //Mutex unlock threads 
-            }
-            else
+            //}
+            /*else
             {
                 recording.Clear();        //Gesture was not detected, reset this recording
-            }
+            }*/
         }
 
         //--------------------------------------------------------------------------------

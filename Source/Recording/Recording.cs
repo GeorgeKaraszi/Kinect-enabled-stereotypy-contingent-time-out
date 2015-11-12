@@ -79,14 +79,16 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         ///  0 = A Gesture by the inserted name, already exists
         ///  1 = The gesture was inserted successfully
         /// </returns>
-        public int AddGesture(string name, int captureLimitEvent)
+        //public int AddGesture(string name, int captureLimitEvent)
+        public int AddGesture(string name)
         {
             int returnValue = -1;
             if (_hashTblRecord != null)
             {
                 if (_hashTblRecord.ContainsKey(name) == false)
                 {
-                    _hashTblRecord.Add(name, new Recording(captureLimitEvent));
+                    //_hashTblRecord.Add(name, new Recording(captureLimitEvent));
+                    _hashTblRecord.Add(name, new Algorithms.GestureInterpreter());
                     returnValue = 1;
                 }
                 else
@@ -115,12 +117,16 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 
             if (_hashTblRecord.ContainsKey(name) && TriggeredWindow == false)
             {
-                var recording = (Recording) _hashTblRecord[name];
+                //var recording = (Recording) _hashTblRecord[name];
+                var classifier = (Algorithms.GestureInterpreter) _hashTblRecord[name];
 
-                if (recording.AddValue(value))
+                //if (recording.AddValue(value))
+                if (classifier.ProcessPoint(value))
                 {
                     //trigger event
+                    TriggeredWindow = true;
                     OnLimitReach?.Invoke(this, new RecordEventArgs(name));
+                    TriggeredWindow = false;
                     returnValue = 1;
                 }
                 else
@@ -132,7 +138,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             return returnValue;
         }
 
-        //--------------------------------------------------------------------------------
+        /*//--------------------------------------------------------------------------------
         /// <summary>
         /// Obtains the recording class of the gesture
         /// </summary>
@@ -142,9 +148,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             return _hashTblRecord.ContainsKey(name)
                 ? (Recording) _hashTblRecord[name]
                 : null;
-        }
+        }*/
 
-        //--------------------------------------------------------------------------------
+        /*//--------------------------------------------------------------------------------
         /// <summary>
         /// Clears all the recorded values from all recording gestures
         /// </summary>
@@ -157,10 +163,10 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             {
                 ((Recording)record.Value).Clear();
             }
-        }
+        }*/
     }
 
-    //====================================================================================
+    /*//====================================================================================
     /// <summary>
     /// Recording structure that contains all the values of a selected gesture
     /// </summary>
@@ -206,5 +212,5 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         {
             _recoredValues.Clear();
         }
-    }
+    }*/
 }
