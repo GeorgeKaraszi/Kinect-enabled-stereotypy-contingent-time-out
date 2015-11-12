@@ -15,7 +15,7 @@ namespace RealTime
             
             try
             {
-                using (StreamReader sr = new StreamReader("PaxtonFB172441.txt"))
+                using (StreamReader sr = new StreamReader("MichaelFB3217.txt"))
                 {
                     String str;
 
@@ -109,6 +109,8 @@ namespace RealTime
         // Process input and return if hand flap has been detected.
         public bool ProcessPoint(double val)
         {
+            bool returnVal = false;
+
             frame++;
 
             // First, check if there is to be a PV removed from the list.
@@ -154,51 +156,11 @@ namespace RealTime
                         return false;
                     }
 
-                    PVList.AddLast(new PeakValley(valset, valley));
-                    Console.WriteLine("Added new PV: {0}, {1}.", valset, valley);
-
-                    // If there are at least three points and the last point is not the third point in the last PVPair
-                    // (if there is one), then create a PVPair from these three points.
-                    if (PVList.Count > 2)
-                    {
-                        if (PVPairs.Count > 0 && PVPairs.Last().frames.Item3 == PVList.ElementAt<PeakValley>(PVList.Count - 2).frame)
-                        {
-                            return false;
-                        }
-
-                        int n = PVList.Count;
-                        int p1 = PVList.ElementAt<PeakValley>(n - 3).frame;
-                        int p2 = PVList.ElementAt<PeakValley>(n - 2).frame;
-                        int p3 = PVList.ElementAt<PeakValley>(n - 1).frame;
-                        double outsideAverage = (wave[p1 % window_size] + wave[p3 % window_size]) / 2;
-                        double midline = (wave[p2 % window_size] + outsideAverage) / 2;
-                        double amplitude = Math.Abs(wave[p2 % window_size] - midline);
-
-                        PVPairs.AddLast(new PVPair(new Tuple<int, int, int>(p1, p2, p3), midline, amplitude));
-                        Console.WriteLine("Created a new PVPair, {0}, {1}, {2} with midline {3} and amplitude {4}.", p1, p2, p3, midline, amplitude);
-
-                        // Now, if there is a previous PVPair, get the frequency between the two PVPairs.
-                        // If the frequency is greater than the threshold minimum and less than the
-                        // threshold maximum, increment the period.
-                        if (PVPairs.Count > 1)
-                        {
-                            //CalculatePeriod(PVPairs);
-                            PVPair prevpvp = PVPairs.ElementAt<PVPair>(PVPairs.Count - 2);
-                            int frequency = PVPairs.Last().frames.Item2 - prevpvp.frames.Item2;
-                            if (frequency > min_frequency && frequency < max_frequency)
-                            {
-                                periods.AddLast(PVPairs.Last().frames.Item1);
-                                System.Console.WriteLine("Frequency = {0} and Period = {1}.", frequency, periods.Count);
-                                if (periods.Count >= 3)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                    // If Adding a PeakValley triggers hand-flapping detection, return true.
+                    returnVal = this.AddPV(new PeakValley(valset, valley));
 
                     valley = 1;
-                    return false;
+                    return returnVal;
                 }
 
                 // If peakset is oldest, save peak to list, reset peak, and continue.
@@ -212,50 +174,11 @@ namespace RealTime
                         return false;
                     }
 
-                    PVList.AddLast(new PeakValley(peakset, peak));
-                    Console.WriteLine("Added new PV: {0}, {1}.", peakset, peak);
-
-                    // If there are at least three points and the last point is not the third point in the last PVPair
-                    // (if there is one), then create a PVPair from these three points.
-                    if (PVList.Count > 2)
-                    {
-                        if (PVPairs.Count > 0 && PVPairs.Last().frames.Item3 == PVList.ElementAt<PeakValley>(PVList.Count - 2).frame)
-                        {
-                            return false;
-                        }
-
-                        int n = PVList.Count;
-                        int p1 = PVList.ElementAt<PeakValley>(n - 3).frame;
-                        int p2 = PVList.ElementAt<PeakValley>(n - 2).frame;
-                        int p3 = PVList.ElementAt<PeakValley>(n - 1).frame;
-                        double outsideAverage = (wave[p1 % window_size] + wave[p3 % window_size]) / 2;
-                        double midline = (wave[p2 % window_size] + outsideAverage) / 2;
-                        double amplitude = Math.Abs(wave[p2 % window_size] - midline);
-
-                        PVPairs.AddLast(new PVPair(new Tuple<int, int, int>(p1, p2, p3), midline, amplitude));
-                        Console.WriteLine("Created a new PVPair, {0}, {1}, {2} with midline {3} and amplitude {4}.", p1, p2, p3, midline, amplitude);
-
-                        // Now, if there is a previous PVPair, get the frequency between the two PVPairs.
-                        // If the frequency is greater than the threshold minimum and less than the
-                        // threshold maximum, increment the period.
-                        if (PVPairs.Count > 1)
-                        {
-                            PVPair prevpvp = PVPairs.ElementAt<PVPair>(PVPairs.Count - 2);
-                            int frequency = PVPairs.Last().frames.Item2 - prevpvp.frames.Item2;
-                            if (frequency > min_frequency && frequency < max_frequency)
-                            {
-                                periods.AddLast(PVPairs.Last().frames.Item1);
-                                System.Console.WriteLine("Frequency = {0} and Period = {1}.", frequency, periods.Count);
-                                if (periods.Count >= 3)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                    // If Adding a PeakValley triggers hand-flapping detection, return true.
+                    returnVal = this.AddPV(new PeakValley(peakset, peak));
 
                     peak = 0;
-                    return false;
+                    return returnVal;
                 }
             }
             if (wave[index] > peak)
@@ -269,34 +192,88 @@ namespace RealTime
                 valley = wave[index];
             }
 
+            return returnVal;
+        }
+
+        // Add a PeakValley to the list.
+        private bool AddPV(PeakValley pv)
+        {
+            PVList.AddLast(pv);
+            Console.WriteLine("Added new PV: {0}, {1}.", pv.frame, pv.value);
+
+            // If there are at least three points and the last point is not the third point in the last PVPair
+            // (if there is one), then create a PVPair from these three points.
+            if (PVList.Count > 2)
+            {
+                if (PVPairs.Count > 0 && PVPairs.Last().frames.Item3 == PVList.ElementAt<PeakValley>(PVList.Count - 2).frame)
+                {
+                    return false;
+                }
+
+                int n = PVList.Count;
+                int p1 = PVList.ElementAt<PeakValley>(n - 3).frame;
+                int p2 = PVList.ElementAt<PeakValley>(n - 2).frame;
+                int p3 = PVList.ElementAt<PeakValley>(n - 1).frame;
+                double outsideAverage = (wave[p1 % window_size] + wave[p3 % window_size]) / 2;
+                double midline = (wave[p2 % window_size] + outsideAverage) / 2;
+                double amplitude = Math.Abs(wave[p2 % window_size] - midline);
+
+                PVPairs.AddLast(new PVPair(new Tuple<int, int, int>(p1, p2, p3), midline, amplitude));
+                Console.WriteLine("Created a new PVPair, {0}, {1}, {2} with midline {3} and amplitude {4}.", p1, p2, p3, midline, amplitude);
+
+                // Now, if there is a previous PVPair, get the frequency between the two PVPairs.
+                // If the frequency is greater than the threshold minimum and less than the
+                // threshold maximum, increment the period.
+                if (PVPairs.Count > 1)
+                {
+                    PVPair prevpvp = PVPairs.ElementAt<PVPair>(PVPairs.Count - 2);
+                    int frequency = this.FrequencyBetween(prevpvp, PVPairs.Last());
+                    if (frequency > min_frequency && frequency < max_frequency)
+                    {
+                        periods.AddLast(PVPairs.Last().frames.Item1);
+                        System.Console.WriteLine("Frequency = {0} and Period = {1}.", frequency, periods.Count);
+                        if (periods.Count >= 3)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
             return false;
         }
 
-        static private int FrequencyBetween(PVPair pvp1, PVPair pvp2, double[] wave, int window)
+        // Calculate the frequency between two PVPairs.
+        private int FrequencyBetween(PVPair pvp1, PVPair pvp2)
         {
             int index = pvp1.frames.Item1;
             int start = -1;
             int end = -1;
             // 1 for VPV and 0 for PVP
-            bool pvpattern = wave[pvp1.frames.Item1 % window] < wave[pvp1.frames.Item2 % window];
+            bool pvpattern = wave[pvp1.frames.Item1 % window_size] < wave[pvp1.frames.Item2 % window_size];
             bool passedMidLine = false;
 
             while (passedMidLine == false)
             {
+                int i = index % window_size;
+                int j = (index + 1) % window_size;
                 passedMidLine =
-                    pvpattern ? (pvp1.midline > wave[index % window] && pvp1.midline < wave[(index + 1) % window] ? true : false)
-                              : (pvp1.midline < wave[index % window] && pvp1.midline > wave[(index + 1) % window] ? true : false);
+                    pvpattern ? (pvp1.midline > wave[i] && pvp1.midline < wave[j] ? true : false)
+                              : (pvp1.midline < wave[i] && pvp1.midline > wave[j] ? true : false);
 
                 index++;
             }
+
             start = index;
             passedMidLine = false;
-            index = pvp2.frames.Item1 % window;
+            index = pvp2.frames.Item1;
             while (passedMidLine == false)
             {
+                int i = index % window_size;
+                int j = (index + 1) % window_size;
                 passedMidLine =
-                    pvpattern ? (pvp1.midline > wave[index % window] && pvp1.midline < wave[(index + 1) % window] ? true : false)
-                              : (pvp1.midline < wave[index % window] && pvp1.midline > wave[(index + 1) % window] ? true : false);
+                    pvpattern ? (pvp1.midline > wave[i] && pvp1.midline < wave[j] ? true : false)
+                              : (pvp1.midline < wave[i] && pvp1.midline > wave[j] ? true : false);
 
                 index++;
             }
@@ -322,8 +299,8 @@ namespace RealTime
     {
         // Item1, 2, and 3 correspond to the frames of the PVPair.
         public Tuple<int, int, int> frames { get; }
-        public double midline { get; set; }
-        public double amplitude { get; set; }
+        public double midline { get; }
+        public double amplitude { get; }
 
         public PVPair(Tuple<int, int, int> frames, double midline, double amplitude)
         {
