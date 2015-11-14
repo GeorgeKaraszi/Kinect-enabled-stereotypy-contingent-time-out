@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using WesternMichgian.SeniorDesign.KinectProject.Algorithms;
 
 namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 {
@@ -53,33 +53,22 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         /// </summary>
         public event AnalysisEventHandeler OnLimitReach;
 
-        public bool TriggeredWindow { get; set; }
-
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Initialize the hash table routine
         /// </summary>
-        public RecordingTable()
-        {
-            TriggeredWindow = false;
-            _hashTblRecord = new Hashtable();
-        }
+        public RecordingTable() { _hashTblRecord = new Hashtable(); }
 
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Add a gesture to the database of gestures that are going to be recored from
         /// </summary>
         /// <param name="name">Name of gesture</param>
-        /// <param name="captureLimitEvent">
-        /// Maximum recording values for an 
-        /// event to trigger 
-        /// </param>
         /// <returns>
         /// -1 = Hash table is null and needs to be initialized
         ///  0 = A Gesture by the inserted name, already exists
         ///  1 = The gesture was inserted successfully
         /// </returns>
-        //public int AddGesture(string name, int captureLimitEvent)
         public int AddGesture(string name)
         {
             int returnValue = -1;
@@ -87,8 +76,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             {
                 if (_hashTblRecord.ContainsKey(name) == false)
                 {
-                    //_hashTblRecord.Add(name, new Recording(captureLimitEvent));
-                    _hashTblRecord.Add(name, new Algorithms.GestureInterpreter());
+                    _hashTblRecord.Add(name, new GestureInterpreter());
                     returnValue = 1;
                 }
                 else
@@ -115,18 +103,14 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         {
             int returnValue = -1;
 
-            if (_hashTblRecord.ContainsKey(name) && TriggeredWindow == false)
+            if (_hashTblRecord.ContainsKey(name))
             {
-                //var recording = (Recording) _hashTblRecord[name];
-                var classifier = (Algorithms.GestureInterpreter) _hashTblRecord[name];
+                var classifier = (GestureInterpreter) _hashTblRecord[name];
 
-                //if (recording.AddValue(value))
                 if (classifier.ProcessPoint(value))
                 {
                     //trigger event
-                    TriggeredWindow = true;
                     OnLimitReach?.Invoke(this, new RecordEventArgs(name));
-                    TriggeredWindow = false;
                     returnValue = 1;
                 }
                 else
@@ -137,80 +121,5 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 
             return returnValue;
         }
-
-        /*//--------------------------------------------------------------------------------
-        /// <summary>
-        /// Obtains the recording class of the gesture
-        /// </summary>
-        /// <param name="name">Gesture name</param>
-        /// <returns></returns>
-        public Recording GetGestureRecording(string name) {
-            return _hashTblRecord.ContainsKey(name)
-                ? (Recording) _hashTblRecord[name]
-                : null;
-        }*/
-
-        /*//--------------------------------------------------------------------------------
-        /// <summary>
-        /// Clears all the recorded values from all recording gestures
-        /// </summary>
-        public void ClearAllValues()
-        {
-            if (_hashTblRecord == null)
-                return;
-
-            foreach (DictionaryEntry record in _hashTblRecord)
-            {
-                ((Recording)record.Value).Clear();
-            }
-        }*/
     }
-
-    /*//====================================================================================
-    /// <summary>
-    /// Recording structure that contains all the values of a selected gesture
-    /// </summary>
-    public class Recording
-    {
-        private readonly int _captureLimitEvent;
-        private readonly List<double> _recoredValues;
-
-        public Recording(int captureLimitEvent)
-        {
-            _captureLimitEvent = captureLimitEvent;
-            _recoredValues = new List<double>(captureLimitEvent);
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Adds a value to the recording list
-        /// </summary>
-        /// <param name="value">Value that is going to be added</param>
-        /// <returns>True if the amount of recordings equal the capture limit</returns>
-        public bool AddValue(double value)
-        {
-            _recoredValues.Add(value);
-
-            return _recoredValues.Count == _captureLimitEvent;
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Gets the list of recordings that has been captured
-        /// </summary>
-        /// <returns></returns>
-        public List<double> GetRecordValues()
-        {
-            return _recoredValues;
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Clears the list of recorded values
-        /// </summary>
-        public void Clear()
-        {
-            _recoredValues.Clear();
-        }
-    }*/
 }
