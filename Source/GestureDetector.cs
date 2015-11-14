@@ -31,6 +31,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private VisualGestureBuilderFrameSource _vgbFrameSource;
 
+
         private int RecordingLimit { get; } = 52;
 
         /// <summary>
@@ -89,11 +90,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         public bool MutexLockGesture { private get; set; }
 
         //--------------------------------------------------------------------------------
-        public string GestureDatabase
-        {
-            get { return gestureDatabase; }
-        }
-        
+        public string GestureDatabase => gestureDatabase;
+
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -148,11 +146,13 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 {
                     if (gesture.GestureType != GestureType.Continuous)
                         continue;
+
                     //**TEMP FIX FOR IGNORING ROCKING FOR RELEASE 1**
                     if (gesture.Name.Contains("Rock"))
                         continue;
 
                     _vgbFrameSource.AddGesture(gesture);
+
                     //RecordingTable.AddGesture(gesture.Name, RecordingLimit);
                     RecordingTable.AddGesture(gesture.Name);
                 }
