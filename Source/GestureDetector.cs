@@ -83,6 +83,14 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             }
         }
 
+        /// <summary>
+        /// Reset the interpretation data associated with this detector.
+        /// </summary>
+        public void ResetInterpreter()
+        {
+            RecordingTable.Reset();
+        }
+
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Disables gesture from being recorded

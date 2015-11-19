@@ -53,11 +53,20 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         /// </summary>
         public event AnalysisEventHandeler OnLimitReach;
 
+        // Frame at which the last event was triggered.
+        private int LastTrigger;
+        // Minimum number of frames in between events triggered.
+        private const int TriggerDistance = 45;
+
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Initialize the hash table routine
         /// </summary>
-        public RecordingTable() { _hashTblRecord = new Hashtable(); }
+        public RecordingTable()
+        {
+            _hashTblRecord = new Hashtable();
+            LastTrigger = 0;
+        }
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -109,9 +118,18 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 
                 if (classifier.ProcessPoint(value))
                 {
+                    // If not enough time has passed since last trigger, ignore.
+                    if (classifier.Frame - LastTrigger < TriggerDistance)
+                    {
+                        returnValue = 0;
+                    }
                     //trigger event
-                    OnLimitReach?.Invoke(this, new RecordEventArgs(name));
-                    returnValue = 1;
+                    else
+                    {
+                        LastTrigger = classifier.Frame;
+                        OnLimitReach?.Invoke(this, new RecordEventArgs(name));
+                        returnValue = 1;
+                    }
                 }
                 else
                 {
@@ -120,6 +138,19 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             }
 
             return returnValue;
+        }
+
+        /// <summary>
+        /// Reset the gesture interpreters in the recording table for this body.
+        /// </summary>
+        public void Reset()
+        {
+            foreach (String key in _hashTblRecord.Keys)
+            {
+                var classifier = (GestureInterpreter) _hashTblRecord[key];
+
+                classifier.Reset();
+            }
         }
     }
 }

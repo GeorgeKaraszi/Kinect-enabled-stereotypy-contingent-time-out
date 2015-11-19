@@ -161,6 +161,12 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 //body is not tracked, pause its detector so we don't waste 
                 //resources trying to get invalid gesture results
                 _gestureDetectorList[i].IsPaused = trackingId == 0;
+
+                // If the gesture detector is NOW paused, reset its interpretation data.
+                if (_gestureDetectorList[i].IsPaused)
+                {
+                    _gestureDetectorList[i].ResetInterpreter();
+                }
             }
         }
 
@@ -170,7 +176,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// Handel's the event that occurs when a gesture reaches it's recording limit
+        /// Handles the event that occurs when sufficient hand-flapping is detected.
         /// </summary>
         /// <param name="source">Instance of recording table class</param>
         /// <param name="e">Name of recorded gesture</param>
