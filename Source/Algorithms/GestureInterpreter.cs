@@ -7,14 +7,14 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
     public class GestureInterpreter
     {
         // Circular array implementation of wave buffer.
-        private readonly double[] _wave;
+        private double[] _wave;
 
         // List of peaks and valleys.
-        readonly List<PeakValley> _pvList;
+        private List<PeakValley> _pvList;
         // List of PVPairs (VPV or PVP) for calculating frequency.
-        readonly List<PvPair> _pvPairs;
+        private List<PvPair> _pvPairs;
         // List of periods. It's a list so it can be decremented as PVPairs are removed.
-        readonly List<int> _periods;
+        private List<int> _periods;
 
         // Size of wave buffer to analyze.
         private const int WindowSize      = 60;
@@ -30,7 +30,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
         private const double MinPeakValleyDistance = 0.15;
 
         // Number of frames for counting.
-        private int Frame { get; set; }
+        public int Frame { get; set; }
 
         // Peak and valley data initialization.
         private double Peak { get; set; }
@@ -270,6 +270,26 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
             end = index;
 
             return end - start;
+        }
+
+        /// <summary>
+        /// Reset the data of the gesture interpreter.
+        /// </summary>
+        public void Reset()
+        {
+            _wave = new double[WindowSize];
+
+            _pvList = new List<PeakValley>();
+            _pvPairs = new List<PvPair>();
+            _periods = new List<int>();
+
+            Frame = -1;
+
+            Peak = 0;
+            Valley = 1;
+
+            Peakset = -1;
+            Valset = -1;
         }
 
         //================================================================================

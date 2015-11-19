@@ -15,7 +15,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
     public partial class QuietHandsWindow : Form
     {
 
-        private int _timeLeft = 60; //6 seconds
+        private int _timeLeft = 15; //6 seconds
         private int _quitTime = 20; //2 seconds
 
         public QuietHandsWindow()
