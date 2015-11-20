@@ -4,7 +4,6 @@ using System;
 using Microsoft.Kinect;
 using Microsoft.Kinect.VisualGestureBuilder;
 using WesternMichgian.SeniorDesign.KinectProject.Recording;
-using System.Media;
 
 #endregion
 
@@ -33,10 +32,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private VisualGestureBuilderFrameSource _vgbFrameSource;
 
 
-        private int timerLimit = 0;
-        public int frames = 0;
-
-        private int RecordingLimit { get; } = 60;
+        private int RecordingLimit { get; } = 52;
 
         /// <summary>
         /// Holds all the recordings from the gesture confidence detector
@@ -222,19 +218,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                                                     e)
         {
             var frameReference = e.FrameReference;
-            FormSetting data = new FormSetting();
-            timerLimit = data.getTimer() * 30 * 60;
-            if (frames== timerLimit)
-            {
-                frames = 0;
 
-                if (data.getOption()==true)
-                {
-                    SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\tada.wav");
-                    qhandsPlayer.Play();
-                }
-            }
-            frames++;
             using (VisualGestureBuilderFrame frame = frameReference.AcquireFrame())
             {
                 //Obtain the latest continuous gesture from the frame

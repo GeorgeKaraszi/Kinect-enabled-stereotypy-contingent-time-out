@@ -1,8 +1,6 @@
 ﻿#region
 
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
 
 #endregion
 
@@ -19,9 +17,10 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// Initializes a new instance of the MainWindow class
         /// </summary>
         public MainWindow()
-        {
+        {         
             //Initialize Kinect structure
             _kinectHandle = new KinectHandle();
+
             // initialize the MainWindow
             InitializeComponent();
 
@@ -29,17 +28,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             DataContext = this;
             if (_kinectHandle.KinectBodyView != null)
                 kinectBodyViewbox.DataContext = _kinectHandle.KinectBodyView;
-        }
-
-
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            // ... Cast sender object.
-            MenuItem item = sender as MenuItem;
-            Setting frm = new Setting();
-            frm.Show();
-        
         }
 
         //--------------------------------------------------------------------------------

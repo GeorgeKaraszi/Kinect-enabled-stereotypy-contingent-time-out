@@ -26,11 +26,10 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         private void QuietHandsWindow_Load(object sender, EventArgs e)
         {
-
-                SetupTimer();
-                SetupDisplay();
-                StartTimer();
-                SetupQHSound();
+            SetupTimer();
+            //SetupDisplay();
+            StartTimer();
+            SetupQHSound();
         }
         /// <summary>
         /// Looks for a hot-key Ctrl+Q to quite the window at hand.
@@ -54,11 +53,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private void Setupwindow()
         {
-            Cursor.Hide();
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
-            //WindowState = FormWindowState.Minimized;
-            TopMost = true;
+            //Cursor.Hide();
+            //FormBorderStyle = FormBorderStyle.None;
+            //WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Minimized;
+            //TopMost = true;
         }
 
         /// <summary>

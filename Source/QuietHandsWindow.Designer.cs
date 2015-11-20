@@ -8,7 +8,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -41,35 +41,30 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             // 
             // progressBar1
             // 
-            this.progressBar1.BackColor = System.Drawing.SystemColors.Window;
-            this.progressBar1.ForeColor = System.Drawing.Color.Transparent;
-            this.progressBar1.Location = new System.Drawing.Point(308, 370);
+            this.progressBar1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.progressBar1.Location = new System.Drawing.Point(255, 292);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(290, 29);
+            this.progressBar1.Size = new System.Drawing.Size(350, 23);
             this.progressBar1.TabIndex = 5;
             // 
             // timer_lbl
             // 
             this.timer_lbl.AutoSize = true;
-            this.timer_lbl.BackColor = System.Drawing.Color.Transparent;
-            this.timer_lbl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.timer_lbl.Location = new System.Drawing.Point(380, 284);
+            this.timer_lbl.Location = new System.Drawing.Point(410, 249);
             this.timer_lbl.Name = "timer_lbl";
-            this.timer_lbl.Size = new System.Drawing.Size(73, 13);
+            this.timer_lbl.Size = new System.Drawing.Size(79, 13);
             this.timer_lbl.TabIndex = 4;
-            this.timer_lbl.Text = "0 seconds left";
+            this.timer_lbl.Text = "0 secounds left";
             // 
             // qhands_lbl
             // 
             this.qhands_lbl.AutoSize = true;
-            this.qhands_lbl.BackColor = System.Drawing.Color.Transparent;
-            this.qhands_lbl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.qhands_lbl.Location = new System.Drawing.Point(380, 237);
+            this.qhands_lbl.Location = new System.Drawing.Point(392, 211);
             this.qhands_lbl.Name = "qhands_lbl";
             this.qhands_lbl.Size = new System.Drawing.Size(66, 13);
             this.qhands_lbl.TabIndex = 3;
             this.qhands_lbl.Text = "Quiet Hands";
-            this.qhands_lbl.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.qhands_lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // qhand_timer
             // 
@@ -83,15 +78,12 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.AliceBlue;
-            this.BackgroundImage = global::WesternMichgian.SeniorDesign.KinectProject.Properties.Resources.pic;
-            this.ClientSize = new System.Drawing.Size(935, 527);
-            this.ControlBox = false;
+            this.BackColor = System.Drawing.SystemColors.Highlight;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(861, 527);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.timer_lbl);
             this.Controls.Add(this.qhands_lbl);
-            this.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.ForeColor = System.Drawing.Color.Transparent;
             this.Name = "QuietHandsWindow";
             this.Text = "QuietHandsWindow";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.onClose);
@@ -103,11 +95,10 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         #endregion
 
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label timer_lbl;
-        private System.Windows.Forms.Label qhands_lbl;
-        private System.Windows.Forms.Timer qhand_timer;
-        private System.Windows.Forms.Timer quitTimer;
-    
-}
+        private ProgressBar progressBar1;
+        private Label timer_lbl;
+        private Label qhands_lbl;
+        private Timer qhand_timer;
+        private Timer quitTimer;
+    }
 }
