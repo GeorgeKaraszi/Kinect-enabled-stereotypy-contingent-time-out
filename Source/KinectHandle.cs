@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Kinect;
 using WesternMichgian.SeniorDesign.KinectProject.Recording;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System;
 
 namespace WesternMichgian.SeniorDesign.KinectProject
 {
     public class KinectHandle
     {
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
         /// <summary> Active Kinect sensor </summary>
         private KinectSensor _kinectSensor;
 
@@ -20,6 +26,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary> Array for the bodies the kinect tracks </summary>
         private Body[] _bodies;
 
+        private FormSetting formSetting;
         /// <summary> 
         /// KinectBodyView object which handles drawing the Kinect bodies to a View box 
         /// in the UI 
@@ -49,7 +56,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             // initialize the gesture detection objects for our gestures
             _gestureDetectorList = new List<GestureDetector>();
 
-
+            formSetting = new FormSetting();
             // create a gesture detector for each body (6 bodies => 6 detectors) 
             //and create content controls to display results in the UI
             int maxBodies = _kinectSensor.BodyFrameSource.BodyCount;
@@ -183,8 +190,16 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void OnLimitReachEvent(object source, RecordEventArgs e)
         {
             LockGestures();            //Mutex lock threads from recording
-            new QuietHandsWindow().ShowDialog();
+            if (formSetting.getOption() == false)
+            {
+
+                muteSound();
+            }
+        
             UnlockGestures();          //Mutex unlock threads 
+            _gestureDetectorList[0].frames = 0;
+           
+            
         }
 
         //--------------------------------------------------------------------------------
@@ -212,5 +227,42 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         }
 
 
+        private void muteSound()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process theprocess in processlist)
+            {
+                try
+                {
+                    VolumeMixer.SetApplicationMute(theprocess.Id, true);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+            int nProcessID = Process.GetCurrentProcess().Id;
+
+            VolumeMixer.SetApplicationMute(nProcessID, false);
+
+            new QuietHandsWindow().ShowDialog();
+
+            foreach (Process theprocess in processlist)
+            {
+                try
+                {
+                    VolumeMixer.SetApplicationMute(theprocess.Id, false);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+
+        }
     }
+
+    
 }
