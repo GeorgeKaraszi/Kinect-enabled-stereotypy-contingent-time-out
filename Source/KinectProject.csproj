@@ -110,6 +110,12 @@
     <Compile Include="Algorithms\GestureInterpreter.cs" />
     <Compile Include="Algorithms\HillBuilding.cs" />
     <Compile Include="Algorithms\PeaksAndValleys.cs" />
+    <Compile Include="Setting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setting.Designer.cs">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </Compile>
     <Compile Include="GraphTools\SMath.cs" />
     <Compile Include="GraphTools\SmoothIteration.cs" />
     <Compile Include="KinectHandle.cs" />
@@ -120,6 +126,8 @@
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Recording\Recording.cs" />
+    <Compile Include="FormSetting.cs" />
+    <Compile Include="VolumeMixer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -150,6 +158,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Setting.resx">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -192,7 +203,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\pic.jpg" />
+    <None Include="Resources\pic1.jpg" />
     <Content Include="Resources\QuietHandsSound.wav" />
+    <Content Include="Resources\tada.wav" />
     <Content Include="vgbtechs\AdaBoostTech.dll" />
     <Content Include="vgbtechs\RFRProgressTech.dll" />
   </ItemGroup>
