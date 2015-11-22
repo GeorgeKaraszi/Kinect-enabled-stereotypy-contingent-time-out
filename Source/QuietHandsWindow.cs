@@ -15,7 +15,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
     public partial class QuietHandsWindow : Form
     {
 
-        private int _timeLeft = 15; //6 seconds
+        private int _timeLeft = 30; //3 seconds
         private int _quitTime = 20; //2 seconds
 
         public QuietHandsWindow()
@@ -23,6 +23,15 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             Setupwindow();
             InitializeComponent();
         }
+
+	
+        public QuietHandsWindow(int sound)
+        {
+            InitializeComponent();
+            SetupQHSound();
+        }
+
+		
 
         private void QuietHandsWindow_Load(object sender, EventArgs e)
         {
@@ -113,7 +122,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private void SetupQHSound()
         {
-            SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\QuietHandsSound.wav");
+            SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\quiethands2.wav");
             qhandsPlayer.Play();
         }
 

@@ -190,14 +190,23 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void OnLimitReachEvent(object source, RecordEventArgs e)
         {
             LockGestures();            //Mutex lock threads from recording
+
+            _gestureDetectorList[0].frames = 0;//reset frames counter
+
             if (formSetting.getOption() == false)
             {
-
                 muteSound();
             }
-        
+            else
+            {
+          
+                new QuietHandsWindow(1);
+                System.Threading.Thread.Sleep(3000);//if I did not freeze this, it would play the sound again.
+
+
+            }
+
             UnlockGestures();          //Mutex unlock threads 
-            _gestureDetectorList[0].frames = 0;
            
             
         }

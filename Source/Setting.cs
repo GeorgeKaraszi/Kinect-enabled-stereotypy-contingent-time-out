@@ -59,6 +59,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default["TimerOrWindow"] = false;
+            Properties.Settings.Default.Save(); // Saves settings in application configuration file
             data = new FormSetting(false);
             timerTb.ReadOnly = true;
         }
