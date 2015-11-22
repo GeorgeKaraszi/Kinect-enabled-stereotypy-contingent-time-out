@@ -230,7 +230,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
                 if (data.getOption()==true)
                 {
-                    SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\tada.wav");
+                    SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\sucess.wav");
                     qhandsPlayer.Play();
                 }
             }

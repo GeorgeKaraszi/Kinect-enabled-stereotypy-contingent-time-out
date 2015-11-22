@@ -205,7 +205,9 @@
   <ItemGroup>
     <Resource Include="Resources\pic.jpg" />
     <None Include="Resources\pic1.jpg" />
+    <Content Include="Resources\quiethands2.wav" />
     <Content Include="Resources\QuietHandsSound.wav" />
+    <Content Include="Resources\sucess.wav" />
     <Content Include="Resources\tada.wav" />
     <Content Include="vgbtechs\AdaBoostTech.dll" />
     <Content Include="vgbtechs\RFRProgressTech.dll" />
