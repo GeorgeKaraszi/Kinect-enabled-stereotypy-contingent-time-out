@@ -17,7 +17,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
         private List<int> _periods;
 
         // Size of wave buffer to analyze.
-        private const int WindowSize      = 60;
+        private const int WindowSize      = 52;
 
         // Minimum and maximum frequency.
         private const int MinFrequency    = 5;
@@ -272,6 +272,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
             return end - start;
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Reset the data of the gesture interpreter.
         /// </summary>
