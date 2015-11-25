@@ -6,20 +6,28 @@
 
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Media;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace WesternMichgian.SeniorDesign.KinectProject
 {
     public partial class QuietHandsWindow : Form
     {
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageW(IntPtr hWnd,
+                                         int Msg,
+                                         IntPtr wParam,
+                                         IntPtr lParam);
 
         private int _timeLeft = 30; //3 seconds
         private int _quitTime = 20; //2 seconds
 
         public QuietHandsWindow()
         {
+            //muteSound();
             Setupwindow();
             InitializeComponent();
         }
@@ -27,6 +35,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 	
         public QuietHandsWindow(int sound)
         {
+            muteSound();
             InitializeComponent();
             SetupQHSound();
         }
@@ -155,13 +164,52 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             }
         }
 
-        /// <summary>
-        /// Be sure to re-enable the mouse, otherwise course wont display 
-        /// while the rest of the application is running
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void onClose(object sender, FormClosingEventArgs e)
+        private void muteSound()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process theprocess in processlist)
+            {
+                try
+                {
+                    VolumeMixer.SetApplicationMute(theprocess.Id, true);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        private void unmuteSound()
+        {
+            Process[] processlist = Process.GetProcesses();
+            int nProcessID = Process.GetCurrentProcess().Id;
+
+            VolumeMixer.SetApplicationMute(nProcessID, false);
+
+            new QuietHandsWindow().ShowDialog();
+
+            foreach (Process theprocess in processlist)
+            {
+                try
+                {
+                    VolumeMixer.SetApplicationMute(theprocess.Id, false);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+    /// <summary>
+    /// Be sure to re-enable the mouse, otherwise course wont display 
+    /// while the rest of the application is running
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void onClose(object sender, FormClosingEventArgs e)
         {
             Cursor.Show();
         }
