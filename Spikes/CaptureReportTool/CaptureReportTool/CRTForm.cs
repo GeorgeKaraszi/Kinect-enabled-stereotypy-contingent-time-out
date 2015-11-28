@@ -25,7 +25,7 @@ namespace CaptureReportTool
                                         };
             TrackedBodies = 0;
             _utilWindow = new UtilWindow(GestureNames.ToArray());
-            _utilWindow.OnGestureTargetChange += GestureTargetChange;
+            //_utilWindow.OnGestureTargetChange += GestureTargetChange;
             InitializeComponent();
         }
 
