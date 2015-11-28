@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Kinect;
 using Microsoft.Kinect.VisualGestureBuilder;
 using WesternMichgian.SeniorDesign.KinectProject.Recording;
@@ -31,13 +32,12 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private VisualGestureBuilderFrameSource _vgbFrameSource;
 
-
-        private int RecordingLimit { get; } = 52;
-
         /// <summary>
         /// Holds all the recordings from the gesture confidence detector
         /// </summary>
-        public RecordingTable RecordingTable { get; set; }
+        public RecordingTable RecordingTable { get; private set; }
+
+        public List<string> GestureNameList { get; private set; } 
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -115,7 +115,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         ///     results of a single body to
         /// </param>
         public GestureDetector(KinectSensor kinectSensor,
-                               GestureResultView gestureResultView)
+                               GestureResultView gestureResultView, int bodyid)
         {
             if (kinectSensor == null)
             {
@@ -129,7 +129,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
             GestureResultView = gestureResultView;
 
-            RecordingTable = new RecordingTable();
+            RecordingTable = new RecordingTable(bodyid);
+            GestureNameList = new List<string>();
 
             // create the vgb source. The associated body tracking ID will be set when a 
             //  valid body frame arrives from the sensor.
@@ -159,6 +160,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                     if (gesture.Name.Contains("Rock"))
                         continue;
 
+                    GestureNameList.Add(gesture.Name);
                     _vgbFrameSource.AddGesture(gesture);
 
                     //RecordingTable.AddGesture(gesture.Name, RecordingLimit);

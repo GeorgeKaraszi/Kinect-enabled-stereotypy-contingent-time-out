@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using WesternMichgian.SeniorDesign.KinectProject.Algorithms;
+using WesternMichgian.SeniorDesign.KinectProject.CaptureUtil;
 
 namespace WesternMichgian.SeniorDesign.KinectProject.Recording
 {
@@ -52,20 +53,30 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         /// Event that is activated when the capture limit has been hit
         /// </summary>
         public event AnalysisEventHandeler OnLimitReach;
+        /// <summary>
+        /// Triggered event when ever a change in stream data occurs
+        /// </summary>
+        public event ChangeInDataEvent OnChangeInData;
 
         // Frame at which the last event was triggered.
-        private int LastTrigger;
+        private int LastTrigger { get; set; }
         // Minimum number of frames in between events triggered.
         private const int TriggerDistance = 45;
+
+        private int BodyId { get; }
+
+        public string TargetGesture { get; set; }
 
         //--------------------------------------------------------------------------------
         /// <summary>
         /// Initialize the hash table routine
         /// </summary>
-        public RecordingTable()
+        public RecordingTable(int bodyid)
         {
             _hashTblRecord = new Hashtable();
-            LastTrigger = 0;
+            LastTrigger    = 0;
+            BodyId         = bodyid;
+            TargetGesture  = "Empty";
         }
 
         //--------------------------------------------------------------------------------
@@ -115,6 +126,13 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
             if (_hashTblRecord.ContainsKey(name))
             {
                 var classifier = (GestureInterpreter) _hashTblRecord[name];
+
+                //If gesture is targeted on the Capture Util. Report it.
+                if (TargetGesture == name)
+                {
+                    OnChangeInData?.Invoke(this, 
+                        new UtilDataArgs(value,classifier.Frame + 1, BodyId));
+                }
 
                 if (classifier.ProcessPoint(value))
                 {
