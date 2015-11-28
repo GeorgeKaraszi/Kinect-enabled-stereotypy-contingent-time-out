@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -291,13 +292,43 @@ namespace CaptureReportTool
             activePanel.IsRecording = !activePanel.IsRecording;
             if (activePanel.IsRecording)
             {
+                activePanel.StartTime   = DateTime.Now;
                 clickedButton.Text      = @"Stop Recording";
                 clickedButton.BackColor = Color.Red;
             }
             else
             {
+                activePanel.EndTime     = DateTime.Now;
                 clickedButton.Text      = @"Record";
                 clickedButton.BackColor = DefaultBackColor;
+                SaveRecordedValues(activePanel);
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Saves the recordings to a file designated by the user
+        /// </summary>
+        /// <param name="panelFrame">Selected frame to save recordings</param>
+        private void SaveRecordedValues(PanelFrame panelFrame)
+        {
+            if (HashTblRecord.Contains(panelFrame.BodyId))
+            {
+                var frameSet =
+                    (List<Tuple<int, double>>) HashTblRecord[panelFrame.BodyId];
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                using (var sw = new StreamWriter(saveFileDialog.FileName))
+                {
+                    sw.Write("Start Time:{0}\tEnd Time{1}\n", 
+                             panelFrame.StartTime, panelFrame.EndTime);
+                    foreach (var points in frameSet)
+                    {
+                        sw.Write("Frame {0}\tValue {1}\n");
+                    }
+                }
             }
         }
 
@@ -339,6 +370,14 @@ namespace CaptureReportTool
         /// Body index id for the recorded panel
         /// </summary>
         public int BodyId { get; set; }
+        /// <summary>
+        /// Start time of when the recording started
+        /// </summary>
+        public DateTime StartTime { get; set; }
+        /// <summary>
+        /// End time of when the recording stopped
+        /// </summary>
+        public DateTime EndTime { get; set; }
         /// <summary>
         /// Panel that contains all necessary visual GUI controls
         /// </summary>
