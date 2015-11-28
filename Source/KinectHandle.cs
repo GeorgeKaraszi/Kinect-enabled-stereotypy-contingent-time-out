@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Kinect;
+using WesternMichgian.SeniorDesign.KinectProject.CaptureUtil;
 using WesternMichgian.SeniorDesign.KinectProject.Recording;
 
 namespace WesternMichgian.SeniorDesign.KinectProject
@@ -25,6 +26,33 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// in the UI 
         /// </summary>
         public readonly KinectBodyView KinectBodyView;
+
+        /// <summary>
+        /// Event that handles incoming and outgoing data to the utility window
+        /// </summary>
+        public event ChangeInDataEvent OnDataChange
+        {
+            add
+            {
+                foreach (var g in _gestureDetectorList)
+                {
+                    g.RecordingTable.OnChangeInData += value;
+                }
+            }
+            remove
+            {
+                foreach (var g in _gestureDetectorList)
+                {
+                    g.RecordingTable.OnChangeInData -= value;
+                }
+            }
+        }
+
+        //public event ChangeInPeriodEvent OnPeriodChange;
+        public event ChangeInSkeletonsEvent OnSkeletonChange;
+
+        public string[] GetGestureNames => 
+            _gestureDetectorList[0].GestureNameList.ToArray();
 
         public KinectHandle()
         {
@@ -55,13 +83,24 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             for (int i = 0; i < maxBodies; ++i)
             {
                 GestureResultView result = new GestureResultView(i, false);
-                GestureDetector detector = new GestureDetector(_kinectSensor, result);
+                GestureDetector detector = new GestureDetector(_kinectSensor, result, i);
 
                 //Insert gesture event trigger
                 detector.RecordingTable.OnLimitReach += OnLimitReachEvent;
 
                 _gestureDetectorList.Add(detector);
             }
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Sets the target gesture the utility window will require to record from
+        /// </summary>
+        /// <param name="bodyid">Id of the body being recorded</param>
+        /// <param name="gestureName">Name of the new target gesture</param>
+        public void SetTargetGesture(int bodyid, string gestureName)
+        {
+            _gestureDetectorList[bodyid].RecordingTable.TargetGesture = gestureName;
         }
 
         //--------------------------------------------------------------------------------
@@ -164,7 +203,12 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 // If the gesture detector is NOW paused, reset its interpretation data.
                 if (_gestureDetectorList[i].IsPaused)
                 {
+                    OnSkeletonChange?.Invoke(this,new UtilBodyArgs(i, false));
                     _gestureDetectorList[i].ResetInterpreter();
+                }
+                else
+                {
+                    OnSkeletonChange?.Invoke(this, new UtilBodyArgs(i, true));
                 }
             }
         }
@@ -185,7 +229,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         {
             LockGestures(); //Mutex lock threads from recording
 
-            new QuietHandsWindow().ShowDialog();
+            //new QuietHandsWindow().ShowDialog();
 
             UnlockGestures(); //Mutex unlock threads    
         }
