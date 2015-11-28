@@ -73,6 +73,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.trackGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -582,5 +583,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.DataVisualization.Charting.Chart trackGraph;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
