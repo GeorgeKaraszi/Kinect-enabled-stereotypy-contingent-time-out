@@ -64,6 +64,78 @@ namespace CaptureReportTool
 
         //--------------------------------------------------------------------------------
         /// <summary>
+        /// Updates the GUI with a change in tracking of a body
+        /// </summary>
+        /// <param name="bodyId">Body of the new tracking event</param>
+        /// <param name="trackingStatus">Status of the body in question</param>
+        public void UpdateTracking(int bodyId, bool trackingStatus)
+        {
+            var targetPanel = ActivePanel.FirstOrDefault(x => x.BodyId == bodyId);
+
+            if (targetPanel == null)
+            {
+                var panel = ActivePanel.FirstOrDefault(x => x.IsActive == false);
+                if (panel != null)
+                {
+                    panel.IsActive = true;
+                    panel.IsRecording = false;
+                    panel.BodyId = bodyId;
+                    UpdatePanelDefaults(panel.Panel, trackingStatus);
+                }
+            }
+            else if (trackingStatus == false)
+            {
+                targetPanel.IsActive = false;
+                targetPanel.IsRecording = false;
+                targetPanel.BodyId = -1;
+                targetPanel.Panel.Visible = false;
+
+                if (HashTblRecord.Contains(bodyId))
+                    HashTblRecord.Remove(bodyId);
+
+                RearrangePanels();
+            }
+
+        }
+
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Records inserted data if the target skeleton is marked for recording
+        /// </summary>
+        /// <param name="bodyid">ID of targeted skeleton</param>
+        /// <param name="frame">
+        /// Tuple containing frame number and value for that frame
+        /// </param>
+        public void AddWaveData(int bodyid, Tuple<int, double> frame)
+        {
+            var trackedBody = ActivePanel.FirstOrDefault(x => x.BodyId == bodyid);
+
+            if (trackedBody == null)
+                return;
+
+            //If Body is flagged for recording but has no table assigned
+            if (trackedBody.IsRecording &&
+                HashTblRecord.Contains(trackedBody.BodyId) == false)
+            {
+                HashTblRecord.Add(trackedBody.BodyId, new List<Tuple<int, double>>());
+            }
+
+            if (trackedBody.IsRecording)
+            {
+                //Body is flagged for recording and data will be added
+                var frameList =
+                    (List<Tuple<int, double>>)HashTblRecord[trackedBody.BodyId];
+                frameList.Add(frame);
+            }
+
+            //Insert data into the visible GUI chart
+            UpdateChartFrame(trackedBody.Panel, frame);
+
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
         /// In the case of a skeleton is no longer tracked between two active one's. 
         /// The GUI must rearrange the GUI in order to prevent gaps.
         /// 
@@ -129,41 +201,6 @@ namespace CaptureReportTool
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// Records inserted data if the target skeleton is marked for recording
-        /// </summary>
-        /// <param name="bodyid">ID of targeted skeleton</param>
-        /// <param name="frame">
-        /// Tuple containing frame number and value for that frame
-        /// </param>
-        public void AddWaveData(int bodyid, Tuple<int, double> frame)
-        {
-            var trackedBody = ActivePanel.FirstOrDefault(x => x.BodyId == bodyid);
-
-            if (trackedBody == null)
-                return;
-
-            //Body is flagged for recording but has no table assigned
-            if (trackedBody.IsRecording && 
-                HashTblRecord.Contains(trackedBody.BodyId) == false)
-            {
-                HashTblRecord.Add(trackedBody.BodyId, new List<Tuple<int, double>>());
-            }
-
-            if (trackedBody.IsRecording)
-            {
-                //Body is flagged for recording and data will be added
-                var frameList =
-                    (List<Tuple<int, double>>) HashTblRecord[trackedBody.BodyId];
-                frameList.Add(frame);
-            }
-
-            //Insert data into the visible GUI chart
-            UpdateChartFrame(trackedBody.Panel, frame);
-
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
         /// Inserts frames of data into the viable chart on the GUI
         /// </summary>
         /// <param name="panel">Control panel</param>
@@ -180,41 +217,6 @@ namespace CaptureReportTool
                     ( (Chart) con ).Refresh();
                 }
             }
-        }
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// Updates the GUI with a change in tracking of a body
-        /// </summary>
-        /// <param name="bodyId">Body of the new tracking event</param>
-        /// <param name="trackingStatus">Status of the body in question</param>
-        public void UpdateTracking(int bodyId, bool trackingStatus)
-        {
-            var targetPanel = ActivePanel.FirstOrDefault(x => x.BodyId == bodyId);
-
-            if (targetPanel == null)
-            {
-                var panel = ActivePanel.FirstOrDefault(x => x.IsActive == false);
-                if (panel != null)
-                {
-                    UpdatePanelDefaults(panel.Panel, trackingStatus);
-                    panel.IsActive    = true;
-                    panel.IsRecording = false;
-                    panel.BodyId      = bodyId;
-                }
-            }
-            else if(trackingStatus == false)
-            {
-                targetPanel.IsActive      = false;
-                targetPanel.IsRecording   = false;
-                targetPanel.BodyId        = -1;
-                targetPanel.Panel.Visible = false;
-
-                if(HashTblRecord.Contains(bodyId))
-                    HashTblRecord.Remove(bodyId);
-
-                RearrangePanels();
-            }
-
         }
 
         //--------------------------------------------------------------------------------
@@ -326,7 +328,7 @@ namespace CaptureReportTool
                              panelFrame.StartTime, panelFrame.EndTime);
                     foreach (var points in frameSet)
                     {
-                        sw.Write("Frame {0}\tValue {1}\n");
+                        sw.Write("Frame {0}\tValue {1}\n", points.Item1, points.Item2);
                     }
                 }
             }
