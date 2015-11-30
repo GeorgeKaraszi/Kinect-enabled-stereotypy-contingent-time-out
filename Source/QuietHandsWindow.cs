@@ -22,33 +22,51 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                                          IntPtr wParam,
                                          IntPtr lParam);
 
-        private int _timeLeft = 30; //3 seconds
-        private int _quitTime = 20; //2 seconds
+        private int TimeLeft { get; set; }=30; //3 seconds
+        private int QuiteTime { get; set; }=20; //2 seconds
+        private int _time = 0;
+        private SoundPlayer SoundBad { get; }
+        private SoundPlayer SoundGood { get; }
 
         public QuietHandsWindow()
         {
             //muteSound();
-            Setupwindow();
+            //Setupwindow();
             InitializeComponent();
+
+            SoundBad = new SoundPlayer(@".\Resources\quiethands2.wav");
+            SoundGood = new SoundPlayer(@".\Resources\sucess.wav");
         }
 
-	
-        public QuietHandsWindow(int sound)
+        public void PlayBadSound()
         {
-            muteSound();
-            InitializeComponent();
-            SetupQHSound();
+            //muteSound();
+            SoundBad.Play();
+            //unmuteSound();
         }
 
-		
+        public void PlayGoodSound()
+        {
+            //muteSound();
+            SoundGood.Play();
+            //unmuteSound();
+        }
+
+        public void DisplayFullScreen(int timeout)
+        {
+            TimeLeft = timeout;
+            Show();
+        }
+
+
 
         private void QuietHandsWindow_Load(object sender, EventArgs e)
         {
-
+                Setupwindow();
                 SetupTimer();
                 SetupDisplay();
                 StartTimer();
-                SetupQHSound();
+                SoundBad.Play();
         }
         /// <summary>
         /// Looks for a hot-key Ctrl+Q to quite the window at hand.
@@ -72,7 +90,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private void Setupwindow()
         {
-            Cursor.Hide();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
             //WindowState = FormWindowState.Minimized;
@@ -84,9 +101,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// </summary>
         private void SetupTimer()
         {
-            timer_lbl.Text = (_timeLeft / 10) + " seconds";
-            progressBar1.Maximum = _timeLeft;
-            progressBar1.Value = _timeLeft;
+            timer_lbl.Text = (TimeLeft / 10) + " seconds";
+            progressBar1.Maximum = TimeLeft;
+            progressBar1.Value = TimeLeft;
             progressBar1.Minimum = 0;
         }
 
@@ -125,27 +142,18 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             progressBar1.Location = new Point(xPbar, yPbar);
         }
 
-        //WindowsMediaPlayer Player;
-        /// <summary>
-        /// Launches the audio for saying quite hands to the listener
-        /// </summary>
-        private void SetupQHSound()
-        {
-            SoundPlayer qhandsPlayer = new SoundPlayer(@".\Resources\quiethands2.wav");
-            qhandsPlayer.Play();
-        }
-
         private void qhand_timer_Tick(object sender, EventArgs e)
         {
-            if (_timeLeft > 0)
+            if (_time < TimeLeft)
             {
-                _timeLeft -= 1;
-                progressBar1.Value = _timeLeft;
-                timer_lbl.Text = (_timeLeft / 10) + " seconds";
+                _time += 1;
+                progressBar1.Value = _time;
+                timer_lbl.Text = ((TimeLeft - _time) / 10) + " seconds";
             }
             else
             {
                 qhand_timer.Stop();
+                _time = 0;
                 timer_lbl.Text = "Times up! You may continue!";
                 SetupDisplay();
                 quitTimer.Start();
@@ -155,10 +163,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         private void quitTimer_Tick(object sender, EventArgs e)
         {
-            if (_quitTime > 0)
-                _quitTime -= 1;
+            if (_time < QuiteTime)
+                _time += 1;
             else
             {
+                _time = 0;
                 quitTimer.Stop();
                 Close();
             }
@@ -188,8 +197,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
             VolumeMixer.SetApplicationMute(nProcessID, false);
 
-            new QuietHandsWindow().ShowDialog();
-
             foreach (Process theprocess in processlist)
             {
                 try
@@ -211,7 +218,16 @@ namespace WesternMichgian.SeniorDesign.KinectProject
     /// <param name="e"></param>
     private void onClose(object sender, FormClosingEventArgs e)
         {
-            Cursor.Show();
+            this.Hide();
+            e.Cancel = true;
+        }
+
+        private void QuietHandsWindow_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible == true)
+            {
+                QuietHandsWindow_Load(sender, e);
+            }
         }
     }
 }

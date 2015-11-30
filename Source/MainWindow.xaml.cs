@@ -2,9 +2,11 @@
 
 using System;
 using System.ComponentModel;
+
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using WesternMichgian.SeniorDesign.KinectProject.CaptureUtil;
+using WesternMichgian.SeniorDesign.KinectProject.Recording;
 
 #endregion
 
@@ -17,6 +19,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject
     {
         private readonly KinectHandle _kinectHandle;
         private readonly UtilWindow _utilWindow;
+        private readonly QuietHandsWindow _quietHandsWindow;
+        private readonly Settings _windowSettings;
+        private int CurrentTime { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class
@@ -24,12 +29,23 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         public MainWindow()
         {
             //Initialize Kinect structure
-            _kinectHandle = new KinectHandle();
-            _utilWindow   = new UtilWindow(_kinectHandle.GetGestureNames);
+
+            Timer applicationTimer = new Timer();
+            _windowSettings        = new Settings();
+            _kinectHandle          = new KinectHandle();
+            _utilWindow            = new UtilWindow(_kinectHandle.GetGestureNames);
+            _quietHandsWindow      = new QuietHandsWindow();
+
+            //Assign Event triggered functions
             _kinectHandle.OnDataChange        += _kinectHandle_OnDataChange;
             _kinectHandle.OnSkeletonChange    += _kinectHandle_OnSkeletonChange;
-            //_kinectHandle.OnPeriodChange      += _kinectHandle_OnPeriodChange;
+            _kinectHandle.OnLimitReach        += _kinectHandle_OnLimitReach;
             _utilWindow.OnGestureTargetChange += _utilWindow_OnGestureTargetChange;
+            applicationTimer.Tick             += _applicationTimer_Tick;
+            applicationTimer.Enabled = true;
+            applicationTimer.Interval = 1;
+            applicationTimer.Start();
+
             // initialize the MainWindow
             InitializeComponent();
 
@@ -37,6 +53,33 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             DataContext = this;
             if (_kinectHandle.KinectBodyView != null)
                 kinectBodyViewbox.DataContext = _kinectHandle.KinectBodyView;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _applicationTimer_Tick(object sender, EventArgs e)
+        {
+            var timeObj = (Timer) sender;
+            if (_kinectHandle.TrackingBodies &&
+                 _quietHandsWindow.Visible == false &&
+                 _windowSettings.ReturnSucessTimerEnabled)
+            {
+                CurrentTime += timeObj.Interval;
+                if (CurrentTime >= _windowSettings.ReturnSucessTimerInterval)
+                {
+                    CurrentTime = 0;
+                    _quietHandsWindow.PlayGoodSound();
+                }
+            }
+            else
+            {
+                CurrentTime = 0;
+            }
+
         }
 
         //--------------------------------------------------------------------------------
@@ -63,16 +106,16 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         }
 
         //--------------------------------------------------------------------------------
-        /// <summary>
-        /// ****Not implemented yet****
-        /// Event is triggered every time a period change for target gesture is found.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void _kinectHandle_OnPeriodChange(object source, UtilPeriodArgs e)
-        {
-            throw new NotImplementedException();
-        }
+//        /// <summary>
+//        /// ****Not implemented yet****
+//        /// Event is triggered every time a period change for target gesture is found.
+//        /// </summary>
+//        /// <param name="source"></param>
+//        /// <param name="e"></param>
+//        private void _kinectHandle_OnPeriodChange(object source, UtilPeriodArgs e)
+//        {
+//            throw new NotImplementedException();
+//        }
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -85,18 +128,47 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             _utilWindow.UpdateTracking(e.GetBodyId(),e.IsBeingTracked());
         }
 
+
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// 
+        /// Handles the event that occurs when sufficient hand-flapping is detected.
+        /// </summary>
+        /// <param name="source">Instance of recording table class</param>
+        /// <param name="e">Name of recorded gesture</param>
+        private void _kinectHandle_OnLimitReach(object source, RecordEventArgs e)
+        {
+            string message = "Gesture : " + e.GetInfo();
+            if (_quietHandsWindow.Visible == false)
+            {
+                if (_windowSettings.ReturnFullScreenEnabled)
+                {
+                    _quietHandsWindow.DisplayFullScreen(_windowSettings.TimeoutInterval);
+                }
+                else
+                {
+
+                    CurrentTime = 0;
+                    System.Windows.Forms.MessageBox.Show(message);
+                    _quietHandsWindow.PlayBadSound();
+                }  
+            }
+        }
+
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Opens the settings dialog menu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Settings_Click(object sender, RoutedEventArgs e)
         {
             // ... Cast sender object.
-            Setting frm = new Setting();
-            frm.Show();
-        
+            if (_windowSettings.Visible == false)
+            {
+                _windowSettings.Show();
+            }
+
         }
 
         //--------------------------------------------------------------------------------

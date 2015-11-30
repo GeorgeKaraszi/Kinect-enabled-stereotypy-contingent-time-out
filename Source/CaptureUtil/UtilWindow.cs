@@ -28,7 +28,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.CaptureUtil
         /// <summary>
         /// Window size of the displayed graph
         /// </summary>
-        private int WindowSize { get; } = 100;
+        private int WindowSize { get; } = 60;
 
         //--------------------------------------------------------------------------------
         public UtilWindow()
@@ -72,8 +72,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject.CaptureUtil
         {
             var targetPanel = ActivePanel.FirstOrDefault(x => x.BodyId == bodyId);
 
-            if (targetPanel == null)
+            if (targetPanel == null)    //No body found, new skeleton was detected
             {
+                //Find the first available inactive panel
                 var panel = ActivePanel.FirstOrDefault(x => x.IsActive == false);
                 if (panel != null)
                 {
@@ -136,7 +137,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.CaptureUtil
         //--------------------------------------------------------------------------------
         /// <summary>
         /// In the case of a skeleton is no longer tracked between two active one's. 
-        /// The GUI must rearrange the GUI in order to prevent gaps.
+        /// The GUI must rearrange the Wave panels in order to prevent gaps.
         /// 
         /// Due to the nature of the application. A simple swap of panels would cause 
         /// error's and a higher level of complexity since each panel needs to be 
@@ -213,7 +214,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject.CaptureUtil
             {
                 var pointList = ( (Chart) con ).Series[0].Points;
                 index = pointList.Count;
-
+                //index = frame.Item1%WindowSize;
+                //Maximum window size was found, remove the oldest point
                 if (pointList.Count > WindowSize)
                 {
                     pointList.RemoveAt(0);
@@ -377,6 +379,13 @@ namespace WesternMichgian.SeniorDesign.KinectProject.CaptureUtil
             OnGestureTargetChange?.Invoke(sender, eventArg);
         }
 
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Prevent the window from fully closing. 
+        /// This prevent complications with having to reinitializing events.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UtilWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.Hide();

@@ -14,7 +14,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
         // List of PVPairs (VPV or PVP) for calculating frequency.
         private List<PvPair> _pvPairs;
         // List of periods. It's a list so it can be decremented as PVPairs are removed.
-        private List<int> _periods;
+        public List<int> _periods;
 
         // Size of wave buffer to analyze.
         private const int WindowSize      = 52;

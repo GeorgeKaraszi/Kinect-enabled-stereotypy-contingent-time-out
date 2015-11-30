@@ -118,12 +118,6 @@
     <Compile Include="CaptureUtil\UtilWindow.Designer.cs">
       <DependentUpon>UtilWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Setting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Setting.Designer.cs">
-      <DependentUpon>Setting.cs</DependentUpon>
-    </Compile>
     <Compile Include="GraphTools\SMath.cs" />
     <Compile Include="GraphTools\SmoothIteration.cs" />
     <Compile Include="KinectHandle.cs" />
@@ -134,7 +128,12 @@
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Recording\Recording.cs" />
-    <Compile Include="FormSetting.cs" />
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="VolumeMixer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -169,9 +168,6 @@
     <EmbeddedResource Include="CaptureUtil\UtilWindow.resx">
       <DependentUpon>UtilWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Setting.resx">
-      <DependentUpon>Setting.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -179,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="QuietHandsWindow.resx">
       <DependentUpon>QuietHandsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Database\HandFlap.gbd" />
     <None Include="Properties\Settings.settings">
@@ -216,6 +215,7 @@
   <ItemGroup>
     <Resource Include="Resources\pic.jpg" />
     <None Include="Resources\pic1.jpg" />
+    <Resource Include="Resources\Main.ico" />
     <Content Include="Resources\quiethands2.wav" />
     <Content Include="Resources\QuietHandsSound.wav" />
     <Content Include="Resources\sucess.wav" />
