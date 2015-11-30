@@ -96,6 +96,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             this.Text = "QuietHandsWindow";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.onClose);
             this.Load += new System.EventHandler(this.QuietHandsWindow_Load);
+            this.VisibleChanged += new System.EventHandler(this.QuietHandsWindow_VisibleChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

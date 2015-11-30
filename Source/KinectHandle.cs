@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Microsoft.Kinect;
 using WesternMichgian.SeniorDesign.KinectProject.CaptureUtil;
 using WesternMichgian.SeniorDesign.KinectProject.Recording;
@@ -20,6 +23,15 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         /// <summary> Array for the bodies the kinect tracks </summary>
         private Body[] _bodies;
+
+        /// <summary>
+        /// Determines if there are skeletons being currently tracked
+        /// </summary>
+        public bool TrackingBodies
+        {
+            get
+            { return _gestureDetectorList.Any(g => g.IsPaused == false); }
+        }
 
         /// <summary> 
         /// KinectBodyView object which handles drawing the Kinect bodies to a View box 
@@ -47,6 +59,28 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 }
             }
         }
+
+        /// <summary>
+        /// Event handler that deals with gestures that have reached their period limit
+        /// </summary>
+        public event AnalysisEventHandeler OnLimitReach
+        {
+            add
+            {
+                foreach (var g in _gestureDetectorList)
+                {
+                    g.RecordingTable.OnLimitReach += value;
+                }
+            }
+            remove
+            {
+                foreach (var g in _gestureDetectorList)
+                {
+                    g.RecordingTable.OnLimitReach -= value;
+                }
+            }
+        }
+
 
         //public event ChangeInPeriodEvent OnPeriodChange;
         public event ChangeInSkeletonsEvent OnSkeletonChange;
@@ -84,9 +118,6 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             {
                 GestureResultView result = new GestureResultView(i, false);
                 GestureDetector detector = new GestureDetector(_kinectSensor, result, i);
-
-                //Insert gesture event trigger
-                detector.RecordingTable.OnLimitReach += OnLimitReachEvent;
 
                 _gestureDetectorList.Add(detector);
             }
@@ -221,24 +252,9 @@ namespace WesternMichgian.SeniorDesign.KinectProject
 
         //--------------------------------------------------------------------------------
         /// <summary>
-        /// Handles the event that occurs when sufficient hand-flapping is detected.
-        /// </summary>
-        /// <param name="source">Instance of recording table class</param>
-        /// <param name="e">Name of recorded gesture</param>
-        private void OnLimitReachEvent(object source, RecordEventArgs e)
-        {
-            LockGestures(); //Mutex lock threads from recording
-
-            //new QuietHandsWindow().ShowDialog();
-
-            UnlockGestures(); //Mutex unlock threads    
-        }
-
-        //--------------------------------------------------------------------------------
-        /// <summary>
         /// Locks all gestures from recording (Mutex thread lock)
         /// </summary>
-        private void LockGestures()
+        public void LockGestures()
         {
             foreach (var gesture in _gestureDetectorList)
             {
@@ -250,7 +266,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         /// <summary>
         /// Unlocks all gestures for recording (Mutex thread unlock)
         /// </summary>
-        private void UnlockGestures()
+        public void UnlockGestures()
         {
             foreach (var gesture in _gestureDetectorList)
             {

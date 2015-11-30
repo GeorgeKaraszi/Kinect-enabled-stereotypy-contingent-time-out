@@ -19,11 +19,17 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         /// </summary>
         private readonly string _gestureName;
 
+        private readonly int _period;
+
         //--------------------------------------------------------------------------------
         /// <summary>
         /// </summary>
         /// <param name="name">Gesture name</param>
-        public RecordEventArgs(string name) { _gestureName = name; }
+        public RecordEventArgs(string name, int period)
+        {
+            _gestureName = name;
+            _period = period;
+        }
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -34,6 +40,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         {
             return _gestureName;
         }
+
+        public int GetPeriod() { return _period; }
 
     }
 
@@ -145,7 +153,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
                     else
                     {
                         LastTrigger = classifier.Frame;
-                        OnLimitReach?.Invoke(this, new RecordEventArgs(name));
+                        OnLimitReach?.Invoke(this, new RecordEventArgs(name, classifier._periods.Count));
                         returnValue = 1;
                     }
                 }
