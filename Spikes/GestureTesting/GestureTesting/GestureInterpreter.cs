@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Windows.Forms;
 
-namespace GestureTraining
+namespace GestureTesting
 {
     public class GestureInterpreter
     {
+        // List for recording all values.
+        private List<double> _waveRecord;
         // Circular array implementation of wave buffer.
         private double[] _wave;
 
@@ -17,7 +21,7 @@ namespace GestureTraining
         private List<int> _periods;
 
         // Size of wave buffer to analyze.
-        private const int WindowSize = 60;
+        private const int WindowSize = 52;
 
         // Minimum and maximum frequency.
         private const int MinFrequency = 5;
@@ -30,7 +34,7 @@ namespace GestureTraining
         private const double MinPeakValleyDistance = 0.15;
 
         // Number of frames for counting.
-        private int Frame { get; set; }
+        public int Frame { get; set; }
 
         // Peak and valley data initialization.
         private double Peak { get; set; }
@@ -45,6 +49,7 @@ namespace GestureTraining
         /// </summary>
         public GestureInterpreter()
         {
+            _waveRecord = new List<double>();
             _wave = new double[WindowSize];
 
             _pvList = new List<PeakValley>();
@@ -73,6 +78,7 @@ namespace GestureTraining
             bool returnVal = false;
             int index = ++Frame % WindowSize;
             _wave[index] = val;
+            _waveRecord.Add(val);
 
             // First, check if there is to be a PV removed from the list.
             if (_pvList.Count > 0 && _pvList.First().Frame <= Frame - WindowSize)
@@ -272,8 +278,24 @@ namespace GestureTraining
             return end - start;
         }
 
-        public void Reset()
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Reset the Gesture Interpreter's data so that it can't be used in the future.
+        /// Now is the time to save the data too.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="gesture"></param>
+        /// <param name="numframes"></param>
+        /// <param name="bodyid"></param>
+        public void Reset(String gesture, String filename, int bodyid, int numframes)
         {
+            // First, save the _waveRecord to the given filepath.
+            if (_waveRecord.Count > 0)
+            {
+                Save(gesture, filename, bodyid, numframes);
+            }
+            
+            _waveRecord = new List<double>();
             _wave = new double[WindowSize];
 
             _pvList = new List<PeakValley>();
@@ -287,6 +309,77 @@ namespace GestureTraining
 
             Peakset = -1;
             Valset = -1;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Return a full file path to the file to write to.
+        /// Format: [gesture][filename][id].txt
+        /// </summary>
+        /// <param name="gesture"></param>
+        /// <param name="filename"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private String GetPath(String gesture, String filename, int id)
+        {
+            // [gesture][filename].xef
+            String Filename = String.Concat(gesture, filename);
+            // [id].txt
+            String idext = String.Concat(id.ToString(), ".txt");
+            // [gesture][filename][id].txt
+            Filename = Filename.Replace(".xef", idext);
+
+            // First get a relative path to the corpus.
+            // Later the user can specify where to store the gesture interpretation files.
+            String relpath = String.Concat(@"..\..\..\corpus\", Filename);
+            // Finally, get the full file path.
+            FileInfo f = new FileInfo(relpath);
+            String FilePath = f.FullName;
+
+            return FilePath;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// With the given information to piece into a String, open a file to save
+        /// the gesture inter
+        /// </summary>
+        /// <param name="gesture"></param>
+        /// <param name="filename"></param>
+        /// <param name="bodyid"></param>
+        /// <param name="numframes"></param>
+        private void Save(String gesture, String filename, int bodyid, int numframes)
+        {
+            try
+            {
+                // The playback was looped once because there is a delay in the
+                // skeletal tagging by the Kinect.
+                // In other words, more data is obtained from the second iteration,
+                // however it must start at the right place (and not < 0!).
+                int trim = _waveRecord.Count - numframes;
+                if (trim < 0)
+                {
+                    trim = 0;
+                }
+                _waveRecord.RemoveRange(0, trim);
+
+                // Get the full path to the file to write to.
+                String FilePath = GetPath(gesture, filename, bodyid);
+
+                // Some day might want to think about the files being
+                // differentiated by their ids.
+                using (StreamWriter file = new StreamWriter(FilePath, false))
+                {
+                    foreach (double val in _waveRecord)
+                    {
+                        file.WriteLine(val.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("File save error : " + ex.GetType().ToString() + " : " + ex.Message);
+            }
         }
 
         //================================================================================
