@@ -80,7 +80,7 @@ namespace GestureTesting
                             // But it's an option.
                             while (msg == null)
                             {
-                                //Thread.Sleep(10);
+                                Thread.Sleep(10);
                                 msg = Mailbox.GetNextMessage();
                             }
                             // Been given the signal to terminate?
@@ -144,6 +144,16 @@ namespace GestureTesting
         private void MainWindowClosing(object sender, FormClosingEventArgs e)
         {
             ReceiverThread.Abort();
+        }
+
+        /// <summary>
+        /// Initialize the window minimized.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormLoad(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

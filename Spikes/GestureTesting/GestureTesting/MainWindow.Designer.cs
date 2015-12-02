@@ -38,6 +38,7 @@
             this.Name = "MainWindow";
             this.Text = "Kinect Handler";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindowClosing);
+            this.Load += new System.EventHandler(this.FormLoad);
             this.ResumeLayout(false);
 
         }
