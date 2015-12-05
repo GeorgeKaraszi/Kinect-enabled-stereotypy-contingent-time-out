@@ -148,7 +148,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
                 {
 
                     CurrentTime = 0;
-                    System.Windows.Forms.MessageBox.Show(message);
+                    //System.Windows.Forms.MessageBox.Show(message);
                     _quietHandsWindow.PlayBadSound();
                 }  
             }

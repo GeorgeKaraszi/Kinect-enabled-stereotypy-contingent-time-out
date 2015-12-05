@@ -69,7 +69,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Recording
         // Frame at which the last event was triggered.
         private int LastTrigger { get; set; }
         // Minimum number of frames in between events triggered.
-        private const int TriggerDistance = 45;
+        private const int TriggerDistance = 90;
 
         private int BodyId { get; }
 

@@ -47,6 +47,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(290, 29);
             this.progressBar1.TabIndex = 5;
+            this.progressBar1.Visible = false;
             // 
             // timer_lbl
             // 
@@ -63,10 +64,11 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             // 
             this.qhands_lbl.AutoSize = true;
             this.qhands_lbl.BackColor = System.Drawing.Color.Transparent;
+            this.qhands_lbl.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.qhands_lbl.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.qhands_lbl.Location = new System.Drawing.Point(380, 237);
             this.qhands_lbl.Name = "qhands_lbl";
-            this.qhands_lbl.Size = new System.Drawing.Size(66, 13);
+            this.qhands_lbl.Size = new System.Drawing.Size(71, 16);
             this.qhands_lbl.TabIndex = 3;
             this.qhands_lbl.Text = "Quiet Hands";
             this.qhands_lbl.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -83,8 +85,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.AliceBlue;
-            this.BackgroundImage = global::WesternMichgian.SeniorDesign.KinectProject.Properties.Resources.pic;
+            this.BackColor = System.Drawing.Color.MediumSpringGreen;
             this.ClientSize = new System.Drawing.Size(935, 527);
             this.ControlBox = false;
             this.Controls.Add(this.progressBar1);

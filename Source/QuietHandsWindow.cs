@@ -122,8 +122,8 @@ namespace WesternMichgian.SeniorDesign.KinectProject
         {
             qhands_lbl.Text = "Quiet Hands";
             //Scale the font of the text upward
-            qhands_lbl.Font = new Font(qhands_lbl.Font.FontFamily, 40);
-            timer_lbl.Font = new Font(timer_lbl.Font.FontFamily, 20);
+            qhands_lbl.Font = new Font(qhands_lbl.Font.FontFamily, 60,FontStyle.Bold);
+            timer_lbl.Font = new Font(timer_lbl.Font.FontFamily, 25);
 
             //Center the text with the screen.
             //Move the text slightly up to make it more appealing
