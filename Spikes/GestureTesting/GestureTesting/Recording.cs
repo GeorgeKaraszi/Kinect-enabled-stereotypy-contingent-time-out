@@ -4,36 +4,36 @@ using System.Windows.Forms;
 
 namespace GestureTesting
 {
-    //public delegate void AnalysisEventHandeler(object source, RecordEventArgs e);
+    public delegate void AnalysisEventHandler(object source, RecordEventArgs e);
 
-    ////====================================================================================
-    ///// <summary>
-    ///// Event Argument parameter class is designed to carry the information we need for 
-    ///// an event to be casted.
-    ///// </summary>
-    //public class RecordEventArgs : EventArgs
-    //{
-    //    /// <summary>
-    //    /// Holds the gesture name that has triggered the event
-    //    /// </summary>
-    //    private readonly string _gestureName;
+    //====================================================================================
+    /// <summary>
+    /// Event Argument parameter class is designed to carry the information we need for 
+    /// an event to be casted.
+    /// </summary>
+    public class RecordEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Holds the gesture name that has triggered the event
+        /// </summary>
+        private readonly string _gestureName;
 
-    //    //--------------------------------------------------------------------------------
-    //    /// <summary>
-    //    /// </summary>
-    //    /// <param name="name">Gesture name</param>
-    //    public RecordEventArgs(string name) { _gestureName = name; }
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// </summary>
+        /// <param name="name">Gesture name</param>
+        public RecordEventArgs(string name) { _gestureName = name; }
 
-    //    //--------------------------------------------------------------------------------
-    //    /// <summary>
-    //    /// Gets the gesture name that is being held in the event argument
-    //    /// </summary>
-    //    /// <returns>Gesture name</returns>
-    //    public string GetInfo()
-    //    {
-    //        return _gestureName;
-    //    }
-    //}
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// Gets the gesture name that is being held in the event argument
+        /// </summary>
+        /// <returns>Gesture name</returns>
+        public string GetInfo()
+        {
+            return _gestureName;
+        }
+    }
 
     //====================================================================================
     /// <summary>
@@ -42,15 +42,16 @@ namespace GestureTesting
     public class RecordingTable
     {
         /// <summary>
+        /// Event that is activated when the capture limit has been hit
+        /// </summary>
+        public event AnalysisEventHandler HandflappingDetected;
+
+        /// <summary>
         /// Hash table that holds class objects of individual gestures, to access to, 
         /// for better performance.
         /// </summary>
         private readonly Hashtable _hashTblRecord;
 
-        /// <summary>
-        /// Event that is activated when the capture limit has been hit
-        /// </summary>
-        //public event AnalysisEventHandeler OnLimitReach;
         /// <summary>
         /// Triggered event when ever a change in stream data occurs
         /// </summary>
@@ -115,7 +116,7 @@ namespace GestureTesting
         /// <returns>
         /// -1 = Hash table does not contain the gesture requested
         ///  0 = Value was added with no event triggered
-        ///  1 = Value was added but an event was triggered
+        ///  1 = Value was added and hand flapping detection triggered.
         /// </returns>
         public int AddValue(string name, double value)
         {
@@ -143,7 +144,7 @@ namespace GestureTesting
                     else
                     {
                         LastTrigger = classifier.Frame;
-                        //OnLimitReach?.Invoke(this, new RecordEventArgs(name));
+                        HandflappingDetected?.Invoke(this, new RecordEventArgs(name));
                         returnValue = 1;
                     }
                 }

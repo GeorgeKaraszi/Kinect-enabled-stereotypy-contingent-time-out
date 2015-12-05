@@ -32,8 +32,7 @@ namespace GestureTesting
         /// Gesture frame source which should be tied to a body tracking ID
         /// </summary>
         private VisualGestureBuilderFrameSource _vgbFrameSource;
-
-
+        
         //private int timerLimit = 0;
         //public int frames = 0;
 
@@ -52,6 +51,9 @@ namespace GestureTesting
         ///     display in the UI
         /// </summary>
         private GestureResultView GestureResultView { get; }
+
+        // Reference to the handle for notifying of hand flapping detected.
+        private KinectHandle Handle;
 
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -124,7 +126,7 @@ namespace GestureTesting
         /// <param name="bodyid">
         ///     ID of the skeletal body that is tracked (0-5)
         /// </param>
-        public GestureDetector(KinectSensor kinectSensor,
+        public GestureDetector(KinectHandle kinecthandle, KinectSensor kinectSensor,
                                GestureResultView gestureResultView, int bodyid)
         {
             if (kinectSensor == null)
@@ -136,6 +138,8 @@ namespace GestureTesting
             {
                 throw new ArgumentNullException(nameof(gestureResultView));
             }
+
+            Handle = kinecthandle;
 
             GestureResultView = gestureResultView;
 

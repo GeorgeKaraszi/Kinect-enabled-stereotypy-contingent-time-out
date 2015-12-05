@@ -10,6 +10,9 @@ namespace GestureTesting
 {
     public class KinectHandle
     {
+        /// <summary> The class that handles messages from the Kinect </summary>
+        private KinectManager _kinectManager;
+
         /// <summary> Active Kinect sensor </summary>
         private KinectSensor _kinectSensor;
 
@@ -63,8 +66,11 @@ namespace GestureTesting
         // Number of frames there should be in this Kinect clip.
         public int NumFrames { get; set; }
 
-        public KinectHandle()
+        public KinectHandle(KinectManager manager)
         {
+            // remember who the manager is
+            _kinectManager = manager;
+            
             // only one sensor is currently supported
             _kinectSensor = KinectSensor.GetDefault();
 
@@ -92,10 +98,10 @@ namespace GestureTesting
             for (int i = 0; i < maxBodies; ++i)
             {
                 GestureResultView result = new GestureResultView(i, false);
-                GestureDetector detector = new GestureDetector(_kinectSensor, result, i);
+                GestureDetector detector = new GestureDetector(this, _kinectSensor, result, i);
 
                 //Insert gesture event trigger
-                //detector.RecordingTable.OnLimitReach += OnLimitReachEvent;
+                detector.RecordingTable.HandflappingDetected += OnHandflappingDetectedEvent;
 
                 _gestureDetectorList.Add(detector);
             }
@@ -242,14 +248,17 @@ namespace GestureTesting
         /// </summary>
         /// <param name="source">Instance of recording table class</param>
         /// <param name="e">Name of recorded gesture</param>
-        //private void OnLimitReachEvent(object source, RecordEventArgs e)
-        //{
-        //    LockGestures(); //Mutex lock threads from recording
+        public void OnHandflappingDetectedEvent(object source, RecordEventArgs e)
+        {
+            LockGestures(); //Mutex lock threads from recording
 
-        //    //new QuietHandsWindow().ShowDialog();
+            //new QuietHandsWindow().ShowDialog();
 
-        //    UnlockGestures(); //Mutex unlock threads    
-        //}
+            // Notify manager of hand flapping detected.
+            _kinectManager.HandflappingDetected(source, e);
+
+            UnlockGestures(); //Mutex unlock threads    
+        }
 
         //--------------------------------------------------------------------------------
         /// <summary>

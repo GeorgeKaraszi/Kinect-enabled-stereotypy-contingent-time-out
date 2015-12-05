@@ -68,6 +68,7 @@
     <Compile Include="GestureResultView.cs" />
     <Compile Include="KinectBodyView.cs" />
     <Compile Include="KinectHandle.cs" />
+    <Compile Include="KinectManager.cs" />
     <Compile Include="Mailslot.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>

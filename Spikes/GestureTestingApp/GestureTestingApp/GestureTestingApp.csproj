@@ -68,7 +68,7 @@
       <DependentUpon>GestureTestingApp.cs</DependentUpon>
     </Compile>
     <Compile Include="Mailslot.cs" />
-    <Compile Include="Playback.cs" />
+    <Compile Include="TestUtility.cs" />
     <Compile Include="ProcessCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

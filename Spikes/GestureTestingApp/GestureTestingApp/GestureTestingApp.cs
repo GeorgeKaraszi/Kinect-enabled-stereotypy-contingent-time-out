@@ -1,21 +1,36 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace GestureTestingApp
 {
     public partial class GestureTestingApp : Form
     {
-        private readonly Playback playback;
+        // Thread to receive messages from the KinectManager.
+        private Thread TestUtilityThread;
+        private TestUtility TestUtility;
 
+        /// <summary>
+        /// Initialize the window and TestUtility.
+        /// </summary>
         public GestureTestingApp()
         {
             InitializeComponent();
 
-            playback = new Playback(this);
+            // Create KinectManager.
+            ProcessCreator Creator = new ProcessCreator();
 
-            playback.FileChanged += _FileChanged;
+            TestUtility = new TestUtility();
+            // On file information change for display.
+            TestUtility.FileChanged += _FileChanged;
+            // If the TestUtility wants to close for some reason.
+            TestUtility.Closing += _Closing;
+            // Thread to run the message receiver of the KinectManager.
+            TestUtilityThread = new Thread(TestUtility.Monitor);
+            TestUtilityThread.Start();
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Let user choose a file to play and play it.
         /// </summary>
@@ -26,21 +41,21 @@ namespace GestureTestingApp
             // Open dialog box to allow user to choose a Kinect clip to play.
             OpenFileDialog openFile = new OpenFileDialog();
 
-            openFile.InitialDirectory = "C:\\";
-
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    playback.PlayClip(openFile.FileName);
+                    TestUtility.PlayClip(openFile.FileName);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error in file open: " + ex.Message);
+                    MessageBox.Show("Error in GestureTestingApp.PlayClip : " + 
+                        ex.GetType().ToString() + " : " + ex.Message);
                 }
             }
         }
 
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// On close, properly dispose.
         /// </summary>
@@ -48,28 +63,13 @@ namespace GestureTestingApp
         /// <param name="e"></param>
         private void MainWindowClosing(object sender, FormClosingEventArgs e)
         {
-            playback.Dispose();
+            TestUtilityThread.Abort();
+            TestUtility.Closing -= _Closing;
+            TestUtility.Dispose();
+            Environment.Exit(0);
         }
 
-        ///// <summary>
-        ///// Method for notifying window to update its fields.
-        ///// </summary>
-        ///// <param name="filename"></param>
-        ///// <param name="duration"></param>
-        ///// <param name="completed"></param>
-        ///// <returns></returns>
-        //public bool UpdateFile(string filename, double duration, bool completed)
-        //{
-        //    this.FilenameValue.Text = filename;
-        //    this.DurationValue.Text = duration.ToString();
-        //    if (!completed)
-        //        this.ProcessingValue.Text = "In Process";
-        //    else if (completed)
-        //        this.ProcessingValue.Text = "Completed";
-
-        //    return true;
-        //}
-
+        //--------------------------------------------------------------------------------
         /// <summary>
         /// Event for notifying window to update its fields.
         /// </summary>
@@ -79,10 +79,22 @@ namespace GestureTestingApp
         {
             this.FilenameValue.Text = e.Filename;
             this.DurationValue.Text = e.Duration.ToString("F2") + " seconds";
-            if (!e.Completed)
-                this.ProcessingValue.Text = "In Process";
-            else if (e.Completed)
-                this.ProcessingValue.Text = "Completed";
+            this.HandflappingValue.Text = e.Status;
+        }
+
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// If something went wrong in the monitor, close the operation down.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _Closing(object sender, EventArgs e)
+        {
+            //TestUtilityThread.Join();
+            TestUtilityThread.Abort();
+            TestUtility.Closing -= _Closing;
+            TestUtility.Dispose();
+            Environment.Exit(0);
         }
     }
 }
