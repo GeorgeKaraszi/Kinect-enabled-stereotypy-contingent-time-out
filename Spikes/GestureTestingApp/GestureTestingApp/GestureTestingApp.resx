@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InformationLabel.Text" xml:space="preserve">
+    <value>Please select a directory in which all Kinect clips should return positive on hand-flapping detected, and optionally a directory where all Kinect clips should return negative on hand-flapping detected.</value>
+  </data>
 </root>

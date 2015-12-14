@@ -77,9 +77,9 @@ namespace GestureTestingApp
         /// <param name="e"></param>
         private void _FileChanged(object sender, FileChangeEventArgs e)
         {
-            this.FilenameValue.Text = e.Filename;
-            this.DurationValue.Text = e.Duration.ToString("F2") + " seconds";
-            this.HandflappingValue.Text = e.Status;
+            this.FormerFilenameValue.Text = e.Filename;
+            this.FormerDurationValue.Text = e.Duration.ToString("F2") + " seconds";
+            this.FormerHandflappingValue.Text = e.Status;
         }
 
         //--------------------------------------------------------------------------------
@@ -95,6 +95,68 @@ namespace GestureTestingApp
             TestUtility.Closing -= _Closing;
             TestUtility.Dispose();
             Environment.Exit(0);
+        }
+
+        private void ChoosePositiveDirectory(object sender, EventArgs e)
+        {
+            // Open dialog box to allow user to choose a directory.
+            FolderBrowserDialog openFolder = new FolderBrowserDialog();
+
+            if (openFolder.ShowDialog() == DialogResult.OK)
+            {
+                PositiveDirectory.Text = openFolder.SelectedPath;
+                TestUtility.PositiveDirectory = openFolder.SelectedPath;
+                NumberOfClipsValue.Text = TestUtility.NumberOfFiles.ToString();
+                TotalDurationValue.Text = Format(TestUtility.TotalDuration);
+                EstimatedRuntimeValue.Text = Format(TestUtility.TotalDuration * 2);
+            }
+        }
+
+        private void ChooseNegativeDirectory(object sender, EventArgs e)
+        {
+            FolderBrowserDialog openFolder = new FolderBrowserDialog();
+
+            if (openFolder.ShowDialog() == DialogResult.OK)
+            {
+                NegativeDirectory.Text = openFolder.SelectedPath;
+                TestUtility.NegativeDirectory = openFolder.SelectedPath;
+                NumberOfClipsValue.Text = TestUtility.NumberOfFiles.ToString();
+                TotalDurationValue.Text = Format(TestUtility.TotalDuration);
+                EstimatedRuntimeValue.Text = Format(TestUtility.TotalDuration * 2);
+            }
+        }
+
+        private string Format(double duration)
+        {
+            int h, m, s;
+            m = (int) duration / 60;
+            h = m / 60;
+            s = (int) duration - (m * 60);
+
+            string durationFormatted = "";
+            if (h > 0)
+            {
+                m = m % 60;
+                if (s != 1) durationFormatted = h + " hours " + m + " minutes " + s + " seconds";
+                else durationFormatted = h + " hours " + m + " minutes " + s + " second";
+            }
+            else if (m > 0)
+            {
+                if (s != 1) durationFormatted = m + " minutes " + s + " seconds";
+                else durationFormatted = m + " minutes " + s + " second";
+            }
+            else
+            {
+                if (s != 1) durationFormatted = s + " seconds";
+                else durationFormatted = s + " second";
+            }
+
+            return durationFormatted;
+        }
+        
+        private void RunTests(object sender, EventArgs e)
+        {
+            //TestUtility.RunTests();
         }
     }
 }

@@ -64,10 +64,10 @@ namespace GestureTestingApp
             PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
 
             // This relative path is subject to change.
-            String relpath = @"..\..\..\..\..\GestureTesting\\GestureTesting\\bin\\x64\\Debug\\GestureTesting.exe";
+            string relpath = @"..\..\..\..\..\GestureTesting\\GestureTesting\\bin\\x64\\Debug\\GestureTesting.exe";
             // Get full file path.
             FileInfo f = new FileInfo(relpath);
-            String filepath = f.FullName;
+            string filepath = f.FullName;
 
             CreateProcess(filepath, null, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref si, out pi);
         }

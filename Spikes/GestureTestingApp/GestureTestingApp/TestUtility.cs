@@ -28,8 +28,8 @@ namespace GestureTestingApp
         private NamedPipeClientStream Client;
         private NamedPipeServerStream Server;
         // Path of current file to be played, its filename, and its duration in seconds.
-        private String Filepath;
-        private String Filename;
+        private string Filepath;
+        private string Filename;
         private double Duration;
         private bool HandflappingDetected;
         // For if any errors were detected.
@@ -41,6 +41,103 @@ namespace GestureTestingApp
         public event ClosingEvent Closing;
 
         Thread PlaybackThread;
+
+        private List<string> PositiveList;
+        private List<string> NegativeList;
+
+        private double PositiveDuration;
+        private double NegativeDuration;
+
+        public void RunTests()
+        {
+            // Loop through each file in each list and sleep for a sec.
+
+        }
+
+        // Return estimated number of seconds of all the clips in the folder.
+        public double TotalDuration
+        {
+            get
+            {
+                return PositiveDuration + NegativeDuration;
+            }
+        }
+
+        public string PositiveDirectory
+        {
+            set
+            {
+                try
+                {
+                    string[] FileList = Directory.GetFiles(value);
+                    PositiveList.Clear();
+                    PositiveDuration = 0;
+
+                    foreach (string file in FileList)
+                    {
+                        FileInfo f = new FileInfo(file);
+                        if (f != null)
+                        {
+                            if (f.Extension == ".xef")
+                            {
+                                PositiveList.Add(file);
+                                PositiveDuration += (f.Length / KinectClipConstant);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error in PositiveDirectory: " +
+                        ex.GetType().ToString() + " : " + ex.Message);
+                }
+            }
+        }
+        public string NegativeDirectory
+        {
+            set
+            {
+                try
+                {
+                    string[] FileList = Directory.GetFiles(value);
+                    NegativeList.Clear();
+                    NegativeDuration = 0;
+
+                    foreach (string file in FileList)
+                    {
+                        FileInfo f = new FileInfo(file);
+                        if (f != null)
+                        {
+                            if (f.Extension == ".xef")
+                            {
+                                NegativeList.Add(file);
+                                NegativeDuration += (f.Length / KinectClipConstant);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error in PositiveDirectory: " +
+                        ex.GetType().ToString() + " : " + ex.Message);
+                }
+            }
+        }
+
+        public int NumberOfFiles
+        {
+            get
+            {
+                int count = 0;
+
+                if (PositiveList != null)
+                    count += PositiveList.Count;
+                if (NegativeList != null)
+                    count += NegativeList.Count;
+
+                return count;
+            }
+        }
 
         public TestUtility()
         {
@@ -63,6 +160,12 @@ namespace GestureTestingApp
             Error = false;
 
             PlaybackThread = null;
+
+            PositiveList = new List<string>();
+            NegativeList = new List<string>();
+
+            PositiveDuration = 0;
+            NegativeDuration = 0;
         }
 
         //--------------------------------------------------------------------------------
@@ -70,13 +173,15 @@ namespace GestureTestingApp
         /// Play the clip specified.
         /// </summary>
         /// <param name="filepath"></param>
-        public void PlayClip(String filepath)
+        public void PlayClip(string filepath)
         {
             if (filepath == null)
             {
                 MessageBox.Show("Error: Null input file.");
                 return;
             }
+
+            HandflappingDetected = false;
 
             // Information must be gathered here (which means approximating the duration)
             // because once the KStudioPlayback is instantiated, the window will not be updated.
@@ -230,7 +335,7 @@ namespace GestureTestingApp
             {
                 try
                 {
-                    String msg;
+                    string msg;
                     do
                     {
                         //using (MailslotServer Server = new MailslotServer("testutility"))

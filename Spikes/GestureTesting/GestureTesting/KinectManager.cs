@@ -55,7 +55,7 @@ namespace GestureTesting
             {
                 try
                 {
-                    String msg;
+                    string msg;
                     do
                     {
                         //using (MailslotServer Server = new MailslotServer("kinectmanager"))
@@ -84,7 +84,7 @@ namespace GestureTesting
                     // Otherwise, msg is a filename with number of frames.
                     else
                     {
-                        String[] tokens;
+                        string[] tokens;
                         char[] delims = { ';' };
                         tokens = msg.Split(delims);
                         if (tokens.Length == 2)
