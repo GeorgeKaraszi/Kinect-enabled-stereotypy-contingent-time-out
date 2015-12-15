@@ -73,7 +73,7 @@ namespace GestureTesting
                         // All Kinect clips should be at least 1/2 second long.
                         if (msg == null || msg.Length == 0)
                         {
-                            Thread.Sleep(500);
+                            Thread.Sleep(50);
                         }
                     } while (msg == null);
                     // Been given the signal to terminate?
@@ -89,6 +89,8 @@ namespace GestureTesting
                         tokens = msg.Split(delims);
                         if (tokens.Length == 2)
                         {
+                            while (!Handle.DoneSaving)
+                                Thread.Sleep(10);
                             Handle.FileName = tokens[0];
                             Handle.NumFrames = Int32.Parse(tokens[1]);
                         }

@@ -10,6 +10,8 @@ namespace GestureTestingApp
         private Thread TestUtilityThread;
         private TestUtility TestUtility;
 
+        static private Mutex Lock;
+
         /// <summary>
         /// Initialize the window and TestUtility.
         /// </summary>
@@ -17,12 +19,20 @@ namespace GestureTestingApp
         {
             InitializeComponent();
 
+            Lock = new Mutex();
+
             // Create KinectManager.
             ProcessCreator Creator = new ProcessCreator();
 
             TestUtility = new TestUtility();
             // On file information change for display.
             TestUtility.FileChanged += _FileChanged;
+            // Update currently processing file's information.
+            TestUtility.NewFile += _NewFile;
+            // Update formerly processed file's information.
+            TestUtility.PreviousFile += _PreviousFile;
+            // Update testing results.
+            TestUtility.TestingComplete += _TestingComplete;
             // If the TestUtility wants to close for some reason.
             TestUtility.Closing += _Closing;
             // Thread to run the message receiver of the KinectManager.
@@ -82,6 +92,68 @@ namespace GestureTestingApp
             this.FormerHandflappingValue.Text = e.Status;
         }
 
+        /// <summary>
+        /// Event for updating currently processing file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _NewFile(object sender, NewFileEventArgs e)
+        {
+            Lock.WaitOne();
+
+            this.InProcessValue.Text = e.Status;
+            this.CurrentFilenameValue.Text = e.Filename;
+            this.CurrentDurationValue.Text = Format(e.Duration * 2);
+
+            Lock.ReleaseMutex();
+        }
+
+        /// <summary>
+        /// Event for updating formerly processed file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _PreviousFile(object sender, PreviousFileEventArgs e)
+        {
+            Lock.WaitOne();
+
+            this.PreviousFilenameValue.Text = e.Filename;
+            this.PreviousDurationValue.Text = Format(e.Duration * 2);
+            if (e.Detected)
+                this.HandflappingValue.Text = "Detected";
+            else
+                this.HandflappingValue.Text = "Not detected";
+
+            Lock.ReleaseMutex();
+        }
+
+        /// <summary>
+        /// Event for updating testing results section.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _TestingComplete(object sender, TestingCompleteEventArgs e)
+        {
+            int GoodTests = e.TotalTests - e.FaultyTests;
+
+            Lock.WaitOne();
+
+            this.TotalTestsValue.Text = e.TotalTests.ToString();
+            this.FaultyTestsValue.Text = e.FaultyTests.ToString();
+            this.SuccessfulTestsValue.Text = e.SuccessfulTests + " / " + GoodTests;
+            this.FalsePositivesValue.Text = e.FalsePositives + " / " + GoodTests;
+            this.FalseNegativesValue.Text = e.FalseNegatives + " / " + GoodTests;
+
+            if (GoodTests > 0)
+            {
+                this.SuccessfulTestsPercent.Text = (e.SuccessfulTests * 100 / GoodTests) + " %";
+                this.FalsePositivesPercent.Text = (e.FalsePositives * 100 / GoodTests) + " %";
+                this.FalseNegativesPercent.Text = (e.FalseNegatives * 100 / GoodTests) + " %";
+            }
+
+            Lock.ReleaseMutex();
+        }
+
         //--------------------------------------------------------------------------------
         /// <summary>
         /// If something went wrong in the monitor, close the operation down.
@@ -132,23 +204,37 @@ namespace GestureTestingApp
             m = (int) duration / 60;
             h = m / 60;
             s = (int) duration - (m * 60);
+            m = m % 60;
+
+            string sec, min, hour;
+
+            if (s != 1)
+                sec = " seconds";
+            else
+                sec = " second";
+
+            if (m != 1)
+                min = " minutes ";
+            else
+                min = " minute ";
+
+            if (h != 1)
+                hour = " hours ";
+            else
+                hour = " hour ";
 
             string durationFormatted = "";
             if (h > 0)
             {
-                m = m % 60;
-                if (s != 1) durationFormatted = h + " hours " + m + " minutes " + s + " seconds";
-                else durationFormatted = h + " hours " + m + " minutes " + s + " second";
+                durationFormatted = h + hour + m + min + s + sec;
             }
             else if (m > 0)
             {
-                if (s != 1) durationFormatted = m + " minutes " + s + " seconds";
-                else durationFormatted = m + " minutes " + s + " second";
+                durationFormatted = m + min + s + sec;
             }
             else
             {
-                if (s != 1) durationFormatted = s + " seconds";
-                else durationFormatted = s + " second";
+                durationFormatted = s + sec;
             }
 
             return durationFormatted;
@@ -156,7 +242,7 @@ namespace GestureTestingApp
         
         private void RunTests(object sender, EventArgs e)
         {
-            //TestUtility.RunTests();
+            TestUtility.RunTests();
         }
     }
 }

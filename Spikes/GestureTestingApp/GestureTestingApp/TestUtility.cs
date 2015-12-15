@@ -14,6 +14,9 @@ using System.IO.Pipes;
 namespace GestureTestingApp
 {
     public delegate void FileChangeEvent(object sender, FileChangeEventArgs e);
+    public delegate void NewFileEvent(object sender, NewFileEventArgs e);
+    public delegate void PreviousFileEvent(object sender, PreviousFileEventArgs e);
+    public delegate void TestingCompleteEvent(object sender, TestingCompleteEventArgs e);
     public delegate void ClosingEvent(object sender, EventArgs e);
     /// <summary>
     /// For playing Kinect clips.
@@ -38,6 +41,9 @@ namespace GestureTestingApp
         private const double KinectClipConstant = 33287554.5;
 
         public event FileChangeEvent FileChanged;
+        public event NewFileEvent NewFile;
+        public event PreviousFileEvent PreviousFile;
+        public event TestingCompleteEvent TestingComplete;
         public event ClosingEvent Closing;
 
         Thread PlaybackThread;
@@ -50,8 +56,76 @@ namespace GestureTestingApp
 
         public void RunTests()
         {
+            int i = 1;
+            int Count = PositiveList.Count + NegativeList.Count;
+            Thread PlayThread;
+            int TotalTests = Count,
+                FaultyTests = 0,
+                SuccessfulTests = 0,
+                FalsePositives = 0,
+                FalseNegatives = 0;
             // Loop through each file in each list and sleep for a sec.
+            for (int j = 0; j < PositiveList.Count; j++)
+            {
+                Filepath = PositiveList[j];
+                Filename = Path.GetFileName(Filepath);
+                FileInfo f = new FileInfo(Filepath);
+                Duration = f.Length / KinectClipConstant;
+                HandflappingDetected = false;
+                NewFileEventArgs e = new NewFileEventArgs(i + " / " + Count, Filename, Duration);
 
+                NewFile?.Invoke(this, e);
+                PlayThread = new Thread(PlayFile);
+                PlayThread.Start();
+                PlayThread.Join();
+
+                // Handflapping and no handflapping detected?
+                if (!HandflappingDetected)
+                    FalseNegatives++;
+                else
+                    SuccessfulTests++;
+
+                PreviousFileEventArgs g = new PreviousFileEventArgs(Filename, Duration, HandflappingDetected);
+
+                PreviousFile?.Invoke(this, g);
+                i++;
+            }
+            for (int j = 0; j < NegativeList.Count; j++)
+            {
+                Filepath = NegativeList[j];
+                Filename = Path.GetFileName(Filepath);
+                FileInfo f = new FileInfo(Filepath);
+                Duration = f.Length / KinectClipConstant;
+                HandflappingDetected = false;
+                NewFileEventArgs e = new NewFileEventArgs(i + " / " + Count, Filename, Duration);
+
+                NewFile?.Invoke(this, e);
+                PlayThread = new Thread(PlayFile);
+                PlayThread.Start();
+                PlayThread.Join();
+
+                // No handflapping and handflapping detected?
+                if (HandflappingDetected)
+                    FalsePositives++;
+                else
+                    SuccessfulTests++;
+
+                PreviousFileEventArgs g = new PreviousFileEventArgs(Filename, Duration, HandflappingDetected);
+
+                PreviousFile?.Invoke(this, g);
+                i++;
+            }
+
+            TestingCompleteEventArgs h = new TestingCompleteEventArgs
+                (TotalTests, FaultyTests, SuccessfulTests, FalsePositives, FalseNegatives);
+
+            if (TotalTests > 0)
+                TestingComplete?.Invoke(this, h);
+        }
+
+        private void Play()
+        {
+            Thread.Sleep(1000);
         }
 
         // Return estimated number of seconds of all the clips in the folder.
@@ -175,62 +249,56 @@ namespace GestureTestingApp
         /// <param name="filepath"></param>
         public void PlayClip(string filepath)
         {
-            if (filepath == null)
-            {
-                MessageBox.Show("Error: Null input file.");
-                return;
-            }
+            //HandflappingDetected = false;
 
-            HandflappingDetected = false;
+            //// Information must be gathered here (which means approximating the duration)
+            //// because once the KStudioPlayback is instantiated, the window will not be updated.
+            //// The precise duration is obtained from the KStudioPlayback, so it must be
+            //// approximated using the length of the file.
+            //Filepath = filepath;
+            //FileInfo f = new FileInfo(Filepath);
+            //Filename = Path.GetFileName(Filepath);
+            //bool xef = (f.Extension == ".xef");
+            //if (xef)
+            //{
+            //    Duration = f.Length / KinectClipConstant;
+            //    Error = false;
+            //}
+            //else
+            //{
+            //    Duration = 0;
+            //    Error = true;
+            //}
 
-            // Information must be gathered here (which means approximating the duration)
-            // because once the KStudioPlayback is instantiated, the window will not be updated.
-            // The precise duration is obtained from the KStudioPlayback, so it must be
-            // approximated using the length of the file.
-            Filepath = filepath;
-            FileInfo f = new FileInfo(Filepath);
-            Filename = Path.GetFileName(Filepath);
-            bool xef = (f.Extension == ".xef");
-            if (xef)
-            {
-                Duration = f.Length / KinectClipConstant;
-                Error = false;
-            }
-            else
-            {
-                Duration = 0;
-                Error = true;
-            }
+            //FileChangeEventArgs e = new FileChangeEventArgs(Filename, Duration, "Processing");
 
-            FileChangeEventArgs e = new FileChangeEventArgs(Filename, Duration, "Processing");
+            //// Update fields in the window.
+            //FileChanged?.Invoke(this, e);
 
-            // Update fields in the window.
-            FileChanged?.Invoke(this, e);
-
-            // Allow users to try bad files, but ultimately only try to play .xefs.
-            if (xef)
-            {
+            //// Allow users to try bad files, but ultimately only try to play .xefs.
+            //if (xef)
+            //{
                 // Playback must be in its own thread because once KStudioPlayback
                 // has been instantiated, the form will not be updated until
                 // playback has terminated.
                 PlaybackThread = new Thread(PlayFile);
                 PlaybackThread.Start();
                 PlaybackThread.Join();
-            }
+            //}
 
-            // Here send processing status.
-            if (Error)
-            {
-                e.Status = "Error";
-            }
-            else
-            {
-                if (HandflappingDetected)
-                    e.Status = "Detected";
-                else
-                    e.Status = "Not detected";
-            }
-            FileChanged?.Invoke(this, e);
+            //// Here send processing status.
+            //if (Error)
+            //{
+            //    e.Status = "Error";
+            //}
+            //else
+            //{
+            //    if (HandflappingDetected)
+            //        e.Status = "Detected";
+            //    else
+            //        e.Status = "Not detected";
+            //}
+            //FileChanged?.Invoke(this, e);
         }
 
         //--------------------------------------------------------------------------------
@@ -451,11 +519,38 @@ namespace GestureTestingApp
                 handler(this, e);
             }
         }
+
+        protected virtual void OnNewFile(NewFileEventArgs e)
+        {
+            NewFileEvent handler = NewFile;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnPreviousFile(PreviousFileEventArgs e)
+        {
+            PreviousFileEvent handler = PreviousFile;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnTestingComplete(TestingCompleteEventArgs e)
+        {
+            TestingCompleteEvent handler = TestingComplete;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
     }
 
     //====================================================================================
     /// <summary>
-    /// When a file is selected to be played, display it's information in the form.
+    /// When a new file is selected to be played, change info displayed in UI.
     /// </summary>
     /// _kinectHandle.OnSkeletonChange += _kinectHandle_OnSkeletonChange
     /// public event FileChangeEvent OnFileChange;
@@ -471,6 +566,61 @@ namespace GestureTestingApp
             Filename = filename;
             Duration = duration;
             Status = status;
+        }
+    }
+
+    /// <summary>
+    /// When a new file is selected to be played, update UI.
+    /// </summary>
+    public class NewFileEventArgs : EventArgs
+    {
+        public string Status { get; set; }
+        public string Filename { get; set; }
+        public double Duration { get; set; }
+
+        public NewFileEventArgs(string status, string filename, double duration)
+        {
+            Status = status;
+            Filename = filename;
+            Duration = duration;
+        }
+    }
+
+    /// <summary>
+    /// When a file has just finished being played, update UI.
+    /// </summary>
+    public class PreviousFileEventArgs : EventArgs
+    {
+        public string Filename { get; set; }
+        public double Duration { get; set; }
+        public bool Detected { get; set; }
+
+        public PreviousFileEventArgs(string filename, double duration, bool detected)
+        {
+            Filename = filename;
+            Duration = duration;
+            Detected = detected;
+        }
+    }
+
+    /// <summary>
+    /// When testing has finished, update UI.
+    /// </summary>
+    public class TestingCompleteEventArgs : EventArgs
+    {
+        public int TotalTests { get; set; }
+        public int FaultyTests { get; set; }
+        public int SuccessfulTests { get; set; }
+        public int FalsePositives { get; set; }
+        public int FalseNegatives { get; set; }
+
+        public TestingCompleteEventArgs(int total, int faulty, int successful, int falsepos, int falseneg)
+        {
+            TotalTests = total;
+            FaultyTests = faulty;
+            SuccessfulTests = successful;
+            FalsePositives = falsepos;
+            FalseNegatives = falseneg;
         }
     }
 }

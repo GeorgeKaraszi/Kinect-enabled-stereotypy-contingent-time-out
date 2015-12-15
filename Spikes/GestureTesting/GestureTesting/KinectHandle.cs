@@ -33,6 +33,15 @@ namespace GestureTesting
         /// </summary>
         public readonly KinectBodyView KinectBodyView;
 
+        private bool donesaving;
+        public bool DoneSaving
+        {
+            get
+            {
+                return donesaving;
+            }
+        }
+
         /// <summary>
         /// Event that handles incoming and outgoing data to the utility window
         /// </summary>
@@ -61,7 +70,19 @@ namespace GestureTesting
             _gestureDetectorList[0].GestureNameList.ToArray();
 
         // Current file name to save to.
-        public string FileName { get; set; }
+        private string fileName;
+        public string FileName
+        {
+            get
+            {
+                return fileName;
+            }
+            set
+            {
+                fileName = value;
+                donesaving = false;
+            }
+        }
 
         // Number of frames there should be in this Kinect clip.
         public int NumFrames { get; set; }
@@ -108,6 +129,8 @@ namespace GestureTesting
 
             FileName = null;
             NumFrames = -1;
+
+            donesaving = true;
         }
 
         /*//--------------------------------------------------------------------------------
@@ -142,12 +165,13 @@ namespace GestureTesting
                 foreach (GestureDetector detector in _gestureDetectorList)
                 {
                     // When leaving, save the last of the values.
-                    if (FileName != null && NumFrames > 0)
+                    if (NumFrames > 0)
                     {
                         detector.ResetInterpreter(FileName, NumFrames);
                     }
                     detector.Dispose();
                 }
+                donesaving = true;
 
                 _gestureDetectorList.Clear();
                 _gestureDetectorList = null;
@@ -228,6 +252,7 @@ namespace GestureTesting
                 {
                     //OnSkeletonChange?.Invoke(this, new UtilBodyArgs(i, false));
                     _gestureDetectorList[i].ResetInterpreter(FileName, NumFrames);
+                    donesaving = true;
                 }
                 //else
                 //{

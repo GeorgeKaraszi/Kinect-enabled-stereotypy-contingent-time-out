@@ -73,6 +73,9 @@
             this.FalseNegativesValue = new System.Windows.Forms.Label();
             this.CurrentFilenameLabel = new System.Windows.Forms.Label();
             this.CurrentFilenameValue = new System.Windows.Forms.Label();
+            this.SuccessfulTestsPercent = new System.Windows.Forms.Label();
+            this.FalsePositivesPercent = new System.Windows.Forms.Label();
+            this.FalseNegativesPercent = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Open
@@ -476,9 +479,39 @@
             this.CurrentFilenameValue.TabIndex = 48;
             this.CurrentFilenameValue.Text = "...";
             // 
+            // SuccessfulTestsPercent
+            // 
+            this.SuccessfulTestsPercent.AutoSize = true;
+            this.SuccessfulTestsPercent.Location = new System.Drawing.Point(165, 461);
+            this.SuccessfulTestsPercent.Name = "SuccessfulTestsPercent";
+            this.SuccessfulTestsPercent.Size = new System.Drawing.Size(16, 13);
+            this.SuccessfulTestsPercent.TabIndex = 49;
+            this.SuccessfulTestsPercent.Text = "...";
+            // 
+            // FalsePositivesPercent
+            // 
+            this.FalsePositivesPercent.AutoSize = true;
+            this.FalsePositivesPercent.Location = new System.Drawing.Point(165, 483);
+            this.FalsePositivesPercent.Name = "FalsePositivesPercent";
+            this.FalsePositivesPercent.Size = new System.Drawing.Size(16, 13);
+            this.FalsePositivesPercent.TabIndex = 50;
+            this.FalsePositivesPercent.Text = "...";
+            // 
+            // FalseNegativesPercent
+            // 
+            this.FalseNegativesPercent.AutoSize = true;
+            this.FalseNegativesPercent.Location = new System.Drawing.Point(165, 506);
+            this.FalseNegativesPercent.Name = "FalseNegativesPercent";
+            this.FalseNegativesPercent.Size = new System.Drawing.Size(16, 13);
+            this.FalseNegativesPercent.TabIndex = 51;
+            this.FalseNegativesPercent.Text = "...";
+            // 
             // GestureTestingApp
             // 
             this.ClientSize = new System.Drawing.Size(373, 672);
+            this.Controls.Add(this.FalseNegativesPercent);
+            this.Controls.Add(this.FalsePositivesPercent);
+            this.Controls.Add(this.SuccessfulTestsPercent);
             this.Controls.Add(this.CurrentFilenameValue);
             this.Controls.Add(this.CurrentFilenameLabel);
             this.Controls.Add(this.FalseNegativesValue);
@@ -577,6 +610,9 @@
         private System.Windows.Forms.Label FalseNegativesValue;
         private System.Windows.Forms.Label CurrentFilenameLabel;
         private System.Windows.Forms.Label CurrentFilenameValue;
+        private System.Windows.Forms.Label SuccessfulTestsPercent;
+        private System.Windows.Forms.Label FalsePositivesPercent;
+        private System.Windows.Forms.Label FalseNegativesPercent;
     }
 }
 
