@@ -10,7 +10,7 @@ namespace WesternMichgian.SeniorDesign.KinectProject.Algorithms
         private double[] _wave;
 
         // List of peaks and valleys.
-        private List<PeakValley> _pvList;
+        public LinkedList<PeakValley> PVList;
         // List of PVPairs (VPV or PVP) for calculating frequency.
         private List<PvPair> _pvPairs;
         // List of periods. It's a list so it can be decremented as PVPairs are removed.
